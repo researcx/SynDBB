@@ -6,3 +6,4 @@ humanize
 bbcode
 Pillow
 piexif
+uwsgi
