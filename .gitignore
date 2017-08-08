@@ -13,6 +13,8 @@
 #Thread grid-view thumbnails
 /syndbb/static/data/threadimg/grid/*
 
+#Logs
+/logs/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
