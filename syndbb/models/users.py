@@ -46,13 +46,8 @@ def inject_user():
                     return {'user': user, 'user_session': user_session}
             else:
                 syndbb.session.pop('logged_in', None)
-                user = d2_user.query.filter_by(user_id='0').first()
-        else:
-            user = d2_user.query.filter_by(user_id='0').first()
-            user_session = 0
-    else:
-        user = d2_user.query.filter_by(user_id='0').first()
-        user_session = 0
+    user = {'user_id': 0, 'username': "Guest", 'rank': 0}
+    user_session = {'sessionid': 0}
     return {'user': user, 'user_session': user_session}
 
 #Get user avatar by ID

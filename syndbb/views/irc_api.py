@@ -31,6 +31,8 @@ def irc_api():
             # /api/irc/?api=<api>&nick=<nick>&count_lines=<amount>
             count_lines = syndbb.request.args.get('count_lines', '')
             if count_lines:
+                if int(count_lines) >= 5:
+                    user.points = user.points + (int(count_lines) / 2)
                 user.line_count = user.line_count + int(count_lines)
                 syndbb.db.session.commit()
                 return str(user.line_count)
@@ -39,6 +41,8 @@ def irc_api():
             # /api/irc/?api=<api>&nick=<nick>&count_words=<amount>
             count_words = syndbb.request.args.get('count_words', '')
             if count_words:
+                if int(count_words) >= 50:
+                    user.points = user.points + (int(count_words) / 2)
                 user.word_count = user.word_count + int(count_words)
                 syndbb.db.session.commit()
                 return str(user.word_count)

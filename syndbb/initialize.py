@@ -6,21 +6,29 @@
 
 import syndbb
 
-#Pages
+# Core Pages
 import syndbb.views.basic
-import syndbb.views.forums
-import syndbb.views.quotedb
+
+# User Pages
+import syndbb.views.auth
 import syndbb.views.invites
 import syndbb.views.profile
-import syndbb.views.admin
-import syndbb.views.emoticons
-import syndbb.views.auth
-import syndbb.views.events
-import syndbb.views.pastebin
-import syndbb.views.upload
-import syndbb.views.irc_api
 
-# syndbb.db.create_all()
+# Forums, upload, pastebin
+import syndbb.views.forums
+import syndbb.views.events
+import syndbb.views.upload
+import syndbb.views.pastebin
+import syndbb.views.quotedb
+import syndbb.views.emoticons
+
+# Management
+import syndbb.views.admin
+
+# Miscellaneous
+import syndbb.views.irc_api
+import syndbb.views.xmlfeed
+
 
 #Run the main app...
 if __name__ == '__main__':
