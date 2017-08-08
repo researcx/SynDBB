@@ -266,6 +266,8 @@ def do_rate_post():
                     return str(postcheck.id)
                 else:
                     return "Trying to rate a post which doesnt exist."
+        else:
+            return "You are not logged in!"
     else:
         return "Invalid Request"
 
