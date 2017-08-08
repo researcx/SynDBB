@@ -1,3 +1,18 @@
+# Configuration
+/config
+
+# Database
+/syndbb/syndbb.db
+
+# User-uploaded files, emoticons, image thumbnails
+/syndbb/static/data/uploads/.thumbnails/*
+/syndbb/static/data/uploads/*
+/syndbb/static/data/avatars/*
+/syndbb/static/data/emoticons/*
+
+#Thread grid-view thumbnails
+/syndbb/static/data/threadimg/grid/*
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
