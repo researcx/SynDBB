@@ -4,7 +4,7 @@
 
 It is an open-source cross-platform forum software written in Python + Flask. It's primarily intended to be used for the D2K5 website, however users are welcome and encouraged to submit improvements, features, feature requests, fixes and bug reports.
 
-*The code is released under the **Q Public License 1.0 (QPL-1.0)***
+*This code is released under the **[Q Public License 1.0 (QPL-1.0)](https://tldrlegal.com/license/q-public-license-1.0-(qpl-1.0)#summary "QPL-1.0")**. The full license is included in [LICENSE.md](LICENSE.md).*
 
 ## Setup
 `chmod +x *.sh`
