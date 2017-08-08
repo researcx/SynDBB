@@ -1,0 +1,32 @@
+{% extends "layout.html" %} {% block body %}
+	<p class="lead">Information</p>
+	<p>SynDBB is a compilation of all the best parts of bulletin boards, intended for IRC/ZNC integration, which is where the name comes from (Syndication + IRCd + Bulletin Boards)</p>
+
+	<p>It is an open-source cross-platform forum software written in Python + Flask. It's primarily intended to be used for the D2K5 website, however users are welcome and encouraged to submit improvements, features, feature requests, fixes and bug reports.</p>
+
+	<p>The code is released under the Q Public License 1.0 (QPL-1.0)</p>
+
+	<p>
+		<strong>Current Version/Revision:</strong> {{ syndbb_version }} ({{ syndbb_full_hash }})<br/>
+	</p>
+	<p class="lead">Features:</p>
+	<ul>
+		<li>Lightweight.</li>
+		<li>Uses locally hosted Google Fonts, jQuery, Bootstrap and Font Awesome.</li>
+		<li>Passwords are hashed client-side before they are submitted to the server, then hashed again server-side.</li>
+		<li>File uploading system where you can upload files on-site or externally using curl/ShareX.</li>
+		<li>File listing for all of your uploads with file info and thumbnails, sorted by date.</li>
+		<li>Forum/channel system with the ability to create your own custom forums/channels with admin approval.</li>
+		<li>Custom forums/channels can be made to have their own guidelines and description.</li>
+		<li>List/grid view toggle for file uploads and forums/threads.</li>
+		<li>Thread gallery/image view mode.</li>
+		<li>Avatar history with the ability to re-use avatars without uploading them.</li>
+		<li>Users can submit their own emoticons and have them admin approved.</li>
+		<li>Uploaded files get shredded (secure erased) when the user chooses to delete them.</li>
+		<li>Pastebin system with a listing of all of your pastes.</li>
+		<li>Karma positive/negative/total system for IRC.</li>
+		<li>IRC statistics tracking for lines and words spoken.</li>
+	</ul>
+	<br/>
+	<p><b>Donate:</b> <a href="https://www.paypal.me/d2k5"><abbr title="PayPal Address">PayPal</abbr></a> / <abbr title="Bitcoin Address">1DCGww1Y55fukRbLEkZuzJBb2nUJ5Xx1rn</abbr></p>
+{% endblock %}

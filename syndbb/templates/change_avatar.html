@@ -1,0 +1,47 @@
+{% extends "layout.html" %} {% block body %}
+<div class="media">
+  <span class="media-left text-center">
+        <img src="{{get_avatar(user.user_id)}}" alt="Avatar" class="img-circle pull-left profile-avatar-size"><br/>
+        {% if user.avatar_date %}
+          <a href="/functions/remove_avatar?uniqid={{user_session.sessionid}}" title="Remove Avatar" class="text-muted deletebutton"><i class="fa fa-trash" aria-hidden="true"></i></a>
+        {% endif %}
+    </span>
+  <div class="media-body" style="padding: 8px;">
+    <form class="form-horizontal" action="/functions/upload_avatar" method="POST">
+      <div class="image-editor">
+        <input type="file" id="avatar_crop" class="cropit-image-input">
+        <span id="avatarform" class="hidden">
+            <div class="cropit-preview"></div>
+            <div class="image-size-label">
+              Resize image
+            </div>
+            <input type="range" class="cropit-image-zoom-input">
+            <input type="hidden" name="avatar" class="hidden-image-data" />
+            <input type="hidden" name="uniqid" value="{{user_session.sessionid}}" />
+            <button type="submit">Submit</button>
+          </span>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="thread-title" style="margin-top: 24px;">Previous Avatars</div>
+
+{% for prevavatar in avatar_list %}
+<div class="text-center img-grid" id="activity-82">
+  <div class="panel-body">
+    <div class="threadimg-gallery center-block">
+      <a href="/static/data/avatars/{{user.user_id}}/{{prevavatar[0]}}" target="_blank">
+        <img src="/static/data/avatars/{{user.user_id}}/{{prevavatar[0]}}" class="activity-threadimg-gallery" alt="' . $array[0] . '"/>
+      </a>
+      <div class="avatar_details">
+        <span class="avatar_date">{{human_date(prevavatar[1])}}</span>
+        <span style="float:right;">
+            <a href="/functions/set_avatar/?file={{prevavatar[0]}}&uniqid={{user_session.sessionid}}" title="Set as avatar" class="text-muted"><i class="fa fa-arrow-up" aria-hidden="true"></i></a>
+            <a href="/functions/remove_avatar?file={{prevavatar[0]}}&uniqid={{user_session.sessionid}}" title="Delete Avatar" class="text-muted deletebutton"><i class="fa fa-trash" aria-hidden="true"></i></a>
+          </span>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %} {% endblock %}

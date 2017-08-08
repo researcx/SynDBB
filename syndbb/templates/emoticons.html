@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="thread-title">Emoticons (<a href="/submit-emoticon/" class="link-dotted">request an emoticon</a>)</div>
+<div style="margin-left: 14px;">
+  <p>Emoticons/smilies are small graphical images that can be used to convey an emotion or feeling. If you have used email or internet chat, you are likely familiar with the smilie concept.<br/> Try twisting your head on one side if you do not get emoticons;
+    using a bit of imagination should reveal a face of some description.</p>
+  <p><strong>Here's the list of currently accepted emoticons:</strong></p>
+</div>
+{% for emote in emote_list %}
+<div class="text-center img-grid">
+  <div class="panel-body">
+    <div class="emoticon-list center-block">
+      <img src="#" data-original="/static/images/emots/{{emote[0]}}" alt="{{emote[0]}}" title="{{emote[1]}}" class="emoticon-list" />
+      <div class="avatar_details">
+        <span class="avatar_date">{{emote[1]}}</span>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}

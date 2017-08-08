@@ -1,0 +1,25 @@
+{% extends "layout.html" %} {% block body %}
+
+{% if unapproved %}
+{% for quote in unapproved %}
+  <div class="quote-container panel panel-default" id="{{quote.id}}">
+    <div class="panel-body">
+  	<div class="media">
+  	  <div class="media-body">
+  		<pre>{{quote.content}}</pre>
+  		<span class="text-muted" style="float:right; text-align: right;">
+        <a href="/functions/approve_quote/?quote={{quote.id}}&uniqid={{user_session.sessionid}}" title="Approve" class="text-muted"><i class="fa fa-fw fa-check" aria-hidden="true"></i></a>
+        <a href="/functions/disapprove_quote/?quote={{quote.id}}&uniqid={{user_session.sessionid}}" title="Disapprove" class="text-muted"><i class="fa fa-fw fa-times" aria-hidden="true"></i></a>
+        {{human_date(quote.time)}}
+  		</span>
+  		<span class="text-muted">submitted by <a href="/user/{{quote.user.username}}" class="text-muted" style="{{get_group_style_from_id(quote.user_id)}}">{{quote.user.username}}</a></span>
+  	  </div>
+  	</div>
+    </div>
+  </div>
+{% endfor %}
+{% else %}
+<p>No unapproved quotes.</p>
+{% endif %}
+
+{% endblock %}

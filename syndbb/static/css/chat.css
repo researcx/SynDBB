@@ -1,0 +1,25 @@
+
+.page-sidebar{
+  display: none !important;
+}
+.row a{
+	color: #7A7A7A !important;
+}
+Body {
+  padding-left: 0px !important;
+}
+.blink {
+  text-decoration: blink;
+  animation: blink-animation 1s steps(5, start) infinite;
+  -webkit-animation: blink-animation 1s steps(5, start) infinite;
+}
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+@-webkit-keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}

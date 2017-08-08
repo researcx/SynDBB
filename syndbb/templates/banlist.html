@@ -1,0 +1,16 @@
+{% extends "layout.html" %} {% block body %}
+<table class="event-list table table-striped">
+  <thead>
+    <tr>
+      <td class="">Date</td>
+      <td class="">Horrible Jerk</td>
+      <td class="">Reason</td>
+      <td class="">Duration</td>
+      <td class="">Banned By</td>
+    </tr>
+  </thead>
+  <tbody>
+    {{ banlist|safe }}
+  </tbody>
+</table>
+{% endblock %}

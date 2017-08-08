@@ -1,0 +1,41 @@
+.container-fluid{
+  padding-left: 0px;
+  padding-right: 0px;
+  border: 0px none #fff;
+}
+.panel{
+    border: 0px none #fff;
+}
+.fa-trash{
+  font-size: 20pt;
+}
+
+.file-list  > tbody > tr > td {
+    vertical-align: middle;
+}
+
+.file-list .file-name a{
+	font-weight: bold;
+	color: #444 !important;
+}
+
+.file-list .file-date{
+	text-align: right;
+}
+
+.file-list .file-actions{
+	text-align: center;
+}
+
+.file-list .file-thumbnail{
+	width: 1%;
+	text-align: center;
+}
+.clickable:hover{
+  cursor:pointer;
+}
+#uploadlogin input, button{
+  font-size: 20pt;
+  width: 90%;
+  margin-top: 5px;
+}

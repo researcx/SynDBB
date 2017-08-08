@@ -1,0 +1,82 @@
+@font-face {
+	font-family: 'PT Sans';
+	font-style: normal;
+	font-weight: normal;
+	src:
+		local('PT Sans'),
+		local('PTSans-Regular'),
+		/* from https://fonts.gstatic.com/s/ptsans/v8/S1YQx4pVZa17uu0HWQd2fA.eot */
+		url('../fonts/PT_Sans.eot?#iefix') format('embedded-opentype'),
+		/* from https://fonts.gstatic.com/s/ptsans/v8/LKf8nhXsWg5ybwEGXk8UBQ.woff */
+		url('../fonts/PT_Sans.woff') format('woff'),
+		/* from https://fonts.gstatic.com/s/ptsans/v8/ATKpv8nLYAKUYexo8iqqrg.woff2 */
+		url('../fonts/PT_Sans.woff2') format('woff2'),
+		/* from https://fonts.gstatic.com/l/font?kit=-W_xG__5QLePeHob2L7z1Q&skey=fd0b32f0f3e6a1fc&v=v8#PTSans */
+		url('../fonts/PT_Sans.svg#PTSans') format('svg'),
+		/* from https://fonts.gstatic.com/s/ptsans/v8/FUDHvzEKSJww3kCxuiAo2A.ttf */
+		url('../fonts/PT_Sans.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'PT Sans Narrow';
+	font-style: normal;
+	font-weight: normal;
+	src:
+		local('PT Sans Narrow'),
+		local('PTSans-Narrow'),
+		/* from https://fonts.gstatic.com/s/ptsansnarrow/v7/UyYrYy3ltEffJV9QueSi4T9sG6gyxihQGrqfBiBoCNc.eot */
+		url('../fonts/PT_Sans_Narrow.eot?#iefix') format('embedded-opentype'),
+		/* from https://fonts.gstatic.com/s/ptsansnarrow/v7/UyYrYy3ltEffJV9QueSi4RdbPw3QSf9R-kE0EsQUn2A.woff */
+		url('../fonts/PT_Sans_Narrow.woff') format('woff'),
+		/* from https://fonts.gstatic.com/s/ptsansnarrow/v7/UyYrYy3ltEffJV9QueSi4UU-p1xzoRgkupcXIqgYFBc.woff2 */
+		url('../fonts/PT_Sans_Narrow.woff2') format('woff2'),
+		/* from https://fonts.gstatic.com/l/font?kit=UyYrYy3ltEffJV9QueSi4Y9qashOVerhvngxLEi9cx0&skey=4fa1436033972818&v=v7#PTSansNarrow */
+		url('../fonts/PT_Sans_Narrow.svg#PTSansNarrow') format('svg'),
+		/* from https://fonts.gstatic.com/s/ptsansnarrow/v7/UyYrYy3ltEffJV9QueSi4UpeNX8RPf6i6WQfJWyCWEs.ttf */
+		url('../fonts/PT_Sans_Narrow.ttf') format('truetype');
+}
+
+body,html{
+background: #000;
+font-family: 'PT Sans Narrow';
+font-size: 12px;
+}
+input{
+  padding: 6px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  border: 0px none #fff;
+}
+.links, .links a{
+  color: #fff !important;
+  font-size: 18pt;
+  margin-top: 20px;
+}
+pre{
+  background: #000;
+  color: lightgrey;
+  border: 0px none #fff;
+  font-family: Consolas, "Source Code Pro", Menlo, Monaco, "Lucida Console", "Liberation Mono", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace, serif;
+  padding: 20px;
+  font-size: 12px;
+}
+.btn-link, .btn-link:hover{
+  color: #fff;
+  padding: 0px;
+  margin-top: -2px;
+  margin-left: 4px;
+}
+.login{
+margin-top: 10%;
+}
+a, a:link, a:hover, a:visited{
+border: 0px none #000;
+text-decoration: none;
+color: #000;
+}
+a.copyright{
+	border-bottom: 1px dashed #ffffff;
+	text-decoration: none;
+	color: #ffffff;
+}
+img { border: 0; }

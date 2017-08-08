@@ -1,0 +1,31 @@
+{% extends "layout.html" %} {% block body %}
+<h2>Users:</h2>
+<a href="/account/admin/ban" style="color: #fff; text-decoration: none;" class="btn btn-info">Ban User</a>
+<a href="/account/admin/users" style="color: #fff; text-decoration: none;" class="btn btn-info">Member List</a>
+<br/>
+<h2>Approve/Unapprove:</h2>
+<a href="/account/admin/quotes" style="color: #fff; text-decoration: none;" class="btn btn-info">Quotes</a>
+<a href="/account/admin/channels" style="color: #fff; text-decoration: none;" class="btn btn-info">Channels</a>
+<a href="/account/admin/emoticons" style="color: #fff; text-decoration: none;" class="btn btn-info">Emoticons</a>
+<br/>
+<h2>Statistics:</h2>
+<dl class="dl-horizontal">
+
+				<dt>Registered Users:</dt>
+				<dd>{{usercount}}</dd>
+
+				<dt>Threads:</dt>
+				<dd>{{threadcount}}</dd>
+
+				<dt>Posts:</dt>
+				<dd>{{postcount}}</dd>
+
+        <dt>Bans:</dt>
+				<dd>{{bancount}}</dd>
+
+				<dt>Channels:</dt>
+				<dd>Official: {{officialforumcount}} / Unofficial: {{unofficialforumcount}} ({{unapprovedforumcount}} unapproved)</dd>
+
+			</dl>
+
+{% endblock %}

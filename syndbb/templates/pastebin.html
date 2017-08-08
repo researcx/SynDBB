@@ -1,0 +1,48 @@
+{% extends "layout.html" %} {% block body %}
+      {% if paste %}
+      <div class="thread-title">{{paste.title|safe}}</div>
+      <pre>{{paste.content|safe}}</pre>
+      {% else %}
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="media">
+            <span class="media-left">
+                <img src="{{get_avatar(user.user_id)}}" alt="Avatar" class="img-circle pull-left activity-avatar-size">
+            </span>
+            <div class="media-body">
+              <form class="form-horizontal" id="activityform" action="/functions/dopaste" method="POST">
+                <span style="float:right;"><strong>Alternative:</strong> <a href="https://paste.d2k5.com/" style="border-bottom: 1px dotted red;">Encrypted Pastebin</a></span>
+                <label>New Paste</label>
+                <br/>
+                <input type="text" id="paste_title" class="form-control paste-title-form" name="paste_title" value="" placeholder="Paste Title">
+                <textarea id="pasteform" class="form-control" name="paste_content" rows="5" placeholder="Paste Content"></textarea><br/>
+                <input type="submit" class="btn btn-primary">
+                <input type="hidden" name="uniqid" value="{{user_session.sessionid}}">
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      {% for paste in pasteList %}
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="media">
+            <span class="media-left">
+              <a href="/user/{{user.username}}">
+                <img src="{{get_avatar(user.user_id)}}" title="{{user.username}}" alt="Avatar" class="img-circle pull-left activity-avatar-size">
+              </a>
+            </span>
+            <div class="media-body">
+              <span class="text-muted" style="float:right; text-align: right;">
+                <i>{{time_ago(paste.time)}}&nbsp;</i>
+              </span>
+              <a href="/pastebin/{{paste.paste_id}}" class="activity_poster"><b>{{paste.title|safe}}</b></a><br/>
+              <span class="text-muted">by <a href="/user/{{user.username}}" class="text-muted">{{user.username}}</a></span><br/>
+              <div class="text-muted actions-main" style="float:right; text-align: right;"> <a href="/functions/undopaste?paste_id={{paste.paste_id}}&uniqid={{user_session.sessionid}}" title="Delete paste" class="text-muted deletebutton"><i class="fa fa-trash" aria-hidden="true"></i></a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+{% endblock %}

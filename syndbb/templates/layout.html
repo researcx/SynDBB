@@ -1,0 +1,199 @@
+{% if bancheck %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="D2K5">
+    <meta name="author" content="https://faggqt.pw/">
+    <meta name="referrer" content="no-referrer">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon-32x32.png') }}" sizes="32x32">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon-16x16.png') }}" sizes="16x16">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <link rel="mask-icon" href="{{ url_for('static', filename='safari-pinned-tab.svg') }}" color="#000000">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <meta name="msapplication-config" content="{{ url_for('static', filename='browserconfig.xml') }}">
+    <meta name="theme-color" content="#ffffff">
+
+    <title>YOU ARE BANNED &bull; D2K5</title>
+  </head>
+
+  <body>
+    <div style='font-family: arial, tahoma; background: yellow; color: red; width: 80%; padding: 20px; margin: 0 auto; margin-top: 2%; text-align: center; border: 20px dashed red; font-size: 11pt;'><span style='font-size: 24pt; font-weight: bold;'>YOU ARE BANNED!</span><br/><br/>
+
+    You've been banned. You probably know why - but the reason that the moderator gave is below. If you feel this is unjust or just want to bitch about how we're nazis and get laughed at then feel free to <a href='mailto://tears@d2k5.com'>contact someone about it</a>.
+    <br/><br/>
+
+    {% if bancheck.ban.reason %}
+    <strong>Reason:</strong> {{bancheck.ban.reason}}<br/>
+    {% endif %}
+    <strong>Expires:</strong> {{bancheck.banduration}} ({{human_date(bancheck.ban.expires)}})<br/>
+
+    </div>
+  </body>
+</html>
+{% else %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="D2K5">
+    <meta name="author" content="https://faggqt.pw/">
+    <meta name="referrer" content="no-referrer">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon-32x32.png') }}" sizes="32x32">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon-16x16.png') }}" sizes="16x16">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <link rel="mask-icon" href="{{ url_for('static', filename='safari-pinned-tab.svg') }}" color="#000000">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <meta name="msapplication-config" content="{{ url_for('static', filename='browserconfig.xml') }}">
+    <meta name="theme-color" content="#ffffff">
+
+    <title>{% if title %} {{ title|striptags }} &bull; {% endif %}D2K5</title>
+
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/ie10-viewport-bug-workaround.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+
+    {% for style in dynamic_css_header %}
+    <link href="/static/{{style}}" rel="stylesheet">
+    {% endfor %}
+
+    <link href="{{ url_for('static', filename='css/d2k5.css') }}" rel="stylesheet">
+
+    <!--[if lt IE 9]>
+          <script src="{{ url_for('static', filename='js/html5shiv.min.js') }}"></script>
+          <script src="{{ url_for('static', filename='js/respond.min.js') }}"></script>
+        <![endif]-->
+  </head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container-fluid">
+        <span class="navbar-title">
+          {% if forumtitle %}
+            {{ forumtitle|safe }}
+          {% else %}
+            {% if title %}
+              {{ title|striptags }}
+            {% else %}
+              D2K5
+            {% endif %}
+          {% endif %}
+        </span>
+        {% if user_session.sessionid %}
+        <div class="top-avatar">
+          <a href="/user/{{user.username}}">
+                <img src="{{get_avatar(user.user_id)}}" alt="Avatar" class="img-circle top-avatar-size">
+              </a>
+        </div>
+        {% endif %}
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+          <a class="navbar-brand" href="{{ url_for('home') }}">
+                <img src="{{ url_for('static', filename='images/d2k5_logo.svg') }}" alt="D2K5" class="sitelogo mask">
+              </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <div class="navbar-container">
+            <ul class="nav navbar-nav">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bars" aria-hidden="true"></i> Channels <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <!--<li><a href="/forums/">Forum Activity</a></li>
+                  <li><a href="/custom-forums/">Custom Forums</a></li>
+                  <li class="forum-list"><a href="/emoticons/">Emoticon List</a></li>-->
+                  <!-- <div class="nsfw-forum">NSFW</div> -->
+                  <li class="forum-list"><a href="#">Official</a></li>
+                  {% for forum in forums %}
+                  <li><a href="/{{ forum.short_name }}/"><span style="float:right;">#{{ forum.short_name }}</span>{{ forum.name }}</a></li>
+                  {% endfor %}
+                  <li class="forum-list"><a href="#">Unofficial</a></li>
+                  {% for forum in custom_forums %}
+                  <li><a href="/{{ forum.short_name }}/"><span style="float:right;">#{{ forum.short_name }}</span>{{ forum.name }}</a></li>
+                  {% endfor %}
+                  {% if user_session.sessionid %}
+                  <li class="forum-list" style="text-align: center;"><a href="/request-channel/">REQUEST A CHANNEL</a></li>
+                  {% endif %}
+                </ul>
+              </li>
+              <li><a href="{{ url_for('chat') }}"><i class="fa fa-comments" aria-hidden="true"></i> Chat</a></li>
+              <li><a href="{{ url_for('events') }}"><i class="fa fa-calendar" aria-hidden="true"></i> Events</a></li>
+              <li><a href="{{ url_for('banlist') }}"><i class="fa fa-ban" aria-hidden="true"></i> Bans</a></li>
+              {% if user_session.sessionid %}
+              <li><a href="{{ url_for('pastebin') }}"><i class="fa fa-clipboard" aria-hidden="true"></i> My Pastes</a></li>
+              <li><a href="{{ url_for('upload') }}"><i class="fa fa-server" aria-hidden="true"></i>My Files</a></li>
+              {% endif %}
+              <!--<li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-glass" aria-hidden="true"></i> Services <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="/video/">Video Chat</a></li>
+                      <li><a href="/synctube/">SyncTube</a></li>
+                    </ul>
+                  </li>-->
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              {% if user_session.sessionid %}
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-circle" aria-hidden="true"></i> {{user.username}} <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  {% if user.rank >= 500 %}
+                  <li><a href="{{ url_for('siteadmin') }}">Administrative Tools</a></li>
+                  {% endif %}
+                  <li><a href="{{ url_for('preferences') }}">User Preferences</a></li>
+                  <li><a href="{{ url_for('change_avatar') }}">Change Avatar</a></li>
+                  <li><a href="{{ url_for('change_password') }}">Change Password</a></li>
+                  <li><a href="{{ url_for('my_invites') }}">Invite Codes</a></li>
+                  <li><a href="{{ url_for('logout') }}?uniqid={{user_session.sessionid}}">Log Out</a></li>
+                </ul>
+              </li>
+              {% else %}
+              <li><a href="{{ url_for('login') }}"><i class="fa fa-sign-in" aria-hidden="true"></i> Log In</a></li>
+              <li><a href="{{ url_for('register') }}"><i class="fa fa-sign-out" aria-hidden="true"></i> Register</a></li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %} {% for category, message in messages %}
+      <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        {{ message }}
+      </div>
+      {% endfor %} {% endif %} {% endwith %} {% block body %}{% endblock %}
+    </div>
+    <footer class="footer">
+      <div class="container-fluid">
+        <p class="text-muted" style="font-style: italic; float:right; text-align: right;">
+          All trademarks and copyrights on this page are owned by their respective parties.<br/> Images and files uploaded are the responsibility of the user. Comments are owned by the user.<br/> If you continue to use this site, you are consenting to our
+          use of cookies.</p>
+        <p class="text-muted"><a href="{{ url_for('terms') }}">D2K5 &copy; 2002 - {{ now.year }}</a> - <a href="{{ url_for('info') }}">Powered by SynDBB {{ syndbb_version }} ({{ syndbb_hash }})</a><br/>
+          <a href="https://github.com/D2K5/SynDBB" target="_blank">Submit bug reports, fixes and feature requests on <i class="fa fa-github" aria-hidden="true"></i>GitHub!</a><br/>
+          <i>Page generation took {{ g.request_time() }} seconds.</i></p>
+      </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/ie10-viewport-bug-workaround.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    {% for script in dynamic_js_footer %}
+    <script src="/static/{{script}}"></script>
+    {% endfor %}
+  </body>
+</html>
+{% endif %}

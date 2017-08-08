@@ -1,0 +1,26 @@
+{% extends "layout.html" %} {% block body %}
+
+{% if emote_list %}
+{% for emote in emote_list %}
+<div class="text-center img-grid">
+  <div class="panel-body">
+	<div class="emoticon-list center-block">
+	  <a href="/static/data/emoticons/{{emote[0]}}" target="_blank">
+		<img src="/static/data/emoticons/{{emote[0]}}" alt="{{emote[1]}}" class="emoticon-list" title="{{emote[1]}}"/>
+	  </a>
+		<div class="avatar_details">
+		  <span class="avatar_date">{{emote[1]}}</span>
+		  <span style="float:right;">
+			<a href="/functions/approve_emoticon/?file={{emote[0]}}&uniqid={{user_session.sessionid}}" title="Approve Emoticon" class="text-muted deletebutton"><i class="fa fa-check" aria-hidden="true"></i></a>
+			<a href="/functions/disapprove_emoticon/?file={{emote[0]}}&uniqid={{user_session.sessionid}}" title="Disapprove Emoticon" class="text-muted deletebutton"><i class="fa fa-times" aria-hidden="true"></i></a>
+		  </span>
+		</div>
+	</div>
+  </div>
+</div>
+{% endfor %}
+{% else %}
+<p>No unapproved emoticons.</p>
+{% endif %}
+
+{% endblock %}

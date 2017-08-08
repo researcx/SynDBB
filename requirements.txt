@@ -1,0 +1,8 @@
+flask
+flask-mysqldb
+Flask_SQLAlchemy
+requests
+humanize
+bbcode
+Pillow
+piexif

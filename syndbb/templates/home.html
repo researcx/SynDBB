@@ -1,0 +1,56 @@
+{% extends "layout.html" %} {% block body %}
+<div style="float:right">
+  <div style="margin-left: 16pt; float: right;">
+    <a href="https://paypal.me/d2k5" style="color: #fff; text-decoration: none;" class="btn btn-info">PayPal</a> <a href="https://blockchain.info/address/1DCGww1Y55fukRbLEkZuzJBb2nUJ5Xx1rn" style="color: #fff; text-decoration: none;" class="btn btn-info">Bitcoin</a>
+  </div>
+  <div style="margin-left: 14px; width:340px;">
+    Donations will help us afford our servers and continued existence.<br/> Users who donate $15 or more will receive the <a href="/gold-member/"><span style="{{get_group_style('Gold Member')}}">Gold Member</span></a> rank.
+    <br/><br/>
+  </div>
+</div>
+<span style="font-size: 18pt;">Welcome to the D2K5 Network.</span><br/>
+<div style="margin-left: 14px;">
+  <div style="padding-top: 10px; padding-bottom: 5px; margin-bottom: 0px;">D2K5 is a network for general, technology, music and video game discussion.
+    <br/> {% if not user_session.sessionid %} Registration is currently <b>invite only</b>.<br/><br/>
+    <a href="/request-invite/" style="color: #fff; text-decoration: none;" class="btn btn-info">Request an invite</a> {% endif %}
+  </div>
+  <div class="row" style="max-width: 100%; margin: 0 auto;">
+    <div class="col-md-6">
+      <h3>Official Channels</h3>
+      <div style="margin-left: 14px;">
+        {% for forum in forums %}
+        <div class="panel panel-default category-list" onclick="location.href='/{{ forum.short_name }}';" style="cursor: pointer;">
+          <div class="panel-body" style="padding: 8px;">
+            <div class="media">
+              <div class="thread-left">
+                <div style="background-image: url({{get_forum_icon(forum.short_name)}})" title="{{ forum.name }}" class="img-circle pull-left forum-image"></div>
+                <div style="clear:both"></div>
+              </div>
+              <div class="media-body">
+                <a href="/{{ forum.short_name }}" class="forum-title"><b>
+                  <span style="float: right;">#{{ forum.short_name }}</span>
+                  {{ forum.name }}</b></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="col-md-6" style="float:right">
+      <h3>Recent Activity</h3>
+      <div style="margin-left: 14px;">
+        <div class="panel panel-default">
+          <div class="panel-body" style="padding: 4px;">
+            <table class="event-list table table-striped">
+              <tbody>
+                {{ get_activity(12)|safe }}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

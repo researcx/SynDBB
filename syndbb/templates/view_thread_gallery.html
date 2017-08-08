@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="thread-title"><a href="/{{forum.short_name}}/{{thread.id}}" title="List View" style="float:right;"><i class="fa fa-list-alt" aria-hidden="true"></i></a> {{thread.title|striptags}}</div>
+{% for image in images %}
+<div class="text-center img-grid">
+  <div class="panel-body">
+    <div class="threadimg-gallery center-block">
+      <a href="{{image}}" target="_blank">
+        <img src="{{image}}" title="Post your Desktop" class="activity-threadimg-gallery">
+      </a>
+    </div>
+  </div>
+</div>
+{% endfor %}
+<br/><br/>
+<div class="thread-title">Displaying {{imagecount}}.</div>
+{% endblock %}

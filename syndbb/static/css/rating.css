@@ -1,0 +1,53 @@
+/* rating disallowed */
+.RatingDisallowed > .RatingUp, .RatingDisallowed > .RatingDown {
+    display:none;
+}
+
+/* show hover and click animations */
+.RatingUp:hover, .RatingDown:hover {
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.RatingUp:active, .RatingDown:active {
+  font-weight:lighter;
+  cursor:pointer;
+}
+
+/* ui elements */
+.RatingUp, .RatingDown {
+  font-size:1.5em;
+}
+
+.Rating {
+    font-size: 10pt;
+}
+
+.RatingLarge{
+  font-weight:bold;
+  font-size: 20pt;
+  line-height: 1.8em;
+}
+
+
+/* rating containers */
+.RatingContainer {
+    display: inline-block;
+    line-height: 1em;
+    text-align: center;
+    width: 1.5em;
+    vertical-align: top;
+    float: right;
+}
+
+.PostInfoContainer{
+  display: inline-block;
+  width: 120px;
+  line-height: 1em;
+  vertical-align: top;
+  margin-right: 15px;
+}
+
+.actions-main{
+  margin-right: 33px;
+}

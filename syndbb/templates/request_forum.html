@@ -1,0 +1,48 @@
+{% extends "layout.html" %} {% block body %}
+	  <strong>Guidelines:</strong>
+	  <ul>
+		<li>Must have an appropriate name, short name and description.</li>
+		<li>No channels promoting illegal activities or content.</li>
+    <li>Custom channels which are popular enough may eventually be added to the main channel list.</li>
+		<li>The channel name can be 5 to 25 alphanumeric characters.</li>
+		<li>The short name must be 1 to 5 alphanumeric characters.</li>
+		<li>The short name will be used for the IRC channel name (e.g. #d2k5).</li>
+		<li>All custom channels must be admin approved.</li>
+	  </ul>
+	  <br/>
+    <div class="custom-forum">
+        <form id="custom-forum" class="form-horizontal" action="/functions/custom_forum/" method="POST">
+            <div class="form-group">
+                <label class="control-label col-xs-2">Channel Name</label>
+                <div class="col-xs-10">
+                    <input id="forum-name" type="text" name="forum-name" class="form-control">
+                </div>
+            </div>
+						<div class="form-group">
+                <label class="control-label col-xs-2">Short Name</label>
+                <div class="col-xs-10">
+                    <input id="forum-acronym" type="text" name="forum-acronym" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-2">Channel Description</label>
+                <div class="col-xs-10">
+                    <textarea id="forum-description" class="form-control" name="forum-description" rows="5" data-provide="markdown"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-offset-2 col-xs-10">
+                  <div class="checkbox">
+                    <label><input type="checkbox" name="forum-nsfw" value="1"><strong><abbr title="Not Safe For Work">NSFW</abbr></strong></label>
+                  </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-offset-2 col-xs-10">
+                    <button type="submit" class="btn btn-primary">Request Channel</button>
+                </div>
+            </div>
+            <input type="hidden" name="uniqid" value="{{user_session.sessionid}}">
+        </form>
+      </div>
+{% endblock %}

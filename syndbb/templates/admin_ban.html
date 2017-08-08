@@ -1,0 +1,68 @@
+{% extends "layout.html" %} {% block body %}
+{% if isbanned %}
+<div class="banform">
+  <form id="banform" class="form-horizontal" action="/functions/unban_user/" method="POST">
+    <div class="form-group">
+      <label class="control-label col-xs-2">User ID</label>
+      <div class="col-xs-10">
+        <input id="forum-name" type="text" name="user_id" class="form-control" value="{{banuser}}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-xs-2">Ban Reason</label>
+      <div class="col-xs-10">
+        <textarea name="reason" class="form-control">{{isbanned.ban.reason}}</textarea>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-xs-offset-2 col-xs-10">
+        <button type="submit" class="btn btn-primary">Unban User</button>
+      </div>
+    </div>
+    <input type="hidden" name="uniqid" value="{{user_session.sessionid}}">
+  </form>
+</div>
+{% else %}
+<div class="banform">
+  <form id="banform" class="form-horizontal" action="/functions/ban_user/" method="POST">
+    <div class="form-group">
+      <label class="control-label col-xs-2">User ID</label>
+      <div class="col-xs-10">
+        <input id="forum-name" type="text" name="user_id" class="form-control" value="{{banuser}}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-xs-2">Ban Reason</label>
+      <div class="col-xs-10">
+        <textarea name="reason" class="form-control"></textarea>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-xs-2">Ban Duration</label>
+      <div class="col-xs-10">
+        <select name="time" class="form-control">
+          <option value="3600">1 Hour</option>
+          <option value="7200">2 Hours</option>
+          <option value="43200">12 Hours</option>
+          <option value="86400">1 Day</option>
+          <option value="172800">2 Days</option>
+          <option value="604800">1 Week</option>
+          <option value="1209600">2 Weeks</option>
+          <option value="2629800">1 Month</option>
+          <option value="7889400">3 Months</option>
+          <option value="15778800">6 Months</option>
+          <option value="0">Permanent</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-xs-offset-2 col-xs-10">
+        <button type="submit" class="btn btn-primary">Ban User</button>
+      </div>
+    </div>
+    <input type="hidden" name="uniqid" value="{{user_session.sessionid}}">
+    <input type="hidden" name="post_id" value="{{banpost}}">
+  </form>
+</div>
+{% endif %}
+{% endblock %}

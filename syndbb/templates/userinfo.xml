@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api>
+	<entry>
+		<id>{{user.user_id}}</id>
+		<name>{{user.username}}</name>
+		<title>{{user.title}}</title>
+		<gender>{{user.gender}}</gender>
+		<location>{{user.location}}</location>
+		<occupation>{{user.occupation}}</occupation>
+		<homepage>{{user.site}}</homepage>
+		<join_date>{{user.join_date}}</join_date>
+		<avatar_date>{{user.avatar_date}}</avatar_date>
+		<post_count>{{user.post_count}}</post_count>
+		<line_count>{{user.line_count}}</line_count>
+		<word_count>{{user.word_count}}</word_count>
+		<profanity_count>{{user.profanity_count}}</profanity_count>
+		<karma_positive>{{user.karma_positive}}</karma_positive>
+		<karma_negative>{{user.karma_negative}}</karma_negative>
+		<points>{{user.points}}</points>
+	</entry>
+</api>

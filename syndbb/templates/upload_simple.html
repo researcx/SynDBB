@@ -1,0 +1,35 @@
+<div class="panel panel-default">
+  <div class="panel-body">
+    <form id="uploadform" action="/functions/upload" method="post" enctype="multipart/form-data">
+      <div class="form-group">
+        <input id="file" name="file" class="filestyle" onchange="initUpload()" type="file">
+        <input type="hidden" name="uploader" value="upload_simple">
+      </div>
+    </form>
+    <div id="uploadLoader" style="display: none; text-align: center;">
+      <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+</div>
+{% for file in file_list %}
+<div class="container-fluid activity">
+  <div class="embedcodes">
+    <input value="{{uploadurl}}{{user.username}}/{{file[2]}}" type="text">
+    <input value="[url]{{uploadurl}}{{user.username}}/{{file[2]}}[/url]" type="text">
+    <input value="[url={{uploadurl}}{{user.username}}/{{file[2]}}]File: {{file[2]}} (Size: {{human_size(file[1])}})[/url]" type="text">
+    <input value="[img]{{uploadurl}}{{user.username}}/{{file[2]}}[/img]" type="text">
+  </div>
+  <table class="file-list table table-striped">
+    <tbody>
+      <tr>
+        <td class="file-thumbnail"><a href="{{uploadurl}}{{user.username}}/{{file[2]}}" target="_blank">{{file[3]|safe}}</td>
+        <td class="file-name"><a href="{{uploadurl}}{{user.username}}/{{file[2]}}" target="_blank">{{file[2]}}</a></td>
+        <td class="file-date text-muted">{{human_size(file[1])}}</td>
+        <td class="file-date text-muted" title="{{time_ago(file[0])}}">{{human_date(file[0])}}</td>
+        <td class="file-actions"><a href="/functions/delete_file?file={{file[2]}}&uniqid={{user_session.sessionid}}&uploader=upload_simple" title="Delete File" class="text-muted deletebutton"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+{% endfor %}

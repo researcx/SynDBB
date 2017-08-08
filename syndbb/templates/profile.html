@@ -1,0 +1,106 @@
+{% if not isInline %}
+{% extends "layout.html" %}
+{% endif %}
+{% block body %}
+	<div class="media">
+		<span class="media-left">
+			{% if user.user_id == profile.user_id %}
+			<a href="/account/avatar">
+				<img src="{{get_avatar(profile.user_id)}}" alt="Avatar" class="img-circle pull-left profile-avatar-size" style="padding: 8px;"/>
+			</a>
+			{% else %}
+			<a id="profileAvatar" href="{{get_avatar(profile.user_id)}}">
+				<img src="{{get_avatar(profile.user_id)}}" alt="Avatar" class="img-circle pull-left profile-avatar-size" style="padding: 8px;"/>
+			</a>
+			{% endif %}
+      {% if user.rank >= 500 %}
+			<span style="text-align: center; display: block;">
+				{% if is_banned(profile.user_id) %}
+				<a href="/account/admin/ban/?user={{profile.user_id}}" title="Unban" class="text-muted">
+					<i class="fa fa-unlock-alt" aria-hidden="true"></i>
+				</a>
+				{% else %}
+				<a href="/account/admin/ban/?user={{profile.user_id}}" title="Ban" class="text-muted">
+					<i class="fa fa-lock" aria-hidden="true"></i>
+				</a>
+				{% endif %}
+			</span>
+      {% endif %}
+		</span>
+		<div class="media-body">
+			{% if not isInline %}
+			<span class="text-muted" style="float:right; text-align: right;">
+				<span style="font-size: 18pt;">{{get_user_title(profile.title)}}</span>&nbsp;
+        {% if user.rank >= 500 %}
+				<br/>
+        {% if profile.last_activity %}
+        <i>Last active {{time_ago(profile.last_activity)}}.</i>
+				<br/>
+        {% endif %}
+        {% if profile.last_login %}
+        <i>Last logged in {{time_ago(profile.last_login)}}.</i>
+				<br/>
+        {% endif %}
+        <i>Registered {{time_ago(profile.join_date)}}.</i>
+				<br/>
+        {% endif %}
+			</span>
+			{% endif %}
+			<a href="/user/{{profile.username}}">
+				<p class="profile-username" style="{{get_group_style_from_id(profile.user_id)}}">{{profile.username}}</p>
+			</a>
+			<dl class="dl-horizontal">
+        {% if profile.gender %}
+				<dt>Gender:</dt>
+				<dd>{{profile.gender}}</dd>
+        {% endif %}
+        {% if profile.location %}
+				<dt>Location:</dt>
+				<dd>{{profile.location}}</dd>
+        {% endif %}
+        {% if profile.occupation %}
+				<dt>Occupation:</dt>
+				<dd>{{profile.occupation}}</dd>
+        {% endif %}
+        {% if profile.site %}
+				<dt>Website:</dt>
+				<dd>
+					<a href="{{profile.site}}" target="_blank">{{profile.site}}</a>
+				</dd>
+        {% endif %}
+			</dl>
+			<dl class="dl-horizontal">
+				<dt>Lines Spoken:</dt>
+				<dd>{{profile.line_count}} ({{profile.word_count}} words)</dd>
+				<dt>Profanity Count:</dt>
+				<dd>{{profile.profanity_count}}</dd>
+			</dl>
+			<dl class="dl-horizontal">
+				<dt>Currency:</dt>
+				<dd>&ETH;{{profile.points}}</dd>
+				<dt>Karma:</dt>
+				<dd>
+					{% if (profile.karma_positive - profile.karma_negative) < 0 %}
+					<span style="color: red; font-weight: bold;">
+					{% elif (profile.karma_positive - profile.karma_negative) > 0 %}
+					<span style="color: green; font-weight: bold;">
+					{% else %}
+					<span style="color: grey; font-weight: bold;">
+					{% endif %}
+					{{profile.karma_positive - profile.karma_negative}}
+					</span>
+          (<span style="color: green">+{{profile.karma_positive}}</span>/
+					<span style="color: red">-{{profile.karma_negative}}</span>)
+				</dd>
+			</dl>
+			{% if not isInline %}
+	      {% if profile.bio %}
+	      <div style="margin-left: 20px;">
+	        {{parse_bbcode(profile.bio)|safe}}
+	      </div>
+	      {% endif %}
+			{% endif %}
+			<br/>
+		</div>
+  </div>
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends "layout.html" %} {% block body %}
+<div class="row" style="max-width: 100%; margin: 0 auto;">
+  <div class="col-md-6">
+    <h3>Internet Relay Chat</h3>
+    <div style="margin-left: 14px;">
+      <a href="https://irc.d2k5.com/" style="color: #fff; text-decoration: none;" class="btn btn-info">Browser Client</a> <a href="ircs://irc.d2k5.com:6697/" style="color: #fff; text-decoration: none;" class="btn btn-info">IRC Client</a> <a href="/quotes/" style="color: #fff; text-decoration: none;" class="btn btn-info">Quote Database</a>
+      <br/><br/>
+      <b>Server Addresses:</b> irc.d2k5.com, 5n3llbatdsan32kx.onion<br/>
+      <b>Server Port:</b> 6697 (SSL only)<br/>
+      <br/>
+      <b>Username:</b> &lt;your username&gt;<br/>
+      <b>Password:</b> &lt;<a href="/account/?preferences" style="border-bottom: 1px dashed #555;">auth key</a>&gt;<br/>
+      <br/>
+      <a href="https://d2k5.com/forums/?thread=15" style="border-bottom: 1px dashed #555;">Need help setting up IRC?</a>
+      <br/><br/> For clients that don't have a username field, use <strong>&lt;username&gt;/D2K5:&lt;auth key&gt;</strong> as your password.<br/> <strong>The password field may also be called server password in some clients</strong>.
+      <br/><br/>
+      <b>IRC Clients:</b>
+      <ul>
+        <li><a href="https://irc.d2k5.com/">The Lounge</a> (web/browser client)</li>
+        <li><a href="https://hexchat.github.io/">HexChat</a> (desktop client)</li>
+        <li><a href="https://pidgin.im/">Pidgin</a> (desktop client)</li>
+        <li><a href="https://adium.im/">Adium</a> (desktop client)</li>
+        <li><a href="https://weechat.org/">WeeChat</a> (command line client)</li>
+        <li><a href="https://irssi.org/">Irssi</a> (command line client)</li>
+      </ul>
+      <!--Chat from IRC is also relayed to Discord.-->
+    </div>
+    <h3>XMPP</h3>
+    <div style="margin-left: 14px;">
+      Access to the XMPP network will be granted per request.<br/>This network is intended to be used with <a href="https://en.wikipedia.org/wiki/OMEMO">OMEMO</a> or <a href="https://en.wikipedia.org/wiki/Off-the-Record_Messaging">OTR</a>.<br/><br/>
+      <b>Server Addresses:</b> im.d2k5.com, uxad6ahdwahkn547.onion<br/>
+      <b>Server Port:</b> 5222 (SSL only)<br/>
+      <br/>
+      <b>XMPP Clients:</b>
+      <ul>
+        <li><a href="https://pidgin.im/">Pidgin</a> (windows/linux desktop client)</li>
+        <li><a href="https://adium.im/">Adium</a> (mac desktop client)</li>
+        <li><a href="https://f-droid.org/repository/browse%20/?fdid=eu.siacs.conversations">Conversations</a> (android mobile client)</li>
+        <li><a href="https://chatsecure.org/">ChatSecure</a> (ios mobile client)</li>
+      </ul>
+    </div>
+    <!--<br/>
+        <h3>Video Chat</h3>
+        <div style="margin-left: 14px;">
+            Max 4 users per room.<br/><br/>
+            <a href="/vidya/" style="color: #fff; text-decoration: none;" class="btn btn-info">Create Room</a> <a href="/vidya/" style="color: #fff; text-decoration: none;" class="btn btn-info">Join Room</a><br/><br/>
+        </div>-->
+  </div>
+  <!--<div class="col-md-6">
+        <h3>Discord</h3>
+        <div style="margin-left: 14px;">
+            <a href="/discord/" style="color: #fff; text-decoration: none;" class="btn btn-info">Connect using Discord</a>
+            <br/><br/>
+            <b>Channels:</b>
+            <ul>
+                <li>#d2k5 - General discussion.</li>
+                <li>#lobby - Default auto-join channel.</li>
+                <li>#music - Share music and things related to music.</li>
+                <li>#games - Discuss and organise games with fellow members.</li>
+                <li>#gaybar - Internet memes, nsfw content, weird crap.</li>
+            </ul>
+            <b>Discord Clients:</b>
+            <ul>
+                <li><a href="/discord.php">Discord Web</a> (browser client)</li>
+                <li><a href="https://discordapp.com/apps">Discord Official</a> (desktop client)</li>
+                <li><a href="https://aur.archlinux.org/packages/discord-canary/">Discord Canary</a> (arch linux desktop client)</li>
+                <li><a href="https://play.google.com/store/apps/details?id=com.discord&amp;hl=en">Discord Android</a> (mobile client)</li>
+                <li><a href="https://itunes.apple.com/us/app/discord-chat-for-gamers/id985746746?mt=8">Discord iOS</a> (mobile client)</li>
+            </ul>
+            Chat from Discord is also relayed to IRC.
+            <br/><br/>
+            <span style="font-weight: bold; color: #ff0000 !important;">
+      <abbr title=\'"we expect server owners, mods, and admins to uphold their servers to these guidelines and we may intervene if community guidelines are not upheld"\'>Using Discord is not recommended as Discord staff attempt to impose their own rules over user-created servers.</abbr>
+      </span> &nbsp;&nbsp;(
+            <a href="https://discordapp.com/guidelines">Discord Guidelines</a>)
+        </div>
+        <br/>
+    </div>-->
+  <div class="col-md-6">
+    <h3>Network Information &amp; Commands</h3>
+    <div style="margin-left: 14px;">
+      <span style="font-size: 15pt; font-weight: bold; color: #ff0000 !important;">READ THIS: <a href="/terms/" class="blink" style="border-bottom: 1px dotted red; font-weight: bold; color: #ff0000 !important;">Terms of Service</a></span><br/> For large
+      amounts of content, use the <a href="/pastebin/" style="border-bottom: 1px dotted red;">pastebin</a>.
+      <br/><br/>
+      <p>The D2K5 Network has its own official IRC bot called <b>Spunky</b>, which provides many useful commands and is also used for identifying users between the site and the IRC.</p>
+      <b>General:</b>
+      <ul>
+        <li>!info [user] - Look up information about a user on D2K5.</li>
+        <li>!calc &lt;calculation&gt; - Calculate something.</li>
+        <li>!wa &lt;calculation&gt; - Calculate something using Wolfram Alpha.</li>
+        <li>!dice &lt;XdY&gt; - Rolls dice using either the XdY or XdYvZ format.</li>
+        <li>!yt &lt;terms&gt; - Find a video on YouTube.</li>
+        <li>!ddg &lt;terms&gt; - Search something on DuckDuckGo.</li>
+        <li>!wiki &lt;terms&gt; - Search something on Wikipedia.</li>
+        <li>!ety &lt;word&gt; - Look up the etymology of a word.</li>
+        <li>!define &lt;word&gt; - Look up the definition of a word.</li>
+        <li>!countdown &lt;YYYY MM DD&gt; - Countdown to a date.</li>
+        <li>!ip &lt;IP&gt; - Look up information of an IP address.</li>
+        <li>!isup &lt;url&gt; - Check if a website is up.</li>
+        <li>!tr &lt;message&gt; - Translates the given message into English.</li>
+        <li>!rand [int1] [int2] - Generates a random number.</li>
+        <li>!settz &lt;timezone&gt; - Set your preferred timezone.</li>
+        <li>!settf &lt;format&gt; - Set your preferred time format.</li>
+        <li>!setlocation &lt;location&gt; - Set your preferred location.</li>
+      </ul>
+      <b>Moderation:</b>
+      <ul>
+        <li>!up - Request a higher rank (&gt;Half-Op).</li>
+        <li>!down - Lowers your rank to voice (Member&lt;).</li>
+        <li>!ban &lt;user&gt; - Bans a user.</li>
+        <li>!unban &lt;user&gt; - Unbans a user.</li>
+        <li>!kick &lt;user&gt; - Kicks a user.</li>
+        <li>!kb &lt;user&gt; - Kicks and bans a user.</li>
+        <li>!quiet &lt;user&gt; - Silences a user.</li>
+        <li>!unquiet &lt;user&gt; - Unsilences a user.</li>
+        <li>!topic &lt;message&gt; - Changes the topic of the current channel.</li>
+        <li>!channeltz &lt;timezone&gt; - Sets the default timezone.</li>
+        <li>!setctf &lt;format&gt; - Sets the default time format.</li>
+        <li>!seen &lt;user&gt; - Shows when and where the user was last seen.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
