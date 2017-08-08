@@ -11,6 +11,6 @@ import syndbb
 def events():
     return syndbb.render_template('events.html', title="Event Log")
 
-@syndbb.app.route("/banlist/")
-def banlist():
-    return syndbb.render_template('banlist.html', title="Ban List")
+@syndbb.app.route("/ban_list/")
+def ban_list():
+    return syndbb.render_template('ban_list.html', title="Ban List")

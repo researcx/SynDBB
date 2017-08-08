@@ -82,4 +82,4 @@ def ban_list():
                         <td class=""><a href="/user/'''+banner.username+'''">'''+banner.username+'''</a></td>
                     </tr>'''
 
-    return {'banlist': ban_list}
+    return {'ban_list': ban_list}

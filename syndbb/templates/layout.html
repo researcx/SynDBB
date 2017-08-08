@@ -131,7 +131,7 @@
               </li>
               <li><a href="{{ url_for('chat') }}"><i class="fa fa-comments" aria-hidden="true"></i> Chat</a></li>
               <li><a href="{{ url_for('events') }}"><i class="fa fa-calendar" aria-hidden="true"></i> Events</a></li>
-              <li><a href="{{ url_for('banlist') }}"><i class="fa fa-ban" aria-hidden="true"></i> Bans</a></li>
+              <li><a href="{{ url_for('ban_list') }}"><i class="fa fa-ban" aria-hidden="true"></i> Bans</a></li>
               {% if user_session.sessionid %}
               <li><a href="{{ url_for('pastebin') }}"><i class="fa fa-clipboard" aria-hidden="true"></i> My Pastes</a></li>
               <li><a href="{{ url_for('upload') }}"><i class="fa fa-server" aria-hidden="true"></i>My Files</a></li>

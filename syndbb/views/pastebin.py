@@ -30,7 +30,7 @@ def pastebin():
         userid = checkSession(str(syndbb.session['logged_in']))
         if userid:
             getPastes = d2_paste.query.filter(d2_paste.user_id == userid).order_by(syndbb.db.desc(d2_paste.time)).all()
-            return syndbb.render_template('pastebin.html', dynamic_js_footer=dynamic_js_footer, pasteList=getPastes, title="Pastebin")
+            return syndbb.render_template('pastebin.html', dynamic_js_footer=dynamic_js_footer, paste_list=getPastes, title="Pastebin")
         else:
             return syndbb.render_template('error_not_logged_in.html', title="Pastebin")
     else:

@@ -47,6 +47,14 @@ streamHandler.setFormatter(formatter)
 syndbb.app.logger.addHandler(fileHandler)
 syndbb.app.logger.addHandler(streamHandler)
 
+@syndbb.app.after_request
+def after_request(response):
+    timestamp = strftime('[%Y-%b-%d %H:%M]')
+    logger.info('%s %s %s %s %s %s',
+        timestamp, request.remote_addr,request.method,
+        request.scheme, request.full_path, response.status)
+    return response
+
 @syndbb.app.errorhandler(Exception)
 def exceptions(e):
     tb = traceback.format_exc()

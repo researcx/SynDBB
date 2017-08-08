@@ -165,27 +165,27 @@ def view_thread_gallery(category, thread):
         dynamic_css_header = ["css/bbcode_editor.css"]
         dynamic_js_footer = ["js/jquery.rangyinputs.js", "js/bbcode_editor_forums.js", "js/posts.js", "js/bootbox.min.js", "js/delete.js", "js/inline.js"]
         threadcheck = d2_activity.query.filter_by(id=thread).first()
-        imagelist = []
+        image_list = []
         if threadcheck:
             thread_title = (threadcheck.title[:75] + '...') if len(threadcheck.title) > 75 else threadcheck.title
 
             image_finder = "(?<=\[img\]).*?(?=\[/img\])"
             images = syndbb.re.findall(image_finder, threadcheck.content, syndbb.re.IGNORECASE)
             for image in images:
-                imagelist.append(image)
+                image_list.append(image)
 
             replycheck = d2_activity.query.filter_by(replyto=thread).all()
             for reply in replycheck:
                 images = syndbb.re.findall(image_finder, reply.content, syndbb.re.IGNORECASE)
                 for image in images:
-                    imagelist.append(image)
+                    image_list.append(image)
 
-            imagecount = str(len(imagelist)) + " images"
-            if len(imagelist) == 1:
+            imagecount = str(len(image_list)) + " images"
+            if len(image_list) == 1:
                 imagecount = imagecount.rstrip('s')
 
 
-            return syndbb.render_template('view_thread_gallery.html', forum=forumcheck, thread=threadcheck, images=imagelist, imagecount=imagecount, title="#"+forumcheck.short_name + " &bull; " + thread_title + " &bull; " + forumcheck.name, forumtitle="<a href='/" + forumcheck.short_name + "/'>" + forumcheck.name + "</a>")
+            return syndbb.render_template('view_thread_gallery.html', forum=forumcheck, thread=threadcheck, images=image_list, imagecount=imagecount, title="#"+forumcheck.short_name + " &bull; " + thread_title + " &bull; " + forumcheck.name, forumtitle="<a href='/" + forumcheck.short_name + "/'>" + forumcheck.name + "</a>")
         else:
             return syndbb.render_template('invalid.html', title="No thread found")
     else:
