@@ -1,4 +1,4 @@
-##SynDBB
+## SynDBB
 
 **SynDBB** is a compilation of all the best parts of bulletin boards, intended for IRC/ZNC integration, which is where the name comes from (Syndication + IRCd + Bulletin Boards)
 
