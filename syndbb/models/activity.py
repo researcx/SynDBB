@@ -16,8 +16,8 @@ def get_activity(limit=10):
     activity_item = ""
     count = 0
 
-    posts = d2_activity.query.filter(d2_activity.replyto != 0).limit(limit).all()
-    threads = d2_activity.query.filter(d2_activity.category != 0).limit(limit).all()
+    posts = d2_activity.query.filter(d2_activity.replyto != 0).order_by(d2_activity.time.desc()).limit(limit).all()
+    threads = d2_activity.query.filter(d2_activity.category != 0).order_by(d2_activity.reply_time.desc()).limit(limit).all()
 
     for post in posts:
         activity.append([post.time, "post", post.id])

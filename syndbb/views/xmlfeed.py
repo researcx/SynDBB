@@ -19,7 +19,7 @@ def feed_posts_xml():
     count = 0
     limit = 10
 
-    posts = d2_activity.query.filter(d2_activity.replyto != 0).limit(limit).all()
+    posts = d2_activity.query.filter(d2_activity.replyto != 0).order_by(d2_activity.time.desc()).limit(limit).all()
 
     for post in posts:
         activity.append([post.time, "post", post.id])
@@ -57,7 +57,7 @@ def feed_threads_xml():
     count = 0
     limit = 10
 
-    threads = d2_activity.query.filter(d2_activity.category != 0).limit(limit).all()
+    threads = d2_activity.query.filter(d2_activity.category != 0).order_by(d2_activity.reply_time.desc()).limit(limit).all()
 
     for thread in threads:
         activity.append([thread.time, "thread", thread.id])
