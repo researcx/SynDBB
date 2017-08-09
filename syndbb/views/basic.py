@@ -16,8 +16,12 @@ def home():
     return syndbb.render_template('home.html', dynamic_js_footer=dynamic_js_footer)
 
 @syndbb.app.route('/robots.txt')
-def static_from_root():
- return send_from_directory(syndbb.app.static_folder, syndbb.request.path[1:])
+def robotstxt():
+    return send_from_directory(syndbb.app.static_folder, syndbb.request.path[1:])
+
+@syndbb.app.route('/favicon.ico')
+def faviconico():
+    return send_from_directory(syndbb.app.static_folder, syndbb.request.path[1:])
 
 @syndbb.app.route("/chat/")
 def chat():

@@ -1,0 +1,28 @@
+{% extends "layout.html" %} {% block body %}
+<table class="event-list table table-striped">
+  <thead>
+    <tr>
+      <td class="">IP</td>
+      <td class="">Time</td>
+      <td class="">Date</td>
+      <td class="">Type</td>
+    </tr>
+  </thead>
+  <tbody>
+    {% for login in logins %}
+    <tr>
+      <td class="">[{{country_from_ip(login.ip)}}] {{login.ip}}</td>
+      <td class="">{{time_ago(login.time)}}</td>
+      <td class="">{{human_date(login.time)}}</td>
+      {% if login.login == 0 %}
+      <td class="">Failed login attempt</td>
+      {% elif login.login == 1 %}
+      <td class="">Logged in</td>
+      {% elif login.login == 2 %}
+      <td class="">Successful login</td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

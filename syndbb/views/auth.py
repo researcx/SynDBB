@@ -5,7 +5,7 @@
 #
 
 import syndbb
-from syndbb.models.users import d2_user, d2_session, d2_bans, checkSession
+from syndbb.models.users import d2_user, d2_session, d2_bans, d2_ip, checkSession
 from syndbb.models.d2_hash import d2_hash
 from syndbb.models.time import unix_time_current
 from syndbb.models.invites import d2_invites
@@ -97,24 +97,34 @@ def dologin():
     username = syndbb.request.form['username']
     password = d2_hash(syndbb.request.form['password'])
 
-    syndbb.app.logger.debug("""DEBUG: Username: """ + username+ """\nDEBUG: Hashed Password: """ + password)
+    #syndbb.app.logger.debug("""DEBUG: Username: """ + username+ """\nDEBUG: Hashed Password: """ + password)
 
     user = d2_user.query.filter_by(username=username).first()
+    my_ip = syndbb.request.remote_addr
 
-    session_id = str(syndbb.uuid.uuid1())
-    if user.password == password:
-        new_session = d2_session(user.user_id, session_id, unix_time_current())
-        syndbb.db.session.add(new_session)
-        syndbb.db.session.commit()
-        syndbb.session['logged_in'] = session_id
+    if user:
+        session_id = str(syndbb.uuid.uuid1())
+        if user.password == password:
+            new_session = d2_session(user.user_id, session_id, unix_time_current())
+            syndbb.db.session.add(new_session)
+            syndbb.db.session.commit()
+            syndbb.session['logged_in'] = session_id
 
-        user.last_login = unix_time_current()
-        syndbb.db.session.commit()
-        return "Login successful."
-        #flash('You\'ve logged in successfully.', 'success')
-        #return redirect(url_for('home'))
+            user.last_login = unix_time_current()
+            syndbb.db.session.commit()
+
+            login_ip = d2_ip(my_ip, user.user_id, unix_time_current(), 2)
+            syndbb.db.session.add(login_ip)
+            syndbb.db.session.commit()
+
+            return "Login successful."
+        else:
+            login_ip = d2_ip(my_ip, user.user_id, unix_time_current(), 0)
+            syndbb.db.session.add(login_ip)
+            syndbb.db.session.commit()
+            return "Invalid password."
     else:
-        return "Invalid username or password."
+        return "Invalid username."
 
 @syndbb.app.route('/functions/logout')
 def logout():
@@ -125,7 +135,7 @@ def logout():
             if str(uniqid) == str(syndbb.session['logged_in']):
                 check_session = d2_session.query.filter_by(sessionid=uniqid).first()
                 if check_session:
-                    syndbb.app.logger.debug("DEBUG: Deleting Session: " + check_session.sessionid)
+                    #syndbb.app.logger.debug("DEBUG: Deleting Session: " + check_session.sessionid)
                     syndbb.db.session.delete(check_session)
                     syndbb.db.session.commit()
 

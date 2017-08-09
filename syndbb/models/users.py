@@ -5,6 +5,7 @@
 #
 
 import syndbb
+from geolite2 import geolite2
 from syndbb.models.time import unix_time_current, display_time
 
 ### General Functions ###
@@ -20,12 +21,7 @@ def checkSession(sessionid):
                     return 0
                 else:
                     return sessioncheck.user_id
-            else:
-                syndbb.session.pop('logged_in', None)
-                return 0
-        else:
-            syndbb.session.pop('logged_in', None)
-            return 0
+    syndbb.session.pop('logged_in', None)
     return 0
 
 
@@ -39,6 +35,18 @@ def inject_user():
             if user and user.user_id:
                 user.last_activity = unix_time_current()
                 syndbb.db.session.commit()
+
+
+                my_ip = syndbb.request.remote_addr
+                ipcheck = d2_ip.query.filter_by(ip=my_ip).filter_by(user_id=user.user_id).filter_by(login=1).first()
+                if ipcheck:
+                    ipcheck.time = unix_time_current()
+                    syndbb.db.session.commit()
+                else:
+                    new_ip = d2_ip(my_ip, user.user_id, unix_time_current(), 1)
+                    syndbb.db.session.add(new_ip)
+                    syndbb.db.session.commit()
+
                 bancheck = is_banned(user.user_id)
                 if bancheck:
                     return {'user': user, 'user_session': user_session, 'bancheck': bancheck}
@@ -84,6 +92,19 @@ def get_user_title(title):
     else:
         return "Member"
 syndbb.app.jinja_env.globals.update(get_user_title=get_user_title)
+
+#Get title from ID
+@syndbb.app.template_filter('country_from_ip')
+def country_from_ip(ip):
+    if ip:
+        reader = geolite2.reader()
+        geo_data = reader.get(ip)
+        geolite2.close()
+        if geo_data and 'country' in geo_data and 'iso_code' in geo_data['country']:
+            country_iso_code = geo_data['country']['iso_code']
+            return country_iso_code
+    return "N/A"
+syndbb.app.jinja_env.globals.update(country_from_ip=country_from_ip)
 
 #Get title from ID
 @syndbb.app.template_filter('is_banned')
@@ -147,8 +168,8 @@ syndbb.app.jinja_env.globals.update(get_group_style=get_group_style)
 ### MySQL Functions ###
 class d2_session(syndbb.db.Model):
     id = syndbb.db.Column(syndbb.db.Integer, primary_key=True)
-    user_id = syndbb.db.Column(syndbb.db.Integer, unique=True)
-    sessionid = syndbb.db.Column(syndbb.db.String, unique=True)
+    user_id = syndbb.db.Column(syndbb.db.Integer, unique=False)
+    sessionid = syndbb.db.Column(syndbb.db.String, unique=False)
     time = syndbb.db.Column(syndbb.db.Integer, unique=False)
 
     def __init__(self, user_id, sessionid, time):
@@ -239,3 +260,20 @@ def __init__(self, banned_id, reason, length, time, expires, post, banner):
 
 def __repr__(self):
     return '<Banned %r>' % self.banned_id
+
+
+class d2_ip(syndbb.db.Model):
+    id = syndbb.db.Column(syndbb.db.Integer, primary_key=True)
+    ip = syndbb.db.Column(syndbb.db.String, unique=False)
+    user_id = syndbb.db.Column(syndbb.db.Integer, unique=False)
+    time = syndbb.db.Column(syndbb.db.Integer, unique=False)
+    login = syndbb.db.Column(syndbb.db.Integer, unique=False)
+
+    def __init__(self, ip, user_id, time, login):
+        self.ip = ip
+        self.user_id = user_id
+        self.time = time
+        self.login = login
+
+    def __repr__(self):
+        return '<IP %r>' % self.user_id

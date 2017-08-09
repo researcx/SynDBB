@@ -156,6 +156,7 @@
                   <li><a href="{{ url_for('change_avatar') }}">Change Avatar</a></li>
                   <li><a href="{{ url_for('change_password') }}">Change Password</a></li>
                   <li><a href="{{ url_for('my_invites') }}">Invite Codes</a></li>
+                  <li><a href="{{ url_for('login_history') }}">Login History</a></li>
                   <li><a href="{{ url_for('logout') }}?uniqid={{user_session.sessionid}}">Log Out</a></li>
                 </ul>
               </li>
@@ -189,7 +190,7 @@
           use of cookies.</p>
         <p class="text-muted"><a href="{{ url_for('terms') }}">D2K5 &copy; 2002 - {{ now.year }}</a> - <a href="{{ url_for('info') }}">Powered by SynDBB {{ syndbb_version }} ({{ syndbb_hash }})</a><br/>
           <a href="https://github.com/D2K5/SynDBB" target="_blank">Submit bug reports, fixes and feature requests on <i class="fa fa-github" aria-hidden="true"></i>GitHub!</a><br/>
-          <i>Page generation took {{ g.request_time() }} seconds.</i></p>
+          <i>Page generation took {{ g.request_time() }} seconds. &bull; All times are <abbr title="Greenwich Mean Time">GMT</abbr>.</i></p>
       </div>
     </footer>
 

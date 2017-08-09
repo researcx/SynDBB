@@ -5,7 +5,7 @@
 #
 
 import syndbb, shutil, base64, requests
-from syndbb.models.users import d2_user, checkSession
+from syndbb.models.users import d2_user, d2_ip, checkSession
 from syndbb.models.time import unix_time_current
 
 @syndbb.app.route("/user/<username>")
@@ -36,6 +36,19 @@ def preferences():
             return syndbb.render_template('error_not_logged_in.html', title="Preferences")
     else:
         return syndbb.render_template('error_not_logged_in.html', title="Preferences")
+
+@syndbb.app.route("/account/login_history")
+def login_history():
+    if 'logged_in' in syndbb.session:
+        userid = checkSession(str(syndbb.session['logged_in']))
+        if userid:
+            user = d2_user.query.filter_by(user_id=userid).first()
+            logins = d2_ip.query.filter_by(user_id=userid).order_by(d2_ip.time.desc()).all()
+            return syndbb.render_template('login_info.html', logins=logins, title="Login History")
+        else:
+            return syndbb.render_template('error_not_logged_in.html', title="Login History")
+    else:
+        return syndbb.render_template('error_not_logged_in.html', title="Login History")
 
 @syndbb.app.route("/account/password")
 def change_password():

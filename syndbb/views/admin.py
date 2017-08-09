@@ -5,7 +5,7 @@
 #
 
 import syndbb, glob, shutil
-from syndbb.models.users import d2_user, d2_bans, checkSession, is_banned
+from syndbb.models.users import d2_user, d2_bans, d2_ip, checkSession, is_banned
 from syndbb.models.forums import d2_forums, d2_activity
 from syndbb.models.quotedb import d2_quotes
 from syndbb.models.time import unix_time_current
@@ -41,6 +41,22 @@ def siteadmin_users():
             if user.rank >= 500:
                 users = d2_user.query.order_by(d2_user.rank.desc()).order_by(d2_user.join_date.asc()).all()
                 return syndbb.render_template('admin_users.html', users=users, title="Administration &bull; User List")
+            else:
+                return syndbb.render_template('invalid.html', title="Not Found")
+        else:
+            return syndbb.render_template('error_not_logged_in.html', title="Administration")
+    else:
+        return syndbb.render_template('error_not_logged_in.html', title="Administration")
+
+@syndbb.app.route("/account/admin/logins")
+def siteadmin_logins():
+    if 'logged_in' in syndbb.session:
+        userid = checkSession(str(syndbb.session['logged_in']))
+        if userid:
+            user = d2_user.query.filter_by(user_id=userid).first()
+            if user.rank >= 900:
+                logins = d2_ip.query.order_by(d2_ip.time.desc()).all()
+                return syndbb.render_template('admin_logins.html', logins=logins, title="Administration &bull; Login History")
             else:
                 return syndbb.render_template('invalid.html', title="Not Found")
         else:
