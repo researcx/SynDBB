@@ -13,7 +13,7 @@
         <span class="text-muted" style="float:right; text-align: right;">
           <div class="RatingContainer Rating">
               <a href="/functions/rate_post/?post_id={{thread.id}}&type=up&uniqid={{user_session.sessionid}}" class="RatingUp DoRatingUp"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
-              <span class="PostRating-{{thread.id}} Rating">{{get_post_rating(thread.id)}}</span>
+              <span class="PostRating-{{thread.id}} Rating">{{thread.rating}}</span>
               <a href="/functions/rate_post/?post_id={{thread.id}}&type=down&uniqid={{user_session.sessionid}}" class="RatingDown DoRatingDown"><i class="fa fa-chevron-down" aria-hidden="true"></i></a>
           </div>
           <div class="PostInfoContainer">
@@ -69,7 +69,7 @@
         <span class="text-muted" style="float:right; text-align: right;">
           <div class="RatingContainer Rating">
               <a href="/functions/rate_post/?post_id={{reply.id}}&type=up&uniqid={{user_session.sessionid}}" class="RatingUp DoRatingUp"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
-              <span class="PostRating-{{reply.id}} Rating">{{get_post_rating(reply.id)}}</span>
+              <span class="PostRating-{{reply.id}} Rating">{{reply.rating}}</span>
               <a href="/functions/rate_post/?post_id={{reply.id}}&type=down&uniqid={{user_session.sessionid}}" class="RatingDown DoRatingDown"><i class="fa fa-chevron-down" aria-hidden="true"></i></a>
           </div>
           <div class="PostInfoContainer">

@@ -44,6 +44,9 @@ def do_rate_quote():
                         syndbb.db.session.commit()
                         ratingtype = 1
 
+                    quotecheck.rating = int(quotecheck.rating) + ratingtype
+                    syndbb.db.session.commit()
+
                     submit_rating = d2_quote_ratings(quote_id, userid, ratingtype)
                     syndbb.db.session.add(submit_rating)
                     syndbb.db.session.commit()
@@ -64,12 +67,14 @@ class d2_quotes(syndbb.db.Model):
     time = syndbb.db.Column(syndbb.db.Integer, unique=True)
     content = syndbb.db.Column(syndbb.db.String, unique=False)
     approved = syndbb.db.Column(syndbb.db.Integer, unique=False)
+    rating = syndbb.db.Column(syndbb.db.Integer, unique=False)
 
-    def __init__(self, user_id, time, content, approved):
+    def __init__(self, user_id, time, content, approved, rating):
         self.user_id = user_id
         self.time = time
         self.content = content
         self.approved = approved
+        self.rating = rating
 
     def __repr__(self):
         return '<Quote %r>' % self.id

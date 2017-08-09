@@ -101,8 +101,9 @@ class d2_activity(syndbb.db.Model):
     category = syndbb.db.Column(syndbb.db.Integer, unique=False)
     reply_time = syndbb.db.Column(syndbb.db.Integer, unique=False)
     reply_count = syndbb.db.Column(syndbb.db.Integer, unique=False)
+    rating = syndbb.db.Column(syndbb.db.Integer, unique=False)
 
-    def __init__(self, user_id, time, content, replyto, replyToPost, title, category, reply_time, reply_count):
+    def __init__(self, user_id, time, content, replyto, replyToPost, title, category, reply_time, reply_count, rating):
         self.user_id = user_id
         self.time = time
         self.content = content
@@ -112,6 +113,7 @@ class d2_activity(syndbb.db.Model):
         self.category = category
         self.reply_time = reply_time
         self.reply_count = reply_count
+        self.rating = rating
 
     def __repr__(self):
         return '<Post %r>' % self.id

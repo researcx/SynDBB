@@ -7,7 +7,7 @@
 import syndbb, requests, hashlib
 from PIL import Image, ImageOps
 from io import BytesIO
-from syndbb.models.forums import d2_forums, d2_activity, d2_post_ratings, get_post_rating, parse_bbcode
+from syndbb.models.forums import d2_forums, d2_activity, d2_post_ratings, parse_bbcode
 from syndbb.models.users import d2_user, get_avatar, get_group_style_from_id, checkSession
 from syndbb.models.time import time_ago, human_date, unix_time_current
 from syndbb.models.currency import give_currency, take_currency
@@ -66,7 +66,7 @@ def view_forum(category):
                   <div class="media-body">
                     <span class="text-muted" style="float:right; text-align: right;">
                       <div class="RatingContainer Rating">
-                          <span class="Rating RatingLarge" title="Thread Rating">'''+str(get_post_rating(thread.id))+'''</span>
+                          <span class="Rating RatingLarge" title="Thread Rating">'''+str(thread.rating)+'''</span>
                       </div>
                       <div class="PostInfoContainer">
                       last active <a href="/''' + forumcheck.short_name+ '''/''' + str(thread.id)+ '''#'''+str(latest)+'''" class="activity_lastpost"><i title="'''+ human_date(thread.reply_time) + '''">''' + time_ago(thread.reply_time) + '''&nbsp;</i></a><br/>
@@ -259,6 +259,9 @@ def do_rate_post():
                         syndbb.db.session.commit()
                         ratingtype = 1
 
+                    postcheck.rating = int(postcheck.rating) + ratingtype
+                    syndbb.db.session.commit()
+
                     submit_rating = d2_post_ratings(post_id, userid, ratingtype)
                     syndbb.db.session.add(submit_rating)
                     syndbb.db.session.commit()
@@ -293,7 +296,7 @@ def create_thread():
                         return "Trying to create threads too quickly, wait a while before trying again."
                     else:
                         # syndbb.flash('Your thread has been created.', 'success')
-                        create_thread = d2_activity(userid, unix_time_current(), tpost, 0, 0, html_escape(tname), tcat, unix_time_current(), 0)
+                        create_thread = d2_activity(userid, unix_time_current(), tpost, 0, 0, html_escape(tname), tcat, unix_time_current(), 0, 0)
                         syndbb.db.session.add(create_thread)
                         syndbb.db.session.flush()
                         thread_id = str(create_thread.id)
@@ -334,7 +337,7 @@ def create_reply():
                         threadcheck.reply_count += 1
                         syndbb.db.session.commit()
 
-                        create_reply = d2_activity(userid, unix_time_current(), tpost, reply_to, reply_post, '', 0, 0, 0)
+                        create_reply = d2_activity(userid, unix_time_current(), tpost, reply_to, reply_post, '', 0, 0, 0, 0)
                         syndbb.db.session.add(create_reply)
                         syndbb.db.session.flush()
                         thread_id = str(create_reply.id)

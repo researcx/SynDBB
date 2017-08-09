@@ -29,7 +29,7 @@
   	  <div class="media-body">
         <div class="RatingContainer Rating">
             <a href="/functions/rate_quote/?quote_id={{quote.id}}&type=up&uniqid={{user_session.sessionid}}" class="RatingUp DoRatingUp"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
-            <span class="PostRating-{{quote.id}} Rating">{{get_quote_rating(quote.id)}}</span>
+            <span class="PostRating-{{quote.id}} Rating">{{quote.rating}}</span>
             <a href="/functions/rate_quote/?quote_id={{quote.id}}&type=down&uniqid={{user_session.sessionid}}" class="RatingDown DoRatingDown"><i class="fa fa-chevron-down" aria-hidden="true"></i></a>
         </div>
         <div class="QuoteContainer">
