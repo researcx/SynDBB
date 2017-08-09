@@ -11,7 +11,7 @@
   <tbody>
     {% for login in logins %}
     <tr>
-      <td class="">[{{country_from_ip(login.ip)}}] {{login.ip}}</td>
+      <td class="">{{login.ip}}</td>
       <td class="">{{time_ago(login.time)}}</td>
       <td class="">{{human_date(login.time)}}</td>
       {% if login.login == 0 %}

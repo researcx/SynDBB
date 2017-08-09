@@ -48,6 +48,11 @@
   margin-right: 15px;
 }
 
+.QuoteContainer{
+  display: block;
+  margin-right: 32px;
+}
+
 .actions-main{
   margin-right: 33px;
 }

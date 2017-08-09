@@ -33,8 +33,8 @@ def all_pages():
 
 @syndbb.app.route("/quotes/")
 def view_qdb():
-    dynamic_css_header = ["css/bbcode_editor.css"]
-    dynamic_js_footer = ["js/jquery.rangyinputs.js", "js/quotes.js", "js/inline.js", "js/bootbox.min.js"]
+    dynamic_css_header = ["css/rating.css"]
+    dynamic_js_footer = ["js/jquery.rangyinputs.js", "js/quotes.js", "js/inline.js", "js/post_ratings.js", "js/bootbox.min.js"]
 
     quotes = d2_quotes.query.filter_by(approved=1).order_by(d2_quotes.time.desc()).all()
 

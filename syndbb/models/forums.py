@@ -55,7 +55,6 @@ def get_post_rating(post_id):
     for rating in ratings:
         final_count = final_count + rating.type
     return final_count
-
 syndbb.app.jinja_env.globals.update(get_post_rating=get_post_rating)
 
 #Parse forum BBCode

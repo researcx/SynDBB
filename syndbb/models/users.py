@@ -5,7 +5,6 @@
 #
 
 import syndbb
-from geolite2 import geolite2
 from syndbb.models.time import unix_time_current, display_time
 
 ### General Functions ###
@@ -92,19 +91,6 @@ def get_user_title(title):
     else:
         return "Member"
 syndbb.app.jinja_env.globals.update(get_user_title=get_user_title)
-
-#Get title from ID
-@syndbb.app.template_filter('country_from_ip')
-def country_from_ip(ip):
-    if ip:
-        reader = geolite2.reader()
-        geo_data = reader.get(ip)
-        geolite2.close()
-        if geo_data and 'country' in geo_data and 'iso_code' in geo_data['country']:
-            country_iso_code = geo_data['country']['iso_code']
-            return country_iso_code
-    return "N/A"
-syndbb.app.jinja_env.globals.update(country_from_ip=country_from_ip)
 
 #Get title from ID
 @syndbb.app.template_filter('is_banned')
