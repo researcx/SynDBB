@@ -34,17 +34,16 @@ def inject_user():
             if user and user.user_id:
                 user.last_activity = unix_time_current()
                 syndbb.db.session.commit()
-
-
-                my_ip = syndbb.request.remote_addr
-                ipcheck = d2_ip.query.filter_by(ip=my_ip).filter_by(user_id=user.user_id).filter_by(login=1).first()
-                if ipcheck:
-                    ipcheck.time = unix_time_current()
-                    syndbb.db.session.commit()
-                else:
-                    new_ip = d2_ip(my_ip, user.user_id, unix_time_current(), 1)
-                    syndbb.db.session.add(new_ip)
-                    syndbb.db.session.commit()
+                
+                # my_ip = syndbb.request.remote_addr
+                # ipcheck = d2_ip.query.filter_by(ip=my_ip).filter_by(user_id=user.user_id).filter_by(login=1).first()
+                # if ipcheck:
+                #     ipcheck.time = unix_time_current()
+                #     syndbb.db.session.commit()
+                # else:
+                #     new_ip = d2_ip(my_ip, user.user_id, unix_time_current(), 1)
+                #     syndbb.db.session.add(new_ip)
+                #     syndbb.db.session.commit()
 
                 bancheck = is_banned(user.user_id)
                 if bancheck:
