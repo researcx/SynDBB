@@ -6,6 +6,7 @@
 
 import syndbb, glob, shutil
 from syndbb.models.users import d2_user, d2_bans, d2_ip, d2_session, checkSession, is_banned
+from syndbb.models.invites import d2_requests
 from syndbb.models.d2_hash import d2_hash
 from syndbb.models.forums import d2_forums, d2_activity
 from syndbb.models.quotedb import d2_quotes
@@ -43,6 +44,23 @@ def siteadmin_users():
                 dynamic_js_footer = ["js/bootbox.min.js", "js/delete.js"]
                 users = d2_user.query.order_by(d2_user.rank.desc()).order_by(d2_user.join_date.asc()).all()
                 return syndbb.render_template('admin_users.html', dynamic_js_footer=dynamic_js_footer, users=users, title="Administration &bull; User List")
+            else:
+                return syndbb.render_template('invalid.html', title="Not Found")
+        else:
+            return syndbb.render_template('error_not_logged_in.html', title="Administration")
+    else:
+        return syndbb.render_template('error_not_logged_in.html', title="Administration")
+
+@syndbb.app.route("/account/admin/invites")
+def siteadmin_invites():
+    if 'logged_in' in syndbb.session:
+        userid = checkSession(str(syndbb.session['logged_in']))
+        if userid:
+            user = d2_user.query.filter_by(user_id=userid).first()
+            if user.rank >= 500:
+                dynamic_js_footer = ["js/bootbox.min.js", "js/delete.js"]
+                invites = d2_requests.query.all()
+                return syndbb.render_template('admin_invites.html', dynamic_js_footer=dynamic_js_footer, invites=invites, title="Administration &bull; Requested Invites")
             else:
                 return syndbb.render_template('invalid.html', title="Not Found")
         else:

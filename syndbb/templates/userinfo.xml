@@ -4,6 +4,7 @@
 		<id>{{user.user_id}}</id>
 		<name>{{user.username}}</name>
 		<title>{{user.title}}</title>
+		<rank>{{user.rank}}</rank>
 		<gender>{{user.gender}}</gender>
 		<location>{{user.location}}</location>
 		<occupation>{{user.occupation}}</occupation>

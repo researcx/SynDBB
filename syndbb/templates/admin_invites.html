@@ -1,0 +1,18 @@
+{% extends "layout.html" %} {% block body %}
+
+{% for invite in invites %}
+<div class="reply-container panel panel-default">
+  <div class="panel-body">
+    <div class="media">
+      <div class="media-body">
+        <span class="text-muted" style="float:right; text-align: right;">
+          <i>{{invite.email}}&nbsp;</i><br/>
+        </span>
+        <b>{{invite.username}}</b><br/>
+        <span class="text-muted">{{invite.reason}}.</span><br/></div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+{% endblock %}
