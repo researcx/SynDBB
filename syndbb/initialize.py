@@ -31,7 +31,7 @@ import syndbb.views.admin
 
 # Miscellaneous
 import syndbb.views.irc_api
-import syndbb.views.xmlfeed
+import syndbb.views.xml_feed
 
 #Error Logging (when not in debug mode)
 if not syndbb.app.debug:

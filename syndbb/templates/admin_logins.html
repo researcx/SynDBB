@@ -7,6 +7,7 @@
       <td class="">Time</td>
       <td class="">Date</td>
       <td class="">Type</td>
+      <td class="">Page</td>
     </tr>
   </thead>
   <tbody>
@@ -23,6 +24,7 @@
       {% elif login.login == 2 %}
       <td class="">Successful login</td>
       {% endif %}
+      <td class="">{{login.page}}</td>
     </tr>
     {% endfor %}
   </tbody>

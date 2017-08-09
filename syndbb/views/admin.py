@@ -5,7 +5,8 @@
 #
 
 import syndbb, glob, shutil
-from syndbb.models.users import d2_user, d2_bans, d2_ip, checkSession, is_banned
+from syndbb.models.users import d2_user, d2_bans, d2_ip, d2_session, checkSession, is_banned
+from syndbb.models.d2_hash import d2_hash
 from syndbb.models.forums import d2_forums, d2_activity
 from syndbb.models.quotedb import d2_quotes
 from syndbb.models.time import unix_time_current
@@ -39,8 +40,9 @@ def siteadmin_users():
         if userid:
             user = d2_user.query.filter_by(user_id=userid).first()
             if user.rank >= 500:
+                dynamic_js_footer = ["js/bootbox.min.js", "js/delete.js"]
                 users = d2_user.query.order_by(d2_user.rank.desc()).order_by(d2_user.join_date.asc()).all()
-                return syndbb.render_template('admin_users.html', users=users, title="Administration &bull; User List")
+                return syndbb.render_template('admin_users.html', dynamic_js_footer=dynamic_js_footer, users=users, title="Administration &bull; User List")
             else:
                 return syndbb.render_template('invalid.html', title="Not Found")
         else:
@@ -80,6 +82,23 @@ def siteadmin_rank():
     else:
         return syndbb.render_template('error_not_logged_in.html', title="Administration")
 
+@syndbb.app.route("/account/admin/password/")
+def siteadmin_password():
+    if 'logged_in' in syndbb.session:
+        userid = checkSession(str(syndbb.session['logged_in']))
+        if userid:
+            user = d2_user.query.filter_by(user_id=userid).first()
+            if user.rank >= 900:
+                dynamic_js_footer = ["js/crypt.js", "js/auth/auth_chpw_admin.js", "js/bootbox.min.js"]
+                pwuser = syndbb.request.args.get('user', '')
+                return syndbb.render_template('admin_password.html', dynamic_js_footer=dynamic_js_footer, pwuser=pwuser, title="Administration &bull; Change Password")
+            else:
+                return syndbb.render_template('invalid.html', title="Not Found")
+        else:
+            return syndbb.render_template('error_not_logged_in.html', title="Administration")
+    else:
+        return syndbb.render_template('error_not_logged_in.html', title="Administration")
+
 @syndbb.app.route("/account/admin/ban/")
 def siteadmin_ban():
     if 'logged_in' in syndbb.session:
@@ -97,6 +116,31 @@ def siteadmin_ban():
             return syndbb.render_template('error_not_logged_in.html', title="Administration")
     else:
         return syndbb.render_template('error_not_logged_in.html', title="Administration")
+
+@syndbb.app.route("/functions/admin_change_password/", methods=['GET', 'POST'])
+def admin_do_change_password():
+    userpassword = syndbb.request.form['user_id']
+    newpassword = d2_hash(syndbb.request.form['newpassword'])
+    uniqid = syndbb.request.form['uniqid']
+
+    if userpassword and newpassword and uniqid:
+        userid = checkSession(uniqid)
+        if userid:
+            user = d2_user.query.filter_by(user_id=userid).first()
+            if user.rank >= 900:
+                pwuser = d2_user.query.filter_by(user_id=userpassword).first()
+                if user:
+                    pwuser.password = newpassword
+                    syndbb.db.session.commit()
+                    return "Password change successful."
+                else:
+                    return "Invalid old password."
+            else:
+                return "No Permission"
+        else:
+            return "Invalid Session"
+    else:
+        return "Invalid Request"
 
 @syndbb.app.route("/functions/ban_user/", methods=['GET', 'POST'])
 def do_ban_user():
@@ -166,6 +210,27 @@ def do_rank_user():
                 return syndbb.redirect(syndbb.url_for('siteadmin_users'))
             else:
                 return syndbb.render_template('invalid.html', title="Not Found")
+        else:
+            return "Invalid Session"
+    else:
+        return "Invalid Request"
+
+@syndbb.app.route("/functions/drop_session/")
+def do_drop_session():
+    dropuser = syndbb.request.args.get('user', '')
+    uniqid = syndbb.request.args.get('uniqid', '')
+
+    if uniqid:
+        userid = checkSession(uniqid)
+        if userid:
+            user = d2_user.query.filter_by(user_id=userid).first()
+            if user.rank >= 500:
+                check_session = d2_session.query.filter_by(user_id=dropuser).all()
+                for usession in check_session:
+                    syndbb.db.session.delete(usession)
+                    syndbb.db.session.commit()
+                syndbb.flash('User has been logged out.', 'success')
+                return syndbb.redirect(syndbb.url_for('siteadmin_users'))
         else:
             return "Invalid Session"
     else:

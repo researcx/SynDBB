@@ -34,16 +34,17 @@ def inject_user():
             if user and user.user_id:
                 user.last_activity = unix_time_current()
                 syndbb.db.session.commit()
-                
-                # my_ip = syndbb.request.remote_addr
-                # ipcheck = d2_ip.query.filter_by(ip=my_ip).filter_by(user_id=user.user_id).filter_by(login=1).first()
-                # if ipcheck:
-                #     ipcheck.time = unix_time_current()
-                #     syndbb.db.session.commit()
-                # else:
-                #     new_ip = d2_ip(my_ip, user.user_id, unix_time_current(), 1)
-                #     syndbb.db.session.add(new_ip)
-                #     syndbb.db.session.commit()
+
+                my_ip = syndbb.request.remote_addr
+                ipcheck = d2_ip.query.filter_by(ip=my_ip).filter_by(user_id=user.user_id).filter_by(login=1).first()
+                if ipcheck:
+                    ipcheck.time = unix_time_current()
+                    ipcheck.page = syndbb.request.path
+                    syndbb.db.session.commit()
+                else:
+                    new_ip = d2_ip(my_ip, user.user_id, unix_time_current(), 1, syndbb.request.path)
+                    syndbb.db.session.add(new_ip)
+                    syndbb.db.session.commit()
 
                 bancheck = is_banned(user.user_id)
                 if bancheck:
@@ -253,12 +254,14 @@ class d2_ip(syndbb.db.Model):
     user_id = syndbb.db.Column(syndbb.db.Integer, unique=False)
     time = syndbb.db.Column(syndbb.db.Integer, unique=False)
     login = syndbb.db.Column(syndbb.db.Integer, unique=False)
+    page = syndbb.db.Column(syndbb.db.String, unique=False)
 
-    def __init__(self, ip, user_id, time, login):
+    def __init__(self, ip, user_id, time, login, page):
         self.ip = ip
         self.user_id = user_id
         self.time = time
         self.login = login
+        self.page = page
 
     def __repr__(self):
         return '<IP %r>' % self.user_id

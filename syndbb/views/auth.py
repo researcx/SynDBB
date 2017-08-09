@@ -113,13 +113,13 @@ def dologin():
             user.last_login = unix_time_current()
             syndbb.db.session.commit()
 
-            login_ip = d2_ip(my_ip, user.user_id, unix_time_current(), 2)
+            login_ip = d2_ip(my_ip, user.user_id, unix_time_current(), 2, syndbb.request.path)
             syndbb.db.session.add(login_ip)
             syndbb.db.session.commit()
 
             return "Login successful."
         else:
-            login_ip = d2_ip(my_ip, user.user_id, unix_time_current(), 0)
+            login_ip = d2_ip(my_ip, user.user_id, unix_time_current(), 0, syndbb.request.path)
             syndbb.db.session.add(login_ip)
             syndbb.db.session.commit()
             return "Invalid password."
