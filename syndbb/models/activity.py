@@ -5,7 +5,7 @@
 #
 
 import syndbb
-from syndbb.models.users import d2_user, d2_bans, is_banned
+from syndbb.models.users import d2_user, d2_bans, is_banned, get_group_style_from_id
 from syndbb.models.forums import d2_forums, d2_activity
 from syndbb.models.time import display_time
 
@@ -76,10 +76,10 @@ def ban_list():
 
         ban_list += '''<tr>
                         <td class="">'''+ban_time+'''</td>
-                        <td class=""><a href="/user/'''+banned.username+'''">'''+banned.username+'''</a></td>
+                        <td class=""><a href="/user/'''+banned.username+'''" style="'''+get_group_style_from_id(banned.user_id)+'''">'''+banned.username+'''</a></td>
                         <td class="">'''+ban.reason+'''</td>
                         <td class="">'''+banduration+'''</td>
-                        <td class=""><a href="/user/'''+banner.username+'''">'''+banner.username+'''</a></td>
+                        <td class=""><a href="/user/'''+banner.username+'''" style="'''+get_group_style_from_id(banner.user_id)+'''">'''+banner.username+'''</a></td>
                     </tr>'''
 
     return {'ban_list': ban_list}

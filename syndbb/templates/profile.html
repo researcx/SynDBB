@@ -4,12 +4,18 @@
 {% block body %}
 	<div class="media">
 		<span class="media-left">
-			{% if user.user_id == profile.user_id %}
-			<a href="/account/avatar">
-				<img src="{{get_avatar(profile.user_id)}}" alt="Avatar" class="img-circle pull-left profile-avatar-size" style="padding: 8px;"/>
-			</a>
+			{% if not isInline %}
+				{% if user.user_id == profile.user_id %}
+				<a href="/account/avatar">
+					<img src="{{get_avatar(profile.user_id)}}" alt="Avatar" class="img-circle pull-left profile-avatar-size" style="padding: 8px;"/>
+				</a>
+				{% else %}
+				<a id="profileAvatar" href="{{get_avatar(profile.user_id)}}">
+					<img src="{{get_avatar(profile.user_id)}}" alt="Avatar" class="img-circle pull-left profile-avatar-size" style="padding: 8px;"/>
+				</a>
+				{% endif %}
 			{% else %}
-			<a id="profileAvatar" href="{{get_avatar(profile.user_id)}}">
+			<a href="/user/{{profile.username}}">
 				<img src="{{get_avatar(profile.user_id)}}" alt="Avatar" class="img-circle pull-left profile-avatar-size" style="padding: 8px;"/>
 			</a>
 			{% endif %}
