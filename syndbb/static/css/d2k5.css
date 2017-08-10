@@ -664,6 +664,11 @@ blockquote {
   padding: 4px;
 }
 
+.forum-description{
+  margin-top: 4px;
+  margin-bottom: 10px;
+}
+
 .embedcodes input {
   width: 100%;
   margin-bottom: 4px;

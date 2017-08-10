@@ -4,7 +4,7 @@
 {% else %}
 <div class="thread-title"><a href="/{{forum.short_name}}/grid" title="Grid View" style="float:right;"><i class="fa fa-picture-o" aria-hidden="true"></i></a> {{forum.name}}</div>
 {% endif %}
-<div class="description">{{forum.description}}</div>
+<div class="forum-description">{{forum.description}}</div>
 {% if user_session.sessionid %}
 <div class="panel panel-default">
   <div class="panel-body">
