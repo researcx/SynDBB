@@ -18,7 +18,7 @@ def siteadmin():
         userid = checkSession(str(syndbb.session['logged_in']))
         if userid:
             user = d2_user.query.filter_by(user_id=userid).first()
-            if user.rank >= 900:
+            if user.rank >= 500:
                 usercount = d2_user.query.count()
                 postcount = d2_activity.query.filter(d2_activity.replyto != 0).count()
                 threadcount = d2_activity.query.filter(d2_activity.category != 0).count()
