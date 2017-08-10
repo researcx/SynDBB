@@ -1,6 +1,6 @@
 {% extends "layout.html" %}{% block body %}
 <div class="thread-title"><span style="float: right;">{{human_size(total_size)}}</span>{{filecount}} images</div>
-<div class="upload-title"><a href="/upload" title="List View" style="float:right;"><i class="fa fa-list-alt" aria-hidden="true"></i></a></div>
+<div class="upload-title"><a href="/upload" title="List View" style="float:right;"><i class="fa fa-list-alt" aria-hidden="true"></i></a> <a href="/upload/album/?u=admin&i=" id="albumlink" title="Album View" style="float:right; margin-right: 12px;"><i class="fa fa-th-large" aria-hidden="true"></i></a></div>
 <div class="panel panel-default">
   <div class="panel-body">
     <form id="uploadform" action="/functions/upload" method="post" enctype="multipart/form-data">
@@ -22,9 +22,9 @@
   			<img src="#" data-original="{{file[3]|safe}}" alt="{{file[2]}}" class="activity-threadimg-gallery" title="{{file[2]}}">
   		  </a>
   			<div class="avatar_details">
-  			  <span class="avatar_date">{{file[2]}}</span>
-  			  <span style="float:right;">
-  				<a href="/functions/delete_file?file={{file[2]}}&uniqid={{user_session.sessionid}}&uploader=upload_gallery" title="Delete File" class="text-muted deletebutton"><i class="fa fa-trash" aria-hidden="true"></i></a>
+  			  <span>
+            <a href="#" title="Add to Album" id="{{file[2]}}" class="addalbum text-muted"><i class="fa fa-arrow-circle-up" aria-hidden="true"></i></a>
+    				<a href="/functions/delete_file?file={{file[2]}}&uniqid={{user_session.sessionid}}&uploader=upload_gallery" title="Delete File" class="text-muted deletebutton"><i class="fa fa-trash" aria-hidden="true"></i></a>
   			  </span>
   			</div>
   		</div>

@@ -121,15 +121,15 @@ def view_forum_grid(category):
                     im = Image.open(BytesIO(threadimg.content))
                     im = ImageOps.fit(im, (150, 150),  Image.ANTIALIAS)
                     im.save(thumbpath, "PNG")
-                timg = hashname + ".png"
+                timg = "/static/data/threadimg/grid/" + hashname + ".png"
             else:
-                timg = ""
+                timg = "/static/images/noimage-grid.png"
 
             thread_list += '''<div class="panel panel-default text-center thread-grid" id="''' + str(thread.id)+ '''" onclick="location.href='/''' + forumcheck.short_name+ '''/''' + str(thread.id)+ '''';" style="cursor: pointer;">
                                   <div class="panel-body">
                                 	<div class="threadimg-grid center-block">
                                 	  <a href="/''' + forumcheck.short_name+ '''/''' + str(thread.id)+ '''/gallery">
-                                		<img src="/static/data/threadimg/grid/'''+ timg +'''" title="''' + thread.title + '''" alt="Thread Image" class="activity-threadimg-grid">
+                                		<img src="'''+ timg +'''" title="''' + thread.title + '''" alt="Thread Image" class="activity-threadimg-grid">
                                 	  </a>
                                 	</div>
                                 	<a href="/''' + forumcheck.short_name+ '''/''' + str(thread.id)+ '''" title="''' + thread.title + '''"><b>''' + thread_title + '''</b></a><br>

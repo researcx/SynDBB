@@ -1,0 +1,19 @@
+{% extends "layout.html" %}{% block body %}
+<div class="thread-title">{{filecount}} images</div>
+<div class="panel panel-default">
+  {% if not file_list %}
+    <div style="padding: 12px;">You haven't added any images yet! Press <i class="fa fa-arrow-circle-up" aria-hidden="true"></i>inside the gallery view to add images to create a temporary album.</div>
+  {% endif %}
+  {% for file in file_list %}
+  <div class="text-center img-grid">
+  	<div class="panel-body">
+  		<div class="threadimg-gallery center-block">
+  		  <a href="{{uploadurl}}{{file}}" target="_blank">
+  			<img src="#" data-original="{{uploadurl}}{{file}}" alt="{{file}}" class="activity-threadimg-gallery" title="{{file}}">
+  		  </a>
+  		</div>
+  	</div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

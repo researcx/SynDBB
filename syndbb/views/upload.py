@@ -73,9 +73,37 @@ def upload():
     else:
         return syndbb.render_template('error_not_logged_in.html', title="Upload")
 
+@syndbb.app.route("/upload/album/")
+def upload_album():
+    uname = syndbb.request.args.get('u', '')
+    file_list = syndbb.request.args.get('i', '').split(";")
+    image_types = [".jpg", ".jpeg", ".jpe", ".gif", ".png", ".bmp"]
+    dynamic_js_footer = ["js/bootbox.min.js", "js/delete.js", "js/lazyload.transpiled.min.js"]
+
+    if uname and file_list:
+        user = d2_user.query.filter_by(username=uname).first()
+        if user:
+            uploadurl = user.upload_url
+            if uploadurl == "local":
+                uploadurl = syndbb.request.url_root + "static/data/uploads/" + user.username + "/"
+            else:
+                uploadurl = "https://" + uploadurl + "/" + user.username + "/"
+
+            images = []
+            for image in file_list:
+                extension = syndbb.os.path.splitext(image)[1].lower()
+                if extension in image_types:
+                    images.append(image)
+
+            return syndbb.render_template('upload_album.html', filecount=len(images), uploadurl=uploadurl, file_list=images, dynamic_js_footer=dynamic_js_footer, title=user.username + " &bull; Album")
+        else:
+            return syndbb.render_template('invalid.html', title="Upload &bull; Gallery")
+    else:
+        return syndbb.render_template('invalid.html', title="Upload &bull; Gallery")
+
 @syndbb.app.route("/upload/gallery/")
 def upload_gallery():
-    dynamic_js_footer = ["js/bootstrap-filestyle.min.js", "js/bootbox.min.js", "js/delete.js", "js/lazyload.transpiled.min.js"]
+    dynamic_js_footer = ["js/bootstrap-filestyle.min.js", "js/uploadgallery.js", "js/bootbox.min.js", "js/delete.js", "js/lazyload.transpiled.min.js"]
     if 'logged_in' in syndbb.session:
         userid = checkSession(str(syndbb.session['logged_in']))
         if userid:
@@ -89,11 +117,6 @@ def upload_gallery():
                 syndbb.os.makedirs(thumbfolder)
 
             image_types = [".jpg", ".jpeg", ".jpe", ".gif", ".png", ".bmp"]
-            audio_types = [".mp3",".ogg",".wav"]
-            video_types = [".webm",".mp4",".avi",".mpg",".mpeg"]
-            text_types = [".txt",".pdf",".doc"]
-            archive_types = [".zip",".rar",".7z",".tar",".gz"]
-
             total_size = sum(syndbb.os.path.getsize(uploadfolder+f) for f in syndbb.os.listdir(uploadfolder) if syndbb.os.path.isfile(uploadfolder+f) and syndbb.os.path.splitext(f)[1].lower() in image_types)
 
             uploadurl = user.upload_url
@@ -120,11 +143,11 @@ def upload_gallery():
                         file_list.append([filetime, filesize, fn, type_icon])
             file_list.sort(reverse=True)
 
-            return syndbb.render_template('upload_gallery.html', uploadurl=uploadurl, filecount=len(file_list), file_list=file_list, total_size=total_size, dynamic_js_footer=dynamic_js_footer, title="Upload")
+            return syndbb.render_template('upload_gallery.html', uploadurl=uploadurl, filecount=len(file_list), file_list=file_list, total_size=total_size, dynamic_js_footer=dynamic_js_footer, title="Upload &bull; Gallery")
         else:
-            return syndbb.render_template('error_not_logged_in.html', title="Upload")
+            return syndbb.render_template('error_not_logged_in.html', title="Upload &bull; Gallery")
     else:
-        return syndbb.render_template('error_not_logged_in.html', title="Upload")
+        return syndbb.render_template('error_not_logged_in.html', title="Upload &bull; Gallery")
 
 @syndbb.app.route("/upload/simple/")
 def upload_simple():
