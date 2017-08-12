@@ -57,6 +57,18 @@ def inject_user():
     user_session = {'sessionid': 0}
     return {'user': user, 'user_session': user_session}
 
+#Get IRC user count
+@syndbb.app.template_filter('irc_users')
+def irc_users():
+    logfile = "logs/irc_users.log"
+    if syndbb.os.path.isfile(logfile):
+        file = open(logfile, "r")
+        count = file.read()
+        return count
+    else:
+        return "0"
+syndbb.app.jinja_env.globals.update(irc_users=irc_users)
+
 #Get user avatar by ID
 @syndbb.app.template_filter('get_avatar')
 def get_avatar(user_id):

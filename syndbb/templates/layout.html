@@ -135,7 +135,7 @@
                   {% endif %}
                 </ul>
               </li>
-              <li><a href="{{ url_for('chat') }}"><i class="fa fa-comments" aria-hidden="true"></i> Chat</a></li>
+              <li><a href="{{ url_for('chat') }}"><i class="fa fa-comments" aria-hidden="true"></i> Chat ({{irc_users()}} users)</a></li>
               <li><a href="{{ url_for('events') }}"><i class="fa fa-calendar" aria-hidden="true"></i> Events</a></li>
               <li><a href="{{ url_for('ban_list') }}"><i class="fa fa-ban" aria-hidden="true"></i> Bans</a></li>
               <li class="dropdown">

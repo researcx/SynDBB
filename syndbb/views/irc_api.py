@@ -4,7 +4,7 @@
 # The full license is included in LICENSE.md, which is distributed as part of this project.
 #
 
-import syndbb, shutil, base64
+import syndbb, shutil, base64, requests, json
 from syndbb.models.users import d2_user
 from flask import make_response
 
@@ -89,6 +89,22 @@ def irc_api():
 
             return "Nothing to do."
         else:
+            # Do the IRC user count thing
+            # /api/irc/?api=<api>&do_usercount
+            do_usercount = syndbb.request.args.get('do_usercount', '')
+            if do_usercount:
+                try:
+                    zncrequest = requests.get("https://" + syndbb.znc_address + ":" + syndbb.znc_port + "/mods/global/httpadmin/listusers", auth=(syndbb.znc_user, syndbb.znc_password), verify=False)
+                    count_data = json.loads(zncrequest.content)
+                    count = str(count_data["count"])
+
+                    with open("logs/irc_users.log", "w") as text_file:
+                        text_file.write(count)
+
+                    return count
+                except requests.exceptions.RequestException:
+                    return "0"
+
             return "No nickname defined."
     else:
         return "Invalid API Key"
