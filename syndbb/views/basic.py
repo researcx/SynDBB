@@ -42,3 +42,14 @@ def chat_rules():
 @syndbb.app.route("/info/")
 def info():
     return syndbb.render_template('info.html', title="Information")
+
+@syndbb.app.route("/vidya/")
+def vidya():
+    roomName = syndbb.request.args.get('room', '')
+    room = False
+    if roomName:
+        if syndbb.re.match("^[A-Za-z0-9_-]*$", roomName):
+            room = roomName
+        else:
+            syndbb.flash('Room name can only contain letters and numbers.', 'danger')
+    return syndbb.render_template('vidya.html', room=room, title="Video Chat")
