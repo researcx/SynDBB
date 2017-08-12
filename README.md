@@ -20,15 +20,15 @@ This is where the avatars, file uploads, thumbnails and submitted emoticons will
 
 ## Information for Developers
 
-###Premade test accounts:
+### Premade test accounts:
 
     admin:admin
     banneduser:testing
     Poster:testing
 
-###Ranks:
+### Ranks:
 
-####Administrator
+#### Administrator
 
 * Rank Integer: >=900
 * Has a red name.
@@ -37,7 +37,7 @@ This is where the avatars, file uploads, thumbnails and submitted emoticons will
 * Inherits permissions from lower ranks.
 
 
-####Operator (Tier-1 Moderator)
+#### Operator (Tier-1 Moderator)
 
 * Rank Integer: >=900
 * Has a purple name.
@@ -47,20 +47,20 @@ This is where the avatars, file uploads, thumbnails and submitted emoticons will
 * Can edit/delete posts/threads.
 * Inherits permissions from lower ranks.
 
-####Half-Operator (Tier-2 Moderator)
+#### Half-Operator (Tier-2 Moderator)
 
 * Rank Integer: >=100
 * Has a green name.
 * Currently has no extra permissions.
 
-####Gold Member
+#### Gold Member
 
 * Rank Integer: >=50
 * Has a gold name.
 * Currently has no extra permissions.
 * *To-do:* Can upload animated avatars.
 
-####Registered User
+#### Registered User
 
 * Rank Integer: <50
 * Has a blue name.
@@ -71,7 +71,7 @@ This is where the avatars, file uploads, thumbnails and submitted emoticons will
 * Can request emoticons and channels.
 * Can invite other users.
 
-###ZNC/IRC Integration:
+### ZNC/IRC Integration:
 
 Creates a ZNC user with the users' name and the IRC auth key provided in their preferences.
 
