@@ -98,15 +98,26 @@ a.forum-title, a:hover.forum-title, a:focus.forum-title {
   display: block;
 }
 
-.nsfw-forum-large {
-  background: #efefef;
-  padding-left: 4px;
-  padding-right: 4px;
-  float: right;
-  border: 1px dashed #d5d5d5;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
+.nsfw-icon {
+  color: #FF8400;
+}
+.forum-title.fa-stack{
+  margin-top: -7px;
+  margin-right: -4px;
+  font-size: 18pt;
+}
+.fa-plus18, .fa-plus16 {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    text-align: center;
+    font-size: 80%;
+    font-weight: bold;
+}
+
+.fa-plus18:before {
+    content: "18+";
+}
+.fa-plus16:before {
+    content: "16+";
 }
 
 a.activity_poster, a:hover.activity_poster, a:focus.activity_poster {

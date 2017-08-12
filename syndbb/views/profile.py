@@ -123,7 +123,7 @@ def change_avatar():
     if 'logged_in' in syndbb.session:
         userid = checkSession(str(syndbb.session['logged_in']))
         if userid:
-            dynamic_js_footer = ["js/jquery.cropit.js", "js/avatar.js", "js/bootbox.min.js", "js/delete.js"]
+            dynamic_js_footer = ["js/jquery.cropit.js", "js/bootbox.min.js", "js/delete.js"]
             avatar_list = []
             avatarfolder = syndbb.os.getcwd() + "/syndbb/static/data/avatars/"+str(userid)+"/"
 

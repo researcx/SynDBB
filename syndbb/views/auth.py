@@ -109,6 +109,7 @@ def dologin():
             syndbb.db.session.add(new_session)
             syndbb.db.session.commit()
             syndbb.session['logged_in'] = session_id
+            syndbb.session.permanent = True
 
             user.last_login = unix_time_current()
             syndbb.db.session.commit()

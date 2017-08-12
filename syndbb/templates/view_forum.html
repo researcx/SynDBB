@@ -1,9 +1,19 @@
 {% extends "layout.html" %} {% block body %}
+<div class="thread-title">
 {% if gridview %}
-<div class="thread-title"><a href="/{{forum.short_name}}" title="List View" style="float:right;"><i class="fa fa-list-alt" aria-hidden="true"></i></a> {{forum.name}}</div>
+<a href="/{{forum.short_name}}" title="List View" style="float:right;"><i class="fa fa-list-alt" aria-hidden="true"></i></a>
 {% else %}
-<div class="thread-title"><a href="/{{forum.short_name}}/grid" title="Grid View" style="float:right;"><i class="fa fa-picture-o" aria-hidden="true"></i></a> {{forum.name}}</div>
+<a href="/{{forum.short_name}}/grid" title="Grid View" style="float:right;"><i class="fa fa-picture-o" aria-hidden="true"></i></a>
 {% endif %}
+
+{% if forum.nsfw %}
+<span class="forum-title fa-stack">
+    <i class="fa fa-circle fa-stack-2x"></i>
+    <span class="fa fa-stack-1x fa-inverse fa-plus18"></span>
+</span>
+{% endif %}
+{{forum.name}}
+</div>
 <div class="forum-description">{{forum.description}}</div>
 {% if user_session.sessionid %}
 <div class="panel panel-default">
