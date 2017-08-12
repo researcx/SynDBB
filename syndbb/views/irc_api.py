@@ -95,7 +95,7 @@ def irc_api():
             if do_usercount:
                 try:
                     zncrequest = requests.get("https://" + syndbb.znc_address + ":" + syndbb.znc_port + "/mods/global/httpadmin/listusers", auth=(syndbb.znc_user, syndbb.znc_password), verify=False)
-                    count_data = json.loads(zncrequest.content)
+                    count_data = json.loads(zncrequest.text)
                     count = str(count_data["count"])
 
                     with open("logs/irc_users.log", "w") as text_file:
