@@ -41,6 +41,8 @@ def view_forum(category):
     if forumcheck:
         dynamic_css_header = ["css/bbcode_editor.css", "css/rating.css"]
         dynamic_js_footer = ["js/jquery.rangyinputs.js", "js/bbcode_editor_forums.js", "js/threads.js", "js/inline.js", "js/bootbox.min.js"]
+        if forumcheck.short_name == "yiff":
+            dynamic_css_header.append("css/oify.css")
 
         threads = d2_activity.query.filter_by(category=forumcheck.id).order_by(d2_activity.reply_time.desc()).all()
 
@@ -93,6 +95,9 @@ def view_forum_grid(category):
     if forumcheck:
         dynamic_css_header = ["css/bbcode_editor.css"]
         dynamic_js_footer = ["js/jquery.rangyinputs.js", "js/bbcode_editor_forums.js", "js/threads.js", "js/bootbox.min.js"]
+        if forumcheck.short_name == "yiff":
+            dynamic_css_header.append("css/oify.css")
+
         image_finder = "(?<=\[img\]).*?(?=\[/img\])"
         threads = d2_activity.query.filter_by(category=forumcheck.id).order_by(d2_activity.reply_time.desc()).all()
 
@@ -148,6 +153,8 @@ def view_thread(category, thread):
     if forumcheck:
         dynamic_css_header = ["css/bbcode_editor.css", "css/rating.css"]
         dynamic_js_footer = ["js/bootstrap-filestyle.min.js", "js/jquery.rangyinputs.js", "js/bbcode_editor_forums.js", "js/posts.js", "js/post_ratings.js", "js/bootbox.min.js", "js/delete.js", "js/inline.js"]
+        if forumcheck.short_name == "yiff":
+            dynamic_css_header.append("css/oify.css")
         threadcheck = d2_activity.query.filter_by(id=thread).first()
         if threadcheck:
             thread_title = (threadcheck.title[:75] + '...') if len(threadcheck.title) > 75 else threadcheck.title
@@ -164,6 +171,8 @@ def view_thread_gallery(category, thread):
     if forumcheck:
         dynamic_css_header = ["css/bbcode_editor.css"]
         dynamic_js_footer = ["js/jquery.rangyinputs.js", "js/bbcode_editor_forums.js", "js/posts.js", "js/bootbox.min.js", "js/delete.js", "js/inline.js"]
+        if forumcheck.short_name == "yiff":
+            dynamic_css_header.append("css/oify.css")
         threadcheck = d2_activity.query.filter_by(id=thread).first()
         image_list = []
         if threadcheck:
