@@ -18,7 +18,7 @@
     <tbody>
       {% for file in file_list %}
       <tr>
-        <td class="file-thumbnail"><a href="{{uploadurl}}{{user.username}}/{{file[2]}}" target="_blank">{{file[3]|safe}}</td>
+        <td class="file-thumbnail"><a href="{{uploadurl}}{{user.username}}/{{file[2]}}" target="_blank">{{file[3]|safe}}</a></td>
         <td class="file-name"><a href="{{uploadurl}}{{user.username}}/{{file[2]}}" target="_blank">{{file[2]}}</a></td>
         <td class="file-date text-muted">{{human_size(file[1])}}</td>
         <td class="file-date text-muted" title="{{time_ago(file[0])}}">{{human_date(file[0])}}</td>

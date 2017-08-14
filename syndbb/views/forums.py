@@ -66,7 +66,7 @@ def view_forum(category):
                     </a>
                   </div>
                   <div class="media-body">
-                    <span class="text-muted" style="float:right; text-align: right;">
+                    <div class="text-muted" style="float:right; text-align: right;">
                       <div class="RatingContainer Rating">
                           <span class="Rating RatingLarge" title="Thread Rating">'''+str(thread.rating)+'''</span>
                       </div>
@@ -74,8 +74,7 @@ def view_forum(category):
                       last active <a href="/''' + forumcheck.short_name+ '''/''' + str(thread.id)+ '''#'''+str(latest)+'''" class="activity_lastpost"><i title="'''+ human_date(thread.reply_time) + '''">''' + time_ago(thread.reply_time) + '''&nbsp;</i></a><br/>
                       '''+str(thread.reply_count)+''' '''+replystr+'''
                       </div>
-                    </span>
-                    </span>
+                    </div>
                     <a href="/''' + forumcheck.short_name+ '''/''' + str(thread.id)+ '''" class="thread-link activity_poster"><b>''' + thread.title+ '''</b></a><br/>
                     <span class="text-muted">by <a href="/user/''' + thread.user.username + '''" class="text-muted" style="''' + get_group_style_from_id(str(thread.user_id))+ '''">''' + thread.user.username + '''</a></span>
                   </div>

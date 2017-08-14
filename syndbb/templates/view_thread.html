@@ -10,7 +10,7 @@
                   </a>
       </div>
       <div class="media-body">
-        <span class="text-muted" style="float:right; text-align: right;">
+        <div class="text-muted" style="float:right; text-align: right;">
           <div class="RatingContainer Rating">
               <a href="/functions/rate_post/?post_id={{thread.id}}&type=up&uniqid={{user_session.sessionid}}" class="RatingUp DoRatingUp"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
               <span class="PostRating-{{thread.id}} Rating">{{thread.rating}}</span>
@@ -20,7 +20,7 @@
             <a href="/post/{{thread.id}}"><i>#{{thread.id}}</i></a>&nbsp;<br/>
             <i title="{{human_date(thread.time)}}">{{time_ago(thread.time)}}&nbsp;</i><br/>
           </div>
-        </span>
+        </div>
         <a href="/user/{{thread.user.username}}" class="activity_poster" style="{{get_group_style_from_id(thread.user_id)}}"><b>{{thread.user.username}}</b></a><br/>
         {{parse_bbcode(thread.content)|safe}}
 

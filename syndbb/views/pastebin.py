@@ -50,8 +50,6 @@ def dopaste():
     paste_content = syndbb.request.form['paste_content']
     uniqid = syndbb.request.form['uniqid']
 
-    syndbb.app.logger.debug("""DEBUG: paste_title: """ + paste_title+ """\nDEBUG: paste_content: """ + paste_content+ """\nDEBUG: uniqid: """ + uniqid)
-
     if paste_title and paste_content and uniqid:
         userid = checkSession(uniqid)
         if userid:

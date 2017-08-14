@@ -97,8 +97,6 @@ def dologin():
     username = syndbb.request.form['username']
     password = d2_hash(syndbb.request.form['password'])
 
-    #syndbb.app.logger.debug("""DEBUG: Username: """ + username+ """\nDEBUG: Hashed Password: """ + password)
-
     user = d2_user.query.filter_by(username=username).first()
     my_ip = syndbb.request.remote_addr
 
@@ -136,7 +134,6 @@ def logout():
             if str(uniqid) == str(syndbb.session['logged_in']):
                 check_session = d2_session.query.filter_by(sessionid=uniqid).first()
                 if check_session:
-                    #syndbb.app.logger.debug("DEBUG: Deleting Session: " + check_session.sessionid)
                     syndbb.db.session.delete(check_session)
                     syndbb.db.session.commit()
 
