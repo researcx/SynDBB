@@ -103,7 +103,11 @@
                 <span class="icon-bar"></span>
               </button>
           <a class="navbar-brand" href="{{ url_for('home') }}">
+                {% if forumlogo %}
+                {{forumlogo|safe}}
+                {% else %}
                 <img src="{{ url_for('static', filename='images/d2k5_logo.svg') }}" alt="D2K5" class="sitelogo mask">
+                {% endif %}
               </a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">

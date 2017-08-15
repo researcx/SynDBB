@@ -38,11 +38,16 @@ def all_pages():
 @syndbb.app.route("/<category>/")
 def view_forum(category):
     forumcheck = d2_forums.query.filter_by(short_name=category).first()
+    forumlogo = ""
     if forumcheck:
         dynamic_css_header = ["css/bbcode_editor.css", "css/rating.css"]
         dynamic_js_footer = ["js/jquery.rangyinputs.js", "js/bbcode_editor_forums.js", "js/threads.js", "js/inline.js", "js/bootbox.min.js"]
         if forumcheck.short_name == "yiff":
             dynamic_css_header.append("css/oify.css")
+
+        logo_file = syndbb.os.getcwd() + "/syndbb/static/data/logos/" + forumcheck.short_name + ".png"
+        if syndbb.os.path.isfile(logo_file):
+            forumlogo = '<img src="/static/data/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
 
         threads = d2_activity.query.filter_by(category=forumcheck.id).order_by(d2_activity.reply_time.desc()).all()
 
@@ -83,7 +88,7 @@ def view_forum(category):
             </div>'''
 
 
-        return syndbb.render_template('view_forum.html', forum=forumcheck, thread_list=thread_list, dynamic_css_header=dynamic_css_header, dynamic_js_footer=dynamic_js_footer, title=forumcheck.name)
+        return syndbb.render_template('view_forum.html', forum=forumcheck, thread_list=thread_list, forumlogo=forumlogo, dynamic_css_header=dynamic_css_header, dynamic_js_footer=dynamic_js_footer, title=forumcheck.name)
     else:
         return syndbb.render_template('invalid.html', title="No page found")
 
@@ -91,11 +96,16 @@ def view_forum(category):
 @syndbb.app.route("/<category>/grid")
 def view_forum_grid(category):
     forumcheck = d2_forums.query.filter_by(short_name=category).first()
+    forumlogo = ""
     if forumcheck:
         dynamic_css_header = ["css/bbcode_editor.css"]
         dynamic_js_footer = ["js/jquery.rangyinputs.js", "js/bbcode_editor_forums.js", "js/threads.js", "js/bootbox.min.js"]
         if forumcheck.short_name == "yiff":
             dynamic_css_header.append("css/oify.css")
+
+        logo_file = syndbb.os.getcwd() + "/syndbb/static/data/logos/" + forumcheck.short_name + ".png"
+        if syndbb.os.path.isfile(logo_file):
+            forumlogo = '<img src="/static/data/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
 
         image_finder = "(?<=\[img\]).*?(?=\[/img\])"
         threads = d2_activity.query.filter_by(category=forumcheck.id).order_by(d2_activity.reply_time.desc()).all()
@@ -142,23 +152,27 @@ def view_forum_grid(category):
                               </div> '''
 
 
-        return syndbb.render_template('view_forum.html', forum=forumcheck, gridview=gridview, thread_list=thread_list, dynamic_css_header=dynamic_css_header, dynamic_js_footer=dynamic_js_footer, title=forumcheck.name)
+        return syndbb.render_template('view_forum.html', forum=forumcheck, gridview=gridview, thread_list=thread_list, forumlogo=forumlogo, dynamic_css_header=dynamic_css_header, dynamic_js_footer=dynamic_js_footer, title=forumcheck.name)
     else:
         return syndbb.render_template('invalid.html', title="No page found")
 
 @syndbb.app.route("/<category>/<thread>")
 def view_thread(category, thread):
     forumcheck = d2_forums.query.filter_by(short_name=category).first()
+    forumlogo = ""
     if forumcheck:
         dynamic_css_header = ["css/bbcode_editor.css", "css/rating.css"]
         dynamic_js_footer = ["js/bootstrap-filestyle.min.js", "js/jquery.rangyinputs.js", "js/bbcode_editor_forums.js", "js/posts.js", "js/post_ratings.js", "js/bootbox.min.js", "js/delete.js", "js/inline.js"]
         if forumcheck.short_name == "yiff":
             dynamic_css_header.append("css/oify.css")
+        logo_file = syndbb.os.getcwd() + "/syndbb/static/data/logos/" + forumcheck.short_name + ".png"
+        if syndbb.os.path.isfile(logo_file):
+            forumlogo = '<img src="/static/data/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
         threadcheck = d2_activity.query.filter_by(id=thread).first()
         if threadcheck:
             thread_title = (threadcheck.title[:75] + '...') if len(threadcheck.title) > 75 else threadcheck.title
             replycheck = d2_activity.query.filter_by(replyto=thread).all()
-            return syndbb.render_template('view_thread.html', forum=forumcheck, replies=replycheck, thread=threadcheck, dynamic_css_header=dynamic_css_header, dynamic_js_footer=dynamic_js_footer, title="#"+forumcheck.short_name + " &bull; " + thread_title + " &bull; " + forumcheck.name, forumtitle="<a href='/" + forumcheck.short_name + "/'>" + forumcheck.name + "</a>")
+            return syndbb.render_template('view_thread.html', forum=forumcheck, replies=replycheck, thread=threadcheck, forumlogo=forumlogo, dynamic_css_header=dynamic_css_header, dynamic_js_footer=dynamic_js_footer, title="#"+forumcheck.short_name + " &bull; " + thread_title + " &bull; " + forumcheck.name, forumtitle="<a href='/" + forumcheck.short_name + "/'>" + forumcheck.name + "</a>")
         else:
             return syndbb.render_template('invalid.html', title="No thread found")
     else:
@@ -167,11 +181,15 @@ def view_thread(category, thread):
 @syndbb.app.route("/<category>/<thread>/gallery")
 def view_thread_gallery(category, thread):
     forumcheck = d2_forums.query.filter_by(short_name=category).first()
+    forumlogo = ""
     if forumcheck:
         dynamic_css_header = ["css/bbcode_editor.css"]
         dynamic_js_footer = ["js/jquery.rangyinputs.js", "js/bbcode_editor_forums.js", "js/posts.js", "js/bootbox.min.js", "js/delete.js", "js/inline.js"]
         if forumcheck.short_name == "yiff":
             dynamic_css_header.append("css/oify.css")
+        logo_file = syndbb.os.getcwd() + "/syndbb/static/data/logos/" + forumcheck.short_name + ".png"
+        if syndbb.os.path.isfile(logo_file):
+            forumlogo = '<img src="/static/data/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
         threadcheck = d2_activity.query.filter_by(id=thread).first()
         image_list = []
         if threadcheck:
@@ -193,7 +211,7 @@ def view_thread_gallery(category, thread):
                 imagecount = imagecount.rstrip('s')
 
 
-            return syndbb.render_template('view_thread_gallery.html', forum=forumcheck, thread=threadcheck, images=image_list, imagecount=imagecount, title="#"+forumcheck.short_name + " &bull; " + thread_title + " &bull; " + forumcheck.name, forumtitle="<a href='/" + forumcheck.short_name + "/'>" + forumcheck.name + "</a>")
+            return syndbb.render_template('view_thread_gallery.html', forum=forumcheck, thread=threadcheck, forumlogo=forumlogo, images=image_list, imagecount=imagecount, title="#"+forumcheck.short_name + " &bull; " + thread_title + " &bull; " + forumcheck.name, forumtitle="<a href='/" + forumcheck.short_name + "/'>" + forumcheck.name + "</a>")
         else:
             return syndbb.render_template('invalid.html', title="No thread found")
     else:
