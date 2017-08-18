@@ -3,7 +3,7 @@
 {% endif %}
 {% block body %}
 	<div class="media">
-		<span class="media-left">
+		<div class="media-left">
 			{% if not isInline %}
 				{% if user.user_id == profile.user_id %}
 				<a href="/account/avatar">
@@ -19,20 +19,25 @@
 				<img src="{{get_avatar(profile.user_id)}}" alt="Avatar" class="img-circle pull-left profile-avatar-size" style="padding: 8px;"/>
 			</a>
 			{% endif %}
-      {% if user.rank >= 500 %}
-			<span style="text-align: center; display: block;">
-				{% if is_banned(profile.user_id) %}
-				<a href="/account/admin/ban/?user={{profile.user_id}}" title="Unban" class="text-muted">
-					<i class="fa fa-unlock-alt" aria-hidden="true"></i>
-				</a>
-				{% else %}
-				<a href="/account/admin/ban/?user={{profile.user_id}}" title="Ban" class="text-muted">
-					<i class="fa fa-lock" aria-hidden="true"></i>
-				</a>
-				{% endif %}
-			</span>
-      {% endif %}
-		</span>
+			{% if not isInline %}
+			<div style="text-align: center; display: block; min-height: 340px;">
+				<div class="dropdown">
+			    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bars" aria-hidden="true"></i></a>
+			    <ul class="dropdown-menu">
+						{% if user.rank >= 500 %}
+							{% if is_banned(profile.user_id) %}
+							<li><a href="/account/admin/ban/?user={{profile.user_id}}">Unban {{profile.username}}</a></li>
+							{% else %}
+							<li><a href="/account/admin/ban/?user={{profile.user_id}}">Ban {{profile.username}}</a></li>
+							{% endif %}
+						{% endif %}
+			      <li><a href="/threads/{{profile.user_id}}">Threads by {{profile.username}}</a></li>
+			      <li><a href="/posts/{{profile.user_id}}">Posts by {{profile.username}}</a></li>
+			    </ul>
+			  </div>
+			</div>
+			{% endif %}
+		</div>
 		<div class="media-body">
 			{% if not isInline %}
 			<span class="text-muted" style="float:right; text-align: right;">
@@ -75,13 +80,15 @@
 				</dd>
         {% endif %}
 			</dl>
+			{% if not isInline %}
 			<dl class="dl-horizontal">
 				<dt>Lines Spoken:</dt>
 				<dd>{{profile.line_count}} ({{profile.word_count}} words)</dd>
 				<dt>Profanity Count:</dt>
 				<dd>{{profile.profanity_count}}</dd>
 			</dl>
-			<dl class="dl-horizontal">
+			{% endif %}
+			<dl {% if isInline %}style="margin-bottom: 0px !important;"{% endif %} class="dl-horizontal">
 				<dt>Currency:</dt>
 				<dd>&ETH;{{profile.points}}</dd>
 				<dt>Karma:</dt>

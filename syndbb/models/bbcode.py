@@ -6,8 +6,18 @@
 
 import syndbb, bbcode, re
 
+def d2_linker(url):
+    href = url
+    if '://' not in href:
+        href = 'http://' + href
+    return '<a href="%s" class="link-dotted" target="_blank">%s</a>' % (href, url)
+
 #Initiate BBCode
-parser = bbcode.Parser()
+parser = bbcode.Parser(linker=d2_linker)
+
+#Code tag
+parser.add_simple_formatter('code', '<code>%(value)s</code>', render_embedded=False, transform_newlines=False,
+swallow_trailing_newline=True, replace_links=False)
 
 #Images
 parser.add_simple_formatter('img', '<img src="%(value)s" onclick="window.open(this.src)" class="bbcode-image img-responsive inline-block" alt="[IMG]" />', replace_links=False)
@@ -72,3 +82,20 @@ def render_size(tag_name, value, options, parent, context):
         'value': value,
     }
 parser.add_formatter('size', render_size)
+
+#Dotted links
+def _render_url(name, value, options, parent, context):
+    if options and 'url' in options:
+        # Option values are not escaped for HTML output.
+        href = parser._replace(options['url'], parser.REPLACE_ESCAPE)
+    else:
+        href = value
+    # Completely ignore javascript: and data: "links".
+    if re.sub(r'[^a-z0-9+]', '', href.lower().split(':', 1)[0]) in ('javascript', 'data', 'vbscript'):
+        return ''
+    # Only add the missing http:// if it looks like it starts with a domain name.
+    if '://' not in href and _domain_re.match(href):
+        href = 'http://' + href
+    return '<a href="%s" class="link-dotted" target="_blank">%s</a>' % (href.replace('"', '%22'), value)
+
+parser.add_formatter('url', _render_url, replace_links=False, replace_cosmetic=False)

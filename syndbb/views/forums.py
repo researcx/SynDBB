@@ -219,7 +219,6 @@ def view_thread_gallery(category, thread):
 
 @syndbb.app.route("/post/<post>")
 def view_post(post):
-    dynamic_css_header = ["css/bbcode_editor.css", "css/rating.css"]
     isInline = syndbb.request.args.get('inlinecontent', '')
     postcheck = d2_activity.query.filter_by(id=post).first()
     if postcheck:
@@ -233,9 +232,73 @@ def view_post(post):
         forumcheck = d2_forums.query.filter_by(id=postvars.category).first()
 
 
-        return syndbb.render_template('view_post.html', dynamic_css_header=dynamic_css_header, isInline=isInline, post=postcheck, title="#"+forumcheck.short_name + " &bull; " + thread_title + " &bull; " + forumcheck.name, forumtitle="<a href='/" + forumcheck.short_name + "/"+str(postvars.id)+"'>" + thread_title + "</a>")
+        return syndbb.render_template('view_post.html', isInline=isInline, post=postcheck, title="#"+forumcheck.short_name + " &bull; " + thread_title + " &bull; " + forumcheck.name, forumtitle="<a href='/" + forumcheck.short_name + "/"+str(postvars.id)+"'>" + thread_title + "</a>")
     else:
         return syndbb.render_template('invalid.html', title=" &bull; No post found")
+
+@syndbb.app.route("/posts/<user>")
+def view_user_posts(user):
+    dynamic_css_header = ["css/bbcode_editor.css", "css/rating.css"]
+    isInline = syndbb.request.args.get('inlinecontent', '')
+    postcheck = d2_activity.query.filter_by(user_id=user).filter(d2_activity.replyto != 0).order_by(d2_activity.time.desc()).all()
+    usercheck = d2_user.query.filter_by(user_id=user).first()
+    if usercheck:
+        if postcheck:
+            return syndbb.render_template('view_user_posts.html', isInline=isInline, posts=postcheck, title="All posts by " + usercheck.username)
+        else:
+            return syndbb.render_template('invalid.html', title=" &bull; No posts found")
+    else:
+        return syndbb.render_template('invalid.html', title=" &bull; No user found")
+
+@syndbb.app.route("/threads/<user>")
+def view_user_threads(user):
+    dynamic_css_header = ["css/bbcode_editor.css", "css/rating.css"]
+    isInline = syndbb.request.args.get('inlinecontent', '')
+    threadcheck = d2_activity.query.filter_by(user_id=user).filter(d2_activity.replyto == 0).order_by(d2_activity.time.desc()).all()
+    usercheck = d2_user.query.filter_by(user_id=user).first()
+    if usercheck:
+        if threadcheck:
+            thread_list = ""
+            for thread in threadcheck:
+                forumcheck = d2_forums.query.filter_by(id=thread.category).first()
+                if thread.reply_count is 1:
+                    replystr = "reply"
+                else:
+                    replystr = "replies"
+                lastpost = d2_activity.query.filter_by(replyto=thread.id).order_by(d2_activity.time.desc()).first()
+                if lastpost:
+                    latest = lastpost.id
+                else:
+                    latest = thread.id
+                thread_list += '''<div class="thread-container panel panel-default" id="''' + str(thread.id)+ '''" onclick="location.href='/''' + forumcheck.short_name+ '''/''' + str(thread.id)+ '''';" style="cursor: pointer;">
+                  <div class="panel-body">
+                    <div class="media">
+                      <div class="thread-left">
+                        <a href="/user/''' + thread.user.username + '''">
+                          <img src="''' + get_avatar(str(thread.user_id))+ '''" title="''' + thread.user.username + '''" alt="Avatar" class="img-circle pull-left activity-avatar-size"/>
+                        </a>
+                      </div>
+                      <div class="media-body">
+                        <div class="text-muted" style="float:right; text-align: right;">
+                          <div class="RatingContainer Rating">
+                              <span class="Rating RatingLarge" title="Thread Rating">'''+str(thread.rating)+'''</span>
+                          </div>
+                          <div class="PostInfoContainer">
+                          last active <a href="/''' + forumcheck.short_name+ '''/''' + str(thread.id)+ '''#'''+str(latest)+'''" class="activity_lastpost"><i title="'''+ human_date(thread.reply_time) + '''">''' + time_ago(thread.reply_time) + '''&nbsp;</i></a><br/>
+                          '''+str(thread.reply_count)+''' '''+replystr+'''
+                          </div>
+                        </div>
+                        <a href="/''' + forumcheck.short_name+ '''/''' + str(thread.id)+ '''" class="thread-link activity_poster"><b>''' + thread.title+ '''</b></a><br/>
+                        <span class="text-muted">by <a href="/user/''' + thread.user.username + '''" class="text-muted" style="''' + get_group_style_from_id(str(thread.user_id))+ '''">''' + thread.user.username + '''</a></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>'''
+            return syndbb.render_template('view_user_threads.html', dynamic_css_header=dynamic_css_header, isInline=isInline, thread_list=thread_list, title="All threads by " + usercheck.username)
+        else:
+            return syndbb.render_template('invalid.html', title=" &bull; No threads found")
+    else:
+        return syndbb.render_template('invalid.html', title=" &bull; No threads found")
 
 @syndbb.app.route("/post/<post>/edit")
 def edit_post(post):
