@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block body %}
+<h2>The D2K5 Discord has been deprecated!</h2>
+<p>
+  <strong>Using Discord is not recommended.</strong><br/><br/>
+
+  <i>"Information we collect may include but not be limited to username, email address, and any messages, images or other content you send via the chat feature."</i> - <a href="https://discordapp.com/privacy"target="_blank" class="link-dotted">Discord Privacy Policy</a><br/><br/>
+  <i>"we expect server owners, mods, and admins to uphold their servers to these guidelines and we may intervene if community guidelines are not upheld"</i> - <a href="https://discordapp.com/guidelines"target="_blank" class="link-dotted">Discord Guidelines</a><br/><br/>
+  <i>"We may disclose your information if required to do so by law or in the good faith belief"</i> - <a href="https://discordapp.com/privacy"target="_blank" class="link-dotted">Discord Privacy Policy</a><br/><br/>
+  <i>"We may also share aggregated or non-personally identifiable information with our partners or others for business purposes.</i> - <a href="https://discordapp.com/privacy"target="_blank" class="link-dotted">Discord Privacy Policy"</a><br/><br/>
+  <i>"By uploading, distributing, transmitting or otherwise using Your Content with the Service, you grant to us a perpetual, nonexclusive, transferable, royalty-free, sublicensable,<br/>
+    and worldwide license to use, host, reproduce, modify, adapt, publish, translate, create derivative works from, distribute, perform, and display Your Content in connection with operating and providing the Service."</i> - <a href="https://discordapp.com/terms"target="_blank" class="link-dotted">Discord Terms of Service</a>
+  <br/><br/>
+  <strong>If you wish to continue being on this network, you should join the IRC.</strong>
+</p>
+<p>
+  {% if not user_session.sessionid %}<a href="/request-invite/" style="color: #fff; text-decoration: none;" class="btn btn-info">Request an invite</a> {% endif %}
+  <a href="/chat/" style="color: #fff; text-decoration: none;" class="btn btn-info">Join the IRC</a>
+</p>
+<br/>
+<div style="text-align: left;">
+  <h2>Why you should use the D2K5 IRC instead of the D2K5 Discord:</h2>
+  <ul>
+    <li>You only follow <a href="/terms/"target="_blank" class="link-dotted">our rules</a>.</li>
+    <li>Any content you submit is your own responsibility.</li>
+    <li>Your chat logs aren't stored on a remote server.</li>
+    <li>Full integration with D2K5 (see how many lines and words you've spoken, profanity you've used, view your and anyone elses' profile from IRC)</li>
+    <li>You can create and moderate your own channels.</li>
+    <li>Get information about new posts and site activity.</li>
+    <li>Reply to threads/posts from IRC.</li>
+    <li>User-deleted files of any sort (file uploads, avatars, emoticons) are <a href="https://en.wikipedia.org/wiki/Shred_(Unix)"target="_blank" class="link-dotted">securely wiped using "shred"</a>.</li>
+  </ul>
+</div>
+
+{% endblock %}

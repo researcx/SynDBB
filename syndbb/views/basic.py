@@ -43,6 +43,10 @@ def chat_rules():
 def info():
     return syndbb.render_template('info.html', title="Information")
 
+@syndbb.app.route("/discord/")
+def discord():
+    return syndbb.render_template('discord.html', title="Discord")
+
 @syndbb.app.route("/vidya/")
 def vidya():
     roomName = syndbb.request.args.get('room', '')
