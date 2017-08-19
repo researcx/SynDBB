@@ -35,18 +35,27 @@ import syndbb.views.xml_feed
 
 #Error Logging (when not in debug mode)
 if not syndbb.app.debug:
+    global_log = "logs/global.log"
+    summary_log = "logs/summary.log"
+    log_size = 2097152
     logger = logging.getLogger('werkzeug')
     logFormatStr = '[%(asctime)s] p%(process)s {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s'
-    logging.basicConfig(format = logFormatStr, filename = "logs/global.log", level=logging.DEBUG)
     formatter = logging.Formatter(logFormatStr,'%m-%d %H:%M:%S')
-    fileHandler = logging.FileHandler("logs/summary.log")
+
+    logging.basicConfig(format = logFormatStr, filename = global_log, level=logging.DEBUG)
+    access_handler = RotatingFileHandler(global_log, maxBytes=log_size, backupCount=5)
+
+    fileHandler = RotatingFileHandler(summary_log, maxBytes=log_size, backupCount=5)
     fileHandler.setLevel(logging.DEBUG)
     fileHandler.setFormatter(formatter)
+
     streamHandler = logging.StreamHandler()
     streamHandler.setLevel(logging.DEBUG)
     streamHandler.setFormatter(formatter)
-    syndbb.app.logger.addHandler(fileHandler)
-    syndbb.app.logger.addHandler(streamHandler)
+
+    logger.addHandler(access_handler)
+    logger.addHandler(fileHandler)
+    logger.addHandler(streamHandler)
 
     @syndbb.app.after_request
     def after_request(response):
