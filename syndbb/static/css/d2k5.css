@@ -36,7 +36,7 @@
 }
 
 @media (max-width: 767px) {
-  .top-avatar, .donation-info, .footer-notice{
+  .top-avatar, .extra-info-right, .footer-notice{
     display: none;
   }
   .navbar-container {
@@ -80,6 +80,14 @@
   width: 250px;
 }
 
+.avatarModal div.modal-dialog.modal-sm{
+  width: 528px;
+}
+
+.avatarModal div.modal-dialog.modal-sm img{
+  max-width: 496px;
+}
+
 .cropit-preview {
   background-color: #f8f8f8;
   background-size: cover;
@@ -92,6 +100,10 @@
 
 .cropit-preview-image-container {
   cursor: move;
+}
+
+.cropit-preview-image{
+  image-rendering: auto;
 }
 
 .image-size-label {
@@ -335,8 +347,13 @@ a:hover, p a:active, p a:focus {
   font-family: "PT Sans" !important;
 }
 
-.dropdown-menu{
+.channel-list{
   min-width: 190px;
+}
+
+.user-options{
+  min-width: 250px;
+  text-align: center;
 }
 
 .actions {
@@ -483,9 +500,21 @@ a:hover, p a:active, p a:focus {
   float: left;
 }
 
-.profile-avatar-size {
+.profile-avatar-inline {
   width: 200px;
   height: 200px;
+  margin-right: 8px;
+}
+.profile-avatar-size {
+  width: 250px;
+  height: 250px;
+  margin-right: 8px;
+}
+
+.profile-avatar-size-large {
+    max-width: 250px;
+    max-height: 530px;
+    margin-right: 8px;
 }
 
 .thread-container {

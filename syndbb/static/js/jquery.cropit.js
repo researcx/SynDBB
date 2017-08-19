@@ -1208,7 +1208,7 @@ return /******/ (function(modules) { // webpackBootstrap
 ;
 
 $(function() {
-  $('.image-editor').cropit({ maxZoom: 4, });
+  $('.image-editor').cropit({ maxZoom: 4, exportZoom: 2});
 
   $('form').submit(function() {
     // Move cropped image data to hidden input

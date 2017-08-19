@@ -13,6 +13,7 @@ function avatarFunc(link) {
   var dialog = bootbox.dialog({
      message: '<br/><img class="center-block" src="' + link + '"/>',
      size: "small",
+     className: "avatarModal",
 	 closeButton: true,
 	 backdrop: true,
 	 onEscape: true

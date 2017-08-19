@@ -7,6 +7,8 @@
 import syndbb, shutil, base64, requests
 from syndbb.models.users import d2_user, d2_ip, checkSession
 from syndbb.models.time import unix_time_current
+from werkzeug.utils import secure_filename
+from PIL import Image
 
 @syndbb.app.route("/user/<username>")
 def profile(username):
@@ -125,6 +127,7 @@ def change_avatar():
         if userid:
             dynamic_js_footer = ["js/jquery.cropit.js", "js/bootbox.min.js", "js/delete.js"]
             avatar_list = []
+            avatar_sources = []
             avatarfolder = syndbb.os.getcwd() + "/syndbb/static/data/avatars/"+str(userid)+"/"
 
             if not syndbb.os.path.exists(avatarfolder):
@@ -137,10 +140,14 @@ def change_avatar():
                 filepath = avatarfolder + "/" + avatar
                 if syndbb.os.path.isfile(filepath):
                     addtime = int(syndbb.os.stat(filepath).st_mtime)
-                    avatar_list.append([avatar, addtime])
+                    if "src" not in avatar:
+                        avatar_list.append([avatar.split(".")[0], addtime])
+                    else:
+                        avatar_sources.append([avatar.split(".")[0], addtime])
             avatar_list.sort(reverse=True)
+            avatar_sources.sort(reverse=True)
 
-            return syndbb.render_template('change_avatar.html', avatar_list=avatar_list, dynamic_js_footer=dynamic_js_footer, title="Change Avatar")
+            return syndbb.render_template('change_avatar.html', avatar_list=avatar_list, avatar_sources=avatar_sources, dynamic_js_footer=dynamic_js_footer, title="Change Avatar")
         else:
             return syndbb.render_template('error_not_logged_in.html', title="Change Avatar")
     else:
@@ -155,8 +162,26 @@ def upload_avatar():
         userid = checkSession(str(syndbb.session['logged_in']))
         if userid:
             user = d2_user.query.filter_by(user_id=userid).first()
+            avatar_original_folder = syndbb.os.getcwd() + "/syndbb/static/data/avatars/"+str(userid)+"-src.png"
+            avatar_original_history = syndbb.os.getcwd() + "/syndbb/static/data/avatars/"+str(userid)+"/"+str(unix_time_current())+"-src.png"
+
             avatar_folder = syndbb.os.getcwd() + "/syndbb/static/data/avatars/"+str(userid)+".png"
             avatar_history = syndbb.os.getcwd() + "/syndbb/static/data/avatars/"+str(userid)+"/"+str(unix_time_current())+".png"
+
+            if 'avatar_source' not in syndbb.request.files:
+                return "No avatar selected."
+            avatar_source = syndbb.request.files['avatar_source']
+            if avatar_source.filename == '':
+                return "No avatar selected."
+            if avatar_source:
+                filename = secure_filename(avatar_source.filename)
+                avatar_source.save(avatar_original_folder)
+
+                im = Image.open(avatar_original_folder)
+                im.thumbnail((1024,1024))
+                im.save(avatar_original_folder, "PNG")
+
+                shutil.copy2(avatar_original_folder, avatar_original_history)
 
             if 'avatar' not in syndbb.request.form:
                 syndbb.flash('No avatar selected.', 'danger')
@@ -181,10 +206,18 @@ def set_avatar():
         userid = checkSession(uniqid)
         if userid:
 
-            avatar_source = syndbb.os.getcwd() + "/syndbb/static/data/avatars/"+str(userid)+"/"+avatar
+            avatar_original_source = syndbb.os.getcwd() + "/syndbb/static/data/avatars/"+str(userid)+"/"+avatar+"-src.png"
+            avatar_original_destination = syndbb.os.getcwd() + "/syndbb/static/data/avatars/"+str(userid)+"-src.png"
+
+            avatar_source = syndbb.os.getcwd() + "/syndbb/static/data/avatars/"+str(userid)+"/"+avatar+".png"
             avatar_destination = syndbb.os.getcwd() + "/syndbb/static/data/avatars/"+str(userid)+".png"
             if syndbb.os.path.isfile(avatar_source):
                 shutil.copy2(avatar_source, avatar_destination)
+                if syndbb.os.path.isfile(avatar_original_source):
+                    shutil.copy2(avatar_original_source, avatar_original_destination)
+                else:
+                    if syndbb.os.path.isfile(avatar_original_destination):
+                        syndbb.os.remove(avatar_original_destination)
 
                 user = d2_user.query.filter_by(user_id=userid).first()
                 user.avatar_date = unix_time_current()
@@ -209,17 +242,23 @@ def remove_avatar():
         userid = checkSession(uniqid)
         if userid:
             if avatar:
-                avatar_source = syndbb.os.getcwd() + "/syndbb/static/data/avatars/"+str(userid)+"/"+avatar
+                avatar_original_source = syndbb.os.getcwd() + "/syndbb/static/data/avatars/"+str(userid)+"/"+avatar+"-src.png"
+                avatar_source = syndbb.os.getcwd() + "/syndbb/static/data/avatars/"+str(userid)+"/"+avatar+".png"
                 if syndbb.os.path.isfile(avatar_source):
                     syndbb.os.remove(avatar_source)
+                    if syndbb.os.path.isfile(avatar_original_source):
+                        syndbb.os.remove(avatar_original_source)
                     syndbb.flash('Avatar removed.', 'success')
                     return syndbb.redirect(syndbb.url_for('change_avatar'))
                 else:
                     syndbb.flash('No such avatar exists.', 'danger')
                     return syndbb.redirect(syndbb.url_for('change_avatar'))
             else:
+                avatar_original_source = syndbb.os.getcwd() + "/syndbb/static/data/avatars/"+str(userid)+"-src.png"
                 avatar_source = syndbb.os.getcwd() + "/syndbb/static/data/avatars/"+str(userid)+".png"
                 syndbb.os.remove(avatar_source)
+                if syndbb.os.path.isfile(avatar_original_source):
+                    syndbb.os.remove(avatar_original_source)
                 user = d2_user.query.filter_by(user_id=userid).first()
                 user.avatar_date = 0
                 syndbb.db.session.commit()

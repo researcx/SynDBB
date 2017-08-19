@@ -85,6 +85,21 @@ def get_avatar(user_id):
         return default_avatar
 syndbb.app.jinja_env.globals.update(get_avatar=get_avatar)
 
+#Get user avatar source by ID
+@syndbb.app.template_filter('get_avatar_source')
+def get_avatar_source(user_id):
+    root_path = syndbb.app.root_path
+    user = d2_user.query.filter_by(user_id=user_id).first()
+    if user.user_id:
+        avatar_path = '/static/data/avatars/{}-src.png'.format(user.user_id)
+        if syndbb.os.path.isfile(root_path+avatar_path):
+            return avatar_path + "?v=" +  str(user.avatar_date)
+        else:
+            return ""
+    else:
+        return ""
+syndbb.app.jinja_env.globals.update(get_avatar_source=get_avatar_source)
+
 #Get username by ID
 @syndbb.app.template_filter('get_name')
 def get_name(user_id):
