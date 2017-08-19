@@ -26,7 +26,7 @@
   margin-left: 20px;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 766px) {
   .dl-horizontal dt {
     width: auto;
   }
@@ -35,8 +35,8 @@
   }
 }
 
-@media (max-width: 768px) {
-  .top-avatar {
+@media (max-width: 767px) {
+  .top-avatar, .donation-info, .footer-notice{
     display: none;
   }
   .navbar-container {
@@ -45,7 +45,17 @@
     border-left: 0px none #fff !important;
     display: block;
     top: 0px !important;
-    width: auto !important;
+    width: 100% !important;
+  }
+  li:hover, li:active, li:focus{
+    background: #d9d9d9;
+  }
+}
+
+@media (max-width: 991px) {
+  div.container-fluid div div.row div.col-md-6{
+    float: left !important;
+    width: 100% !important;
   }
 }
 
@@ -551,7 +561,7 @@ ul.nav.navbar-nav a {
   bottom: 0;
   width: 100%;
   /* Set the fixed height of the footer here */
-  height: 91px;
+  min-height: 91px;
   background-color: #f5f5f5;
   text-shadow: 0 1px 0 #fff;
 }
