@@ -43,6 +43,13 @@ def youtubelink(tag_name, value, options, parent, context):
     return '<iframe id="ytplayer" type="text/html" src="//www.youtube.com/embed/'+youtube.group(1)+'" frameborder="0" style="width: 480px; height: 270px;" allowfullscreen></iframe>'
 parser.add_formatter('youtube', youtubelink, replace_links=False, strip=True, swallow_trailing_newline=True)
 
+#Text Background
+def render_bg(tag_name, value, options, parent, context):
+    if 'bg' in options:
+        bg = options['bg'].strip()
+    return '<span style="background-color:'+bg+'; padding: 1px 4px 1px 4px;">'+value+'</span>'
+parser.add_formatter('bg', render_bg)
+
 #Text Font
 def render_font(tag_name, value, options, parent, context):
     if 'font' in options:
