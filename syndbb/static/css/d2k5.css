@@ -196,6 +196,10 @@ a:hover, p a:active, p a:focus {
   border-bottom: 1px dotted #000;
 }
 
+.link-postname:hover {
+  border-bottom: 1px dotted #000;
+}
+
 .threadimg {
   width: 48px;
   height: 48px;

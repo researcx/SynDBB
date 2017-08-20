@@ -63,11 +63,12 @@ def parse_bbcode(text):
     # Do the bbcode parsing
     text = syndbb.models.bbcode.parser.format(text)
     # Get @usernames and turn them into links
-    postname = syndbb.re.findall('@(\w+)', text, syndbb.re.IGNORECASE)
+    postname = syndbb.re.findall('(@\w+)', text, syndbb.re.IGNORECASE)
     for user in postname:
-        d2user = d2_user.query.filter_by(username=user).first()
+        highlighted_user = user[1:]
+        d2user = d2_user.query.filter_by(username=highlighted_user).first()
         if d2user:
-            user_link = '<a href="/user/'+d2user.username+'" style="'+get_group_style_from_id(d2user.user_id)+'">'+d2user.username+'</a>'
+            user_link = '<a href="/user/'+d2user.username+'" style="'+get_group_style_from_id(d2user.user_id)+'" class="link-postname">'+d2user.username+'</a>'
             text = syndbb.re.sub(user, user_link, text)
     # Add in emotes
     for k, v in get_emote():
