@@ -68,7 +68,7 @@ def parse_bbcode(text):
         highlighted_user = user[1:]
         d2user = d2_user.query.filter_by(username=highlighted_user).first()
         if d2user:
-            user_link = '<a href="/user/'+d2user.username+'" style="'+get_group_style_from_id(d2user.user_id)+'" class="link-postname">'+d2user.username+'</a>'
+            user_link = '<a href="/user/'+d2user.username+'" style="'+get_group_style_from_id(d2user.user_id)+'" class="link-postname profile-inline">'+d2user.username+'</a>'
             text = syndbb.re.sub(user, user_link, text)
     # Add in emotes
     for k, v in get_emote():
