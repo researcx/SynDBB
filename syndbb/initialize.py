@@ -43,9 +43,9 @@ if not syndbb.app.debug:
     formatter = logging.Formatter(logFormatStr,'%m-%d %H:%M:%S')
 
     logging.basicConfig(format = logFormatStr, filename = global_log, level=logging.DEBUG)
-    access_handler = RotatingFileHandler(global_log, maxBytes=log_size, backupCount=5)
+    access_handler = RotatingFileHandler(summary_log, maxBytes=log_size, backupCount=5)
 
-    fileHandler = RotatingFileHandler(summary_log, maxBytes=log_size, backupCount=5)
+    fileHandler = RotatingFileHandler(global_log, maxBytes=log_size, backupCount=5)
     fileHandler.setLevel(logging.DEBUG)
     fileHandler.setFormatter(formatter)
 
