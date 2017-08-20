@@ -522,10 +522,6 @@ def delete_post():
                 return "Trying to delete a post which doesnt exist."
 
 ### Custom Forums ###
-@syndbb.app.route("/custom-forums/")
-def custom_forums():
-    return syndbb.render_template('custom_forums.html', title="Custom Channels")
-
 @syndbb.app.route("/request-channel/")
 def request_forum():
     if 'logged_in' in syndbb.session:
