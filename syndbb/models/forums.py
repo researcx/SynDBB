@@ -6,7 +6,7 @@
 
 import syndbb
 from syndbb.models.get_emote import get_emote
-from syndbb.models.users import d2_user
+from syndbb.models.users import d2_user, get_group_style_from_id
 import syndbb.models.bbcode
 
 ### General Functions ###
@@ -62,6 +62,13 @@ syndbb.app.jinja_env.globals.update(get_post_rating=get_post_rating)
 def parse_bbcode(text):
     # Do the bbcode parsing
     text = syndbb.models.bbcode.parser.format(text)
+    # Get @usernames and turn them into links
+    postname = syndbb.re.findall('@(\w+)', text, syndbb.re.IGNORECASE)
+    for user in postname:
+        d2user = d2_user.query.filter_by(username=user).first()
+        if d2user:
+            user_link = '<a href="/user/'+d2user.username+'" style="'+get_group_style_from_id(d2user.user_id)+'">'+d2user.username+'</a>'
+            text = syndbb.re.sub(user, user_link, text)
     # Add in emotes
     for k, v in get_emote():
         text = text.replace(v, '<img src="/static/images/emots/'+k+'" alt="'+k+'" title="'+v+'" class="emoticon" />')
