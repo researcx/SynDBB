@@ -39,9 +39,13 @@ parser.add_simple_formatter('ban', '<span style="color: #ff0000; font-weight: bo
 
 #YouTube
 def youtubelink(tag_name, value, options, parent, context):
-    youtube = re.match('^[^v]+v=(.{11}).*', value)
-    return '<iframe id="ytplayer" type="text/html" src="//www.youtube.com/embed/'+youtube.group(1)+'" frameborder="0" style="width: 480px; height: 270px;" allowfullscreen></iframe>'
-parser.add_formatter('youtube', youtubelink, replace_links=False, strip=True, swallow_trailing_newline=True)
+    pattern = r'(?:https?:\/\/)?(?:[0-9A-Z-]+\.)?(?:youtube|youtu|youtube-nocookie)\.(?:com|be)\/(?:watch\?v=|watch\?.+&v=|embed\/|v\/|.+\?v=)?([^&=\n%\?]{11})'
+    youtube = re.findall(pattern, value, re.IGNORECASE)
+    if youtube and youtube[0]:
+        return '<iframe id="ytplayer" type="text/html" src="//www.youtube.com/embed/'+youtube[0]+'" frameborder="0" style="width: 480px; height: 270px;" allowfullscreen></iframe>'
+    else:
+        return "[Invalid video ID]"
+parser.add_formatter('youtube', youtubelink, replace_links=False, strip=True, swallow_trailing_newline=False)
 
 #Text Background
 def render_bg(tag_name, value, options, parent, context):
