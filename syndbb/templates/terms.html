@@ -1,29 +1,31 @@
 {% extends "layout.html" %} {% block body %}
-<div class="thread-title">Rules</div>
-<a href="{{ url_for('rules') }}" style="color: #fff; text-decoration: none;" class="btn btn-info">Forum Rules</a>
-<a href="{{ url_for('chat_rules') }}" style="color: #fff; text-decoration: none;" class="btn btn-info">IRC Rules</a>
+<div class="inner-container">
+  <h2>Rules</h2>
+  <a href="{{ url_for('rules') }}" style="color: #fff; text-decoration: none;" class="btn btn-info">Forum Rules</a>
+  <a href="{{ url_for('chat_rules') }}" style="color: #fff; text-decoration: none;" class="btn btn-info">IRC Rules</a>
 
-<h2>Content</h2>
-<p>D2K5 and the D2K5 logo are Copyright &copy; 2002 - {{ now.year }} by faggqt (<a href="https://faggqt.pw" target="_blank">https://faggqt.pw/</a>). All rights reserved.<br/>
-You may use, distribute and modify this code under the QPL-1.0 license. The full license is included in LICENSE.md, which is distributed as part of this project.
-</p>
+  <h2>Content</h2>
+  <p>D2K5 and the D2K5 logo are Copyright &copy; 2002 - {{ now.year }} by faggqt (<a href="https://faggqt.pw" target="_blank">https://faggqt.pw/</a>). All rights reserved.<br/>
+  You may use, distribute and modify this code under the QPL-1.0 license. The full license is included in LICENSE.md, which is distributed as part of this project.
+  </p>
 
-<p>All trademarks and copyrights on this site are owned by their respective parties. Images and files uploaded are the responsibility of the user. Comments are owned by the user.</p>
+  <p>All trademarks and copyrights on this site are owned by their respective parties. Images and files uploaded are the responsibility of the user. Comments are owned by the user.</p>
 
-<p>If you continue to use this site, you are consenting to our use of cookies.</p>
+  <p>If you continue to use this site, you are consenting to our use of cookies.</p>
 
-<h2>Age Limit</h2>
+  <h2>Age Limit</h2>
 
-<p>You agree that you are 18 years of age, or older, or old enough to use these services and accept the terms of service, as defined by the legal code of your local area. If you do not agree, stop using this service now.</p>
+  <p>You agree that you are 18 years of age, or older, or old enough to use these services and accept the terms of service, as defined by the legal code of your local area. If you do not agree, stop using this service now.</p>
 
-<h2>Liability</h2>
+  <h2>Liability</h2>
 
-<p>By accessing D2K5 services, the user agrees to release D2K5, its owners, and staff of ALL liability for said user's communication, should it be illegal or abusive. You also agree that you are solely responsible for your actions, and that you will not
-  hold D2K5, the domain name d2k5.com, faggqt.pw, hardcats.net, lulzsec.co.uk, spacetopia.pw or any other related domain names, internet addresses, its owners, service providers, or staff responsible for any of your actions. You, and/or your representative
-  organization, assume all liability by connection to D2K5, this website, or any affiliated service or provided function. You also agree that this license applies to all services related or unrelated to D2K5 that are hosted or provided by D2K5's owners
-  or staff members.</p>
+  <p>By accessing D2K5 services, the user agrees to release D2K5, its owners, and staff of ALL liability for said user's communication, should it be illegal or abusive. You also agree that you are solely responsible for your actions, and that you will not
+    hold D2K5, the domain name d2k5.com, faggqt.pw, hardcats.net, lulzsec.co.uk, spacetopia.pw or any other related domain names, internet addresses, its owners, service providers, or staff responsible for any of your actions. You, and/or your representative
+    organization, assume all liability by connection to D2K5, this website, or any affiliated service or provided function. You also agree that this license applies to all services related or unrelated to D2K5 that are hosted or provided by D2K5's owners
+    or staff members.</p>
 
-<h2>Warranty</h2>
+  <h2>Warranty</h2>
 
-<p>D2K5 and its services, and related or unrelated services are provided without a guarantee of warranty of any kind. Use them at your own risk.</p>
+  <p>D2K5 and its services, and related or unrelated services are provided without a guarantee of warranty of any kind. Use them at your own risk.</p>
+</div>
 {% endblock %}
