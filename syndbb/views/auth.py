@@ -68,7 +68,7 @@ def doregister():
         if user:
             return "A user with that username already exists."
         else:
-            create_user = d2_user(username, '', '', 0, 0, '', '', '', '', '', 0, password, 0, 0, 0, 0, 0, 0, 0, unix_time_current(), unix_time_current(), unix_time_current(), '', '', '')
+            create_user = d2_user(username, '', '', '', 0, 0, '', '', '', '', '', 0, password, 0, 0, 0, 0, 0, 0, 0, unix_time_current(), unix_time_current(), unix_time_current(), '', '', '')
             syndbb.db.session.add(create_user)
             syndbb.db.session.flush()
             created_user_id = str(create_user.user_id)
