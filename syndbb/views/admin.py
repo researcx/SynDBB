@@ -63,7 +63,7 @@ def get_stats():
     logfile = "logs/irc_users.log"
     if syndbb.os.path.isfile(logfile):
         file = open(logfile, "r")
-        count = file.read()
+        irccount = file.read()
     return {'usercount': usercount, 'postcount': postcount, 'threadcount': threadcount, 'bancount': bancount, 'officialforumcount': officialforumcount, 'unofficialforumcount': unofficialforumcount, 'unapprovedforumcount': unapprovedforumcount, 'irccount': irccount, 'filecount': filecount, 'filesize': filesize, 'disk_percentage': disk_percentage, 'disk_total': disk_total, 'progress_indicator': progress_indicator, 'linecount': linecount}
 syndbb.app.jinja_env.globals.update(get_stats=get_stats)
 
