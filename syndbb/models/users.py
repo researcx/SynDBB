@@ -57,17 +57,18 @@ def inject_user():
     user_session = {'sessionid': 0}
     return {'user': user, 'user_session': user_session}
 
-#Get IRC user count
-@syndbb.app.template_filter('irc_users')
-def irc_users():
-    logfile = "logs/irc_users.log"
-    if syndbb.os.path.isfile(logfile):
-        file = open(logfile, "r")
-        count = file.read()
-        return count
-    else:
-        return "0"
-syndbb.app.jinja_env.globals.update(irc_users=irc_users)
+#Get status updates
+@syndbb.app.template_filter('get_all_status_updates')
+#@syndbb.cache.memoize(timeout=60)
+def get_all_status_updates():
+    statuses = []
+    users = d2_user.query.filter(d2_user.status != "").order_by(d2_user.status_time.desc()).limit(20).all()
+    for user in users:
+        statuses.append([user.status_time, user.status, user.username, user.user_id])
+    statuses.sort(reverse=True)
+    return statuses
+
+syndbb.app.jinja_env.globals.update(get_all_status_updates=get_all_status_updates)
 
 #Get user avatar by ID
 @syndbb.app.template_filter('get_avatar')
@@ -102,9 +103,10 @@ syndbb.app.jinja_env.globals.update(get_avatar_source=get_avatar_source)
 
 #Get username by ID
 @syndbb.app.template_filter('get_name')
+@syndbb.cache.memoize(timeout=180)
 def get_name(user_id):
     user = d2_user.query.filter_by(user_id=user_id).first()
-    if user.user_id:
+    if user and user.user_id:
         return user.username
     else:
         return "Guest"
@@ -112,14 +114,27 @@ syndbb.app.jinja_env.globals.update(get_name=get_name)
 
 #Get title from ID
 @syndbb.app.template_filter('get_user_title')
-def get_user_title(title):
-    if title:
-        return title
+@syndbb.cache.memoize(timeout=180)
+def get_user_title(user_id):
+    user = d2_user.query.filter_by(user_id=user_id).first()
+    if user:
+        if is_banned(user.user_id):
+            return "Banned"
+        if user.rank >= 900:
+            return "Administrator"
+        elif user.rank >= 500:
+            return "Operator"
+        elif user.rank >= 100:
+            return "Half-Operator"
+        elif user.rank >= 50:
+            return "Gold Member"
+        else:
+            return "Member"
     else:
         return "Member"
 syndbb.app.jinja_env.globals.update(get_user_title=get_user_title)
 
-#Get title from ID
+#Get banned state
 @syndbb.app.template_filter('is_banned')
 def is_banned(id):
     user = d2_user.query.filter_by(user_id=id).first()
@@ -142,6 +157,7 @@ syndbb.app.jinja_env.globals.update(is_banned=is_banned)
 
 #User group color from user ID
 @syndbb.app.template_filter('get_group_style_from_id')
+@syndbb.cache.memoize(timeout=180)
 def get_group_style_from_id(user_id):
     user = d2_user.query.filter_by(user_id=user_id).first()
     if user:
@@ -162,21 +178,22 @@ def get_group_style_from_id(user_id):
 syndbb.app.jinja_env.globals.update(get_group_style_from_id=get_group_style_from_id)
 
 #User group color
-@syndbb.app.template_filter('get_group_style')
-def get_group_style(group_name, banned=0):
-    if banned:
-        return "color: #FF0000; text-decoration: line-through;"
-    if group_name == "Administrator":
-        return "color: #DB0003; font-weight: bold;"
-    elif group_name == "Operator":
-        return "color: #AC15F2; font-weight: bold;"
-    elif group_name == "Half-Operator":
-        return "color: #00BC1F; font-weight: bold;"
-    elif group_name == "Gold Member":
-        return "color: #B56236; font-weight: bold;"
-    else:
-        return "color: #397FEF; font-weight bold;"
-syndbb.app.jinja_env.globals.update(get_group_style=get_group_style)
+# @syndbb.app.template_filter('get_group_style')
+# @syndbb.cache.memoize(timeout=180)
+# def get_group_style(group_name, banned=0):
+#     if banned:
+#         return "color: #FF0000; text-decoration: line-through;"
+#     if group_name == "Administrator":
+#         return "color: #DB0003; font-weight: bold;"
+#     elif group_name == "Operator":
+#         return "color: #AC15F2; font-weight: bold;"
+#     elif group_name == "Half-Operator":
+#         return "color: #00BC1F; font-weight: bold;"
+#     elif group_name == "Gold Member":
+#         return "color: #B56236; font-weight: bold;"
+#     else:
+#         return "color: #397FEF; font-weight bold;"
+# syndbb.app.jinja_env.globals.update(get_group_style=get_group_style)
 
 ### MySQL Functions ###
 class d2_session(syndbb.db.Model):
@@ -199,6 +216,8 @@ class d2_user(syndbb.db.Model):
     username = syndbb.db.Column(syndbb.db.String(150), unique=True)
     email = syndbb.db.Column(syndbb.db.String, unique=False)
     title = syndbb.db.Column(syndbb.db.String, unique=False)
+    status = syndbb.db.Column(syndbb.db.String, unique=False)
+    status_time = syndbb.db.Column(syndbb.db.Integer, unique=False)
     rank = syndbb.db.Column(syndbb.db.Integer, unique=False)
     gender = syndbb.db.Column(syndbb.db.String, unique=False)
     location = syndbb.db.Column(syndbb.db.String, unique=False)
@@ -222,10 +241,12 @@ class d2_user(syndbb.db.Model):
     upload_url = syndbb.db.Column(syndbb.db.String, unique=False)
 
 
-    def __init__(self, username, email, title, rank, gender, location, occupation, bio, site, avatar_date, password, post_count, line_count, word_count, profanity_count, karma_positive, karma_negative, points, join_date, last_login, last_activity, ircauth, uploadauth, upload_url):
+    def __init__(self, username, email, title, status, status_time, rank, gender, location, occupation, bio, site, avatar_date, password, post_count, line_count, word_count, profanity_count, karma_positive, karma_negative, points, join_date, last_login, last_activity, ircauth, uploadauth, upload_url):
         self.username = username
         self.email = email
         self.title = title
+        self.status = status
+        self.status_time = status_time
         self.rank = rank
         self.gender = gender
         self.location = location

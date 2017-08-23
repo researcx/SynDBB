@@ -9,6 +9,7 @@ from logging.handlers import RotatingFileHandler
 from flask import Flask, request, jsonify
 from time import strftime
 import traceback
+# import bs4, functools, htmlmin
 
 # Core Pages
 import syndbb.views.basic
@@ -32,6 +33,29 @@ import syndbb.views.admin
 # Miscellaneous
 import syndbb.views.irc_api
 import syndbb.views.xml_feed
+
+def prettify(route_function):
+    @functools.wraps(route_function)
+    def wrapped(*args, **kwargs):
+        yielded_html = route_function(*args, **kwargs)
+        soup = bs4.BeautifulSoup(yielded_html, 'html.parser')
+        return soup.prettify()
+
+    return wrapped
+
+def uglify(route_function):
+    @functools.wraps(route_function)
+    def wrapped(*args, **kwargs):
+        yielded_html = route_function(*args, **kwargs)
+        minified_html = htmlmin.minify(yielded_html)
+        return minified_html
+
+    return wrapped
+
+# if syndbb.app.debug:
+#     syndbb.render_template = prettify(syndbb.render_template)
+# else:
+#     syndbb.render_template = uglify(syndbb.render_template)
 
 #Error Logging (when not in debug mode)
 if not syndbb.app.debug:

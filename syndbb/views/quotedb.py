@@ -33,12 +33,11 @@ def all_pages():
 
 @syndbb.app.route("/quotes/")
 def view_qdb():
-    dynamic_css_header = ["css/rating.css"]
     dynamic_js_footer = ["js/jquery.rangyinputs.js", "js/quotes.js", "js/inline.js", "js/post_ratings.js", "js/bootbox.min.js"]
 
     quotes = d2_quotes.query.filter_by(approved=1).order_by(d2_quotes.rating.desc()).order_by(d2_quotes.time.desc()).all()
 
-    return syndbb.render_template('quote_list.html', quotes=quotes, dynamic_css_header=dynamic_css_header, dynamic_js_footer=dynamic_js_footer, title="Quote Database")
+    return syndbb.render_template('quote_list.html', quotes=quotes, dynamic_js_footer=dynamic_js_footer, title="Quote Database", subheading=[""])
 
 @syndbb.app.route("/functions/create_quote/", methods=['GET', 'POST'])
 def create_quotes():

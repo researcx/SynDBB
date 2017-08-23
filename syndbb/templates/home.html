@@ -1,56 +1,117 @@
 {% extends "layout.html" %} {% block body %}
-<div style="float:right">
-  <div style="margin-left: 16pt; float: right;">
-    <a href="https://paypal.me/d2k5" style="color: #fff; text-decoration: none;" class="btn btn-info">PayPal</a> <a href="https://blockchain.info/address/1DCGww1Y55fukRbLEkZuzJBb2nUJ5Xx1rn" style="color: #fff; text-decoration: none;" class="btn btn-info">Bitcoin</a>
-  </div>
-  <div style="margin-left: 14px; width:340px;" class="extra-info-right">
-    Donations will help us afford our servers and continued existence.<br/> Users who donate $15 or more will receive the <a href="/gold-member/"><span style="{{get_group_style('Gold Member')}}">Gold Member</span></a> rank.
-    <br/><br/>
-  </div>
-</div>
-<span style="font-size: 18pt;">Welcome to the D2K5 Network.</span><br/>
-<div style="margin-left: 14px;">
-  <div style="padding-top: 10px; padding-bottom: 5px; margin-bottom: 0px;">D2K5 is a network for general, technology, music and video game discussion.
-    <br/> {% if not user_session.sessionid %} Registration is currently <b>invite only</b>.<br/><br/>
-    <a href="/request-invite/" style="color: #fff; text-decoration: none;" class="btn btn-info">Request an invite</a> {% endif %}
-  </div>
-  <div class="row" style="max-width: 100%; margin: 0 auto;">
-    <div class="col-md-6">
-      <h3>Official Channels</h3>
-      <div style="margin-left: 14px;">
-        {% for forum in forums %}
-        <div class="panel panel-default category-list" onclick="location.href='/{{ forum.short_name }}';" style="cursor: pointer;">
-          <div class="panel-body" style="padding: 8px;">
-            <div class="media">
-              <div class="thread-left">
-                <div style="background-image: url({{get_forum_icon(forum.short_name)}})" title="{{ forum.name }}" class="img-circle pull-left forum-image"></div>
-                <div style="clear:both"></div>
-              </div>
-              <div class="media-body">
-                <a href="/{{ forum.short_name }}" class="forum-title"><b>
-                  <span style="float: right;">#{{ forum.short_name }}</span>
-                  {{ forum.name }}</b></a>
-              </div>
-            </div>
+  <div class="row" style="max-width: 100%; margin: 0 auto; margin-bottom: -20px;">
+    <div class="col-12 col-sm-9 col-lg-10 main">
+      <div class="inner-header">
+        Recent Posts
+      </div>
+      <table class="home-forum-list recent-post-list table table-striped">
+        <tbody>
+          {{ get_recent_posts(15)|safe }}
+        </tbody>
+      </table>
+      <div class="inner-header">
+        Channels
+      </div>
+      <table class="home-forum-list table table-striped">
+        <tbody>
+          {% for forum in forums %}
+          <tr>
+            <td class="home-forum home-forum-icon"><a href="/{{ forum.short_name }}"><img src="{{get_forum_icon(forum.short_name)}}" alt=""/></a></td>
+            <td class="home-forum"><a href="/{{ forum.short_name }}"><b><span style="float: right;">#{{ forum.short_name }}</span>{{ forum.name }}</b></a>
+            {% if forum.description %}
+              <br/><span class="small">{{forum.description}}</span>
+            {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="col-12 col-sm-3 col-lg-2 left" style="border-top: 1px solid #ddd; border-left: 1px solid #ddd;">
+      <div class="sidebar-userinfo text-center" style="border-bottom: 1px solid #ddd;">
+      {% if user_session.sessionid %}
+        <div style="padding-top: 20px;">
+          <a href="/user/{{user.username}}">
+            <img src="{{get_avatar(user.user_id)}}" alt="Avatar" class="img-circle home-avatar-size"/>
+          </a>
+          <dl class="dl-horizontal statistics" style="margin-top: 10px;">
+    				<dt>Karma:</dt>
+    				<dd>
+    					{% if (user.karma_positive - user.karma_negative) < 0 %}
+    					<span style="color: red; font-weight: bold;">
+    					{% elif (user.karma_positive - user.karma_negative) > 0 %}
+    					<span style="color: green; font-weight: bold;">
+    					{% else %}
+    					<span style="color: grey; font-weight: bold;">
+    					{% endif %}
+    					{{user.karma_positive - user.karma_negative}}
+    					</span>
+              (<span style="color: green">+{{user.karma_positive}}</span>/
+    					<span style="color: red">-{{user.karma_negative}}</span>)
+    				</dd>
+            <dt>Currency:</dt>
+    				<dd>&ETH;{{user.points}}</dd>
+            <dt>Lines Spoken:</dt>
+    				<dd>{{user.line_count}}</dd>
+    				<dt>Profanity Count:</dt>
+    				<dd>{{user.profanity_count}}</dd>
+    			</dl>
+        </div>
+      {% else %}
+        <a href="{{ url_for('register') }}" style="color: #fff; text-decoration: none;" class="authbutton">Register</a>
+        <a href="{{ url_for('login') }}" style="color: #fff; text-decoration: none;" class="authbutton">Log In</a>
+			{% endif %}
+      </div>
+      <div class="sidebar-status" style="padding: 12px; border-bottom: 1px solid #ddd;">
+        {% if user_session.sessionid %}
+        <form class="form-horizontal" action="/functions/update_status" method="POST">
+          <input name="status" class="form-control status-update-field" placeholder="Update your status..." type="text">
+          <input type="hidden" name="uniqid" value="{{user_session.sessionid}}">
+        </form>
+        {% endif %}
+        {% for status in get_all_status_updates() %}
+        <div class="media" style="margin-top: 3px;">
+          <div class="media-left" style="padding-right: 5px; vertical-align: middle;">
+            <a href="/user/{{status[2]}}">
+              <img src="{{get_avatar(status[3])}}" alt="Avatar" class="status-avatar-size"/>
+            </a>
+          </div>
+          <div class="media-body" style="vertical-align: middle;">
+            <a href="/user/{{status[2]}}">
+              <span style="{{get_group_style_from_id(status[3])}}">{{status[2]}}</span>
+            </a>
+            <span class="text-muted" style="font-size: 12px;"> {{status[1]}}</span>
           </div>
         </div>
         {% endfor %}
       </div>
-    </div>
-    <div class="col-md-6" style="float:right">
-      <h3>Recent Activity</h3>
-      <div style="margin-left: 14px;">
-        <div class="panel panel-default">
-          <div class="panel-body" style="padding: 4px;">
-            <table class="event-list table table-striped">
-              <tbody>
-                {{ get_activity(12)|safe }}
-              </tbody>
-            </table>
+      <div class="sidebar-statistics text-center" style="border-bottom: 1px solid #ddd;">
+        <dl class="dl-horizontal statistics" style="margin-top: 10px; margin-bottom: 10px;">
+  				<dt>Posts:</dt>
+  				<dd>{{get_stats()['threadcount'] + get_stats()['postcount']}}</dd>
+
+          <dt>Channels:</dt>
+  				<dd>{{get_stats()['officialforumcount'] + get_stats()['unofficialforumcount']}}</dd>
+
+          <dt>Lines Spoken:</dt>
+  				<dd>{{get_stats()['linecount']}}</dd>
+
+          <dt>Bans:</dt>
+  				<dd>{{get_stats()['bancount']}}</dd>
+  			</dl>
+        <div style="padding: 0px 20px;">
+          <div class="progress">
+            <div class="progress-bar {{get_stats()['progress_indicator']}} progress-bar-striped" role="progressbar" aria-valuenow="40"
+            aria-valuemin="0" aria-valuemax="100" style="width:{{get_stats()['disk_percentage']}}%">
+              <span>{{get_stats()['filecount']}} files ({{human_size(get_stats()['filesize'])}})</span>
+            </div>
           </div>
-        </div>
+       </div>
+      </div>
+      <div class="sidebar-statistics text-center" style="padding: 18px;">
+        Donations help us afford our servers and continued existence. Users who donate $15 or more will receive the <a href="/gold-member/"><span style="color: #B56236; font-weight: bold;">Gold Member</span></a> rank.<br/><br/>
+        <a href="https://paypal.me/d2k5" style="color: #fff; text-decoration: none;" class="btn btn-info" target="_blank">PayPal</a> <a href="https://blockchain.info/address/1DCGww1Y55fukRbLEkZuzJBb2nUJ5Xx1rn" style="color: #fff; text-decoration: none;" class="btn btn-info" target="_blank">Bitcoin</a>
       </div>
     </div>
   </div>
-</div>
 {% endblock %}

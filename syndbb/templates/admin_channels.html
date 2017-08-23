@@ -13,8 +13,8 @@
       <div class="media-body">
         <span class="text-muted" style="float:right; text-align: right;">
           <i>#{{channel.short_name}}&nbsp;</i><br/>
-          <a href="/functions/approve_channel/?channel={{channel.id}}&uniqid={{user_session.sessionid}}" title="Approve" class="text-muted"><i class="fa fa-fw fa-check" aria-hidden="true"></i></a>
-          <a href="/functions/disapprove_channel/?channel={{channel.id}}&uniqid={{user_session.sessionid}}" title="Disapprove" class="text-muted"><i class="fa fa-fw fa-times" aria-hidden="true"></i></a>
+          <a href="/functions/approve_channel/?channel={{channel.id}}&uniqid={{user_session.sessionid}}" title="Approve" class="text-muted"><i class="silk-icon icon_tick" aria-hidden="true"></i></a>
+          <a href="/functions/disapprove_channel/?channel={{channel.id}}&uniqid={{user_session.sessionid}}" title="Disapprove" class="text-muted"><i class="silk-icon icon_cross" aria-hidden="true"></i></a>
         </span>
         <a href="/user/{{get_name(channel.owned_by)}}" class="activity_poster"><b>{{channel.name}}</b></a><br/>
         <span class="text-muted">{{channel.description}}</span><br/></div>

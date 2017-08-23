@@ -1,19 +1,21 @@
 {% extends "layout.html" %} {% block body %}
-<p class="lead">Invite Codes:</p>
+<div class="inner-container">
+  <p class="lead">Invite Codes:</p>
 
-{% for invite in invite_list %}
-<div class="panel panel-default">
-  <div class="panel-body">
-    <span style="font-size: 15pt;">
-      {% if invite.used_by != 0 %}
-        Invite used by <a href="/user/{{get_name(invite.used_by)}}" class="text-muted">{{get_name(invite.used_by)}}</a>
-      {% else %}
-        <a href="/register/{{ invite.code }}" class="text-muted">{{ invite.code }}</a>
-      {% endif %}
-    </span>
+  {% for invite in invite_list %}
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <span style="font-size: 15pt;">
+        {% if invite.used_by != 0 %}
+          Invite used by <a href="/user/{{get_name(invite.used_by)}}" class="text-muted">{{get_name(invite.used_by)}}</a>
+        {% else %}
+          <a href="/register/{{ invite.code }}" class="text-muted">{{ invite.code }}</a>
+        {% endif %}
+      </span>
+    </div>
   </div>
-</div>
-{% endfor %}
+  {% endfor %}
 
-<div class="invitegen"><a href="/functions/generate_invite/?uniqid={{user_session.sessionid}}" style="color: #fff; text-decoration: none;" class="btn btn-info">Generate Invite</a></div>
+  <div class="invitegen"><a href="/functions/generate_invite/?uniqid={{user_session.sessionid}}" style="color: #fff; text-decoration: none;" class="btn btn-info">Generate Invite</a></div>
+</div>
 {% endblock %}

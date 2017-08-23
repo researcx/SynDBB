@@ -19,11 +19,11 @@ function redirFunc(link) {
 	  backdrop: true,
       buttons: {
           confirm: {
-              label: '<i class="fa fa-check"></i> Yes',
+              label: 'Yes',
               className: 'btn-success'
           },
           cancel: {
-              label: '<i class="fa fa-times"></i> No',
+              label: 'No',
               className: 'btn-danger'
           }
       },

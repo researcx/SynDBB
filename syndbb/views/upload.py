@@ -54,24 +54,24 @@ def upload():
                             im.thumbnail((150,150))
                             im.save(thumbpath, "PNG")
                     elif extension in audio_types:
-                        type_icon = '<i class="fa fa-file-audio-o" aria-hidden="true"></i>'
+                        type_icon = '<i class="silk-icon icon_music" aria-hidden="true"></i>'
                     elif extension in video_types:
-                        type_icon = '<i class="fa fa-file-video-o" aria-hidden="true"></i>'
+                        type_icon = '<i class="fsilk-icon icon_film" aria-hidden="true"></i>'
                     elif extension in text_types:
-                        type_icon = '<i class="fa fa-file-text-o" aria-hidden="true"></i>'
+                        type_icon = '<i class="silk-icon icon_page_white_test" aria-hidden="true"></i>'
                     elif extension in archive_types:
-                        type_icon = '<i class="fa fa-file-archive-o" aria-hidden="true"></i>'
+                        type_icon = '<i class="silk-icon icon_compress" aria-hidden="true"></i>'
                     else:
-                        type_icon = '<i class="fa fa-file-o" aria-hidden="true"></i>'
+                        type_icon = '<i class="silk-icon icon_page_white" aria-hidden="true"></i>'
 
                     file_list.append([filetime, filesize, fn, type_icon])
             file_list.sort(reverse=True)
 
-            return syndbb.render_template('upload.html', uploadurl=uploadurl, filecount=len(file_list), file_list=file_list, total_size=total_size, dynamic_js_footer=dynamic_js_footer, title="Upload")
+            return syndbb.render_template('upload.html', uploadurl=uploadurl, filecount=len(file_list), file_list=file_list, total_size=total_size, dynamic_js_footer=dynamic_js_footer, title="Upload", subheading=[""])
         else:
-            return syndbb.render_template('error_not_logged_in.html', title="Upload")
+            return syndbb.render_template('error_not_logged_in.html', title="Upload", subheading=[""])
     else:
-        return syndbb.render_template('error_not_logged_in.html', title="Upload")
+        return syndbb.render_template('error_not_logged_in.html', title="Upload", subheading=[""])
 
 @syndbb.app.route("/upload/album/")
 def upload_album():
@@ -95,11 +95,11 @@ def upload_album():
                 if extension in image_types:
                     images.append(image)
 
-            return syndbb.render_template('upload_album.html', filecount=len(images), uploadurl=uploadurl, file_list=images, dynamic_js_footer=dynamic_js_footer, title=user.username + " &bull; Album")
+            return syndbb.render_template('upload_album.html', filecount=len(images), uploadurl=uploadurl, file_list=images, dynamic_js_footer=dynamic_js_footer, title=user.username + " &bull; Album", subheading=[""])
         else:
-            return syndbb.render_template('invalid.html', title="Upload &bull; Gallery")
+            return syndbb.render_template('invalid.html', title="Upload &bull; Gallery", subheading=[""])
     else:
-        return syndbb.render_template('invalid.html', title="Upload &bull; Gallery")
+        return syndbb.render_template('invalid.html', title="Upload &bull; Gallery", subheading=[""])
 
 @syndbb.app.route("/upload/gallery/")
 def upload_gallery():
@@ -143,11 +143,11 @@ def upload_gallery():
                         file_list.append([filetime, filesize, fn, type_icon])
             file_list.sort(reverse=True)
 
-            return syndbb.render_template('upload_gallery.html', uploadurl=uploadurl, filecount=len(file_list), file_list=file_list, total_size=total_size, dynamic_js_footer=dynamic_js_footer, title="Upload &bull; Gallery")
+            return syndbb.render_template('upload_gallery.html', uploadurl=uploadurl, filecount=len(file_list), file_list=file_list, total_size=total_size, dynamic_js_footer=dynamic_js_footer, title="Upload &bull; Gallery", subheading=[""])
         else:
-            return syndbb.render_template('error_not_logged_in.html', title="Upload &bull; Gallery")
+            return syndbb.render_template('error_not_logged_in.html', title="Upload &bull; Gallery", subheading=[""])
     else:
-        return syndbb.render_template('error_not_logged_in.html', title="Upload &bull; Gallery")
+        return syndbb.render_template('error_not_logged_in.html', title="Upload &bull; Gallery", subheading=[""])
 
 @syndbb.app.route("/upload/simple/")
 def upload_simple():
@@ -193,13 +193,13 @@ def upload_simple():
                             im.thumbnail((150,150))
                             im.save(thumbpath, "PNG")
                         file_list.append([filetime, filesize, ufile, type_icon])
-                return syndbb.render_template('upload_simple.html', uploadurl=uploadurl, file_list=file_list, dynamic_js_footer=dynamic_js_footer, title="Upload")
+                return syndbb.render_template('upload_simple.html', uploadurl=uploadurl, file_list=file_list, dynamic_js_footer=dynamic_js_footer, title="Upload", subheading=[""])
             else:
-                return syndbb.render_template('upload_simple.html', dynamic_js_footer=dynamic_js_footer, title="Upload")
+                return syndbb.render_template('upload_simple.html', dynamic_js_footer=dynamic_js_footer, title="Upload", subheading=[""])
         else:
-            return syndbb.render_template('error_not_logged_in.html', title="Upload")
+            return syndbb.render_template('error_not_logged_in.html', title="Upload", subheading=[""])
     else:
-        return syndbb.render_template('error_not_logged_in.html', title="Upload")
+        return syndbb.render_template('error_not_logged_in.html', title="Upload", subheading=[""])
 
 @syndbb.app.route('/functions/upload', methods=['GET', 'POST'])
 def upload_file():

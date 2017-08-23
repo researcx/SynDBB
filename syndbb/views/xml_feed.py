@@ -13,6 +13,7 @@ from flask import make_response
 # Post Feed
 # /feed/posts/xml
 @syndbb.app.route("/feed/posts/xml")
+@syndbb.cache.memoize(timeout=60)
 def feed_posts_xml():
     activity = []
     activity_item = ""
@@ -51,6 +52,7 @@ def feed_posts_xml():
 # Thread Feed
 # /feed/threads/xml
 @syndbb.app.route("/feed/threads/xml")
+@syndbb.cache.memoize(timeout=60)
 def feed_threads_xml():
     activity = []
     activity_item = ""

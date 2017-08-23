@@ -65,7 +65,7 @@
     {% for style in dynamic_css_header %}
     <link href="/static/{{style}}" rel="stylesheet">
     {% endfor %}
-
+    <link href="{{ url_for('static', filename='icons/iconAtlas.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/d2k5.css') }}" rel="stylesheet">
 
     <!--[if lt IE 9]>
@@ -77,6 +77,16 @@
   <body>
     <nav class="navbar navbar-default navbar-static-top">
       <div class="container-fluid">
+        {% if subheading %}
+        <span class="navbar-title-sub">
+          <a href="{{ url_for('home') }}">D2K5</a> &gt;
+          {% for subhead in subheading %}
+            {% if subhead %}
+              {{subhead|safe}} &gt;
+            {% endif %}
+          {% endfor %}
+        </span>
+        {% endif %}
         <span class="navbar-title">
           {% if forumtitle %}
             {{ forumtitle|safe }}
@@ -86,6 +96,11 @@
             {% else %}
               D2K5
             {% endif %}
+          {% endif %}
+          {% if topbuttons %}
+            <div class="topbuttons">
+              {{topbuttons|safe}}
+            </div>
           {% endif %}
         </span>
         {% if user_session.sessionid %}
@@ -114,7 +129,7 @@
           <div class="navbar-container">
             <ul class="nav navbar-nav">
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bars" aria-hidden="true"></i> Channels <span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="silk-icon icon_application_side_list" aria-hidden="true"></i> Channels <span class="caret"></span></a>
                 <ul class="dropdown-menu channel-list">
                   <li class="forum-list"><a href="#">Official</a></li>
                   {% for forum in forums %}
@@ -139,11 +154,11 @@
                   {% endif %}
                 </ul>
               </li>
-              <li><a href="{{ url_for('chat') }}"><i class="fa fa-comments" aria-hidden="true"></i> Chat ({{irc_users()}} users)</a></li>
-              <li><a href="{{ url_for('events') }}"><i class="fa fa-calendar" aria-hidden="true"></i> Events</a></li>
-              <li><a href="{{ url_for('ban_list') }}"><i class="fa fa-ban" aria-hidden="true"></i> Bans</a></li>
+              <li><a href="{{ url_for('chat') }}"><i class="silk-icon icon_comment" aria-hidden="true"></i> IRC ({{get_stats()['irccount']}} users)</a></li>
+              <li><a href="{{ url_for('events') }}"><i class="silk-icon icon_date" aria-hidden="true"></i> Events</a></li>
+              <li><a href="{{ url_for('ban_list') }}"><i class="silk-icon icon_delete" aria-hidden="true"></i> Bans</a></li>
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-coffee" aria-hidden="true"></i> Services <span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="silk-icon icon_cup" aria-hidden="true"></i> Services <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                   {% if user_session.sessionid %}
                   <li><a href="{{ url_for('pastebin') }}">Pastebin</a></li>
@@ -159,23 +174,24 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
               {% if user_session.sessionid %}
+              <!--<li><a href="{{ url_for('ban_list') }}"><i class="silk-icon icon_error" aria-hidden="true"></i> Alerts (0)</a></li>-->
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-circle" aria-hidden="true"></i> {{user.username}} <span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="silk-icon icon_user_gray" aria-hidden="true"></i> {{user.username}} <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                  {% if user.rank >= 500 %}
-                  <li><a href="{{ url_for('siteadmin') }}">Administrative Tools</a></li>
-                  {% endif %}
                   <li><a href="{{ url_for('preferences') }}">User Preferences</a></li>
                   <li><a href="{{ url_for('change_avatar') }}">Change Avatar</a></li>
                   <li><a href="{{ url_for('change_password') }}">Change Password</a></li>
                   <li><a href="{{ url_for('my_invites') }}">Invite Codes</a></li>
+                  {% if user.rank >= 500 %}
+                  <li><a href="{{ url_for('siteadmin') }}">Administrative Tools</a></li>
+                  {% endif %}
                   <li><a href="{{ url_for('login_history') }}">Login History</a></li>
                   <li><a href="{{ url_for('logout') }}?uniqid={{user_session.sessionid}}">Log Out</a></li>
                 </ul>
               </li>
               {% else %}
-              <li><a href="{{ url_for('login') }}"><i class="fa fa-sign-in" aria-hidden="true"></i> Log In</a></li>
-              <li><a href="{{ url_for('register') }}"><i class="fa fa-sign-out" aria-hidden="true"></i> Register</a></li>
+              <li><a href="{{ url_for('login') }}"><i class="silk-icon icon_key" aria-hidden="true"></i> Log In</a></li>
+              <li><a href="{{ url_for('register') }}"><i class="silk-icon icon_lock" aria-hidden="true"></i> Register</a></li>
               {% endif %}
             </ul>
           </div>
@@ -198,7 +214,7 @@
           All trademarks and copyrights on this page are owned by their respective parties.<br/> Images and files uploaded are the responsibility of the user. Comments are owned by the user.<br/> If you continue to use this site, you are consenting to our
           use of cookies.</p>
         <p class="text-muted"><a href="{{ url_for('terms') }}">D2K5 &copy; 2002 - {{ now.year }}</a> - <a href="{{ url_for('info') }}">Powered by SynDBB {{ syndbb_version }} ({{ syndbb_hash }})</a><br/>
-          <a href="https://github.com/D2K5/SynDBB" target="_blank">Submit bug reports, fixes and feature requests on <i class="fa fa-github" aria-hidden="true"></i>GitHub!</a><br/>
+          <a href="https://github.com/D2K5/SynDBB" target="_blank">Submit bug reports, fixes and feature requests on GitHub!</a><br/>
           <i>Page generation took {{ g.request_time() }} seconds. &bull; All times are <abbr title="Greenwich Mean Time">GMT</abbr>.</i></p>
       </div>
     </footer>

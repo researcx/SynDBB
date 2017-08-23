@@ -1,28 +1,30 @@
 {% extends "layout.html" %} {% block body %}
-<div class="thread-title">Request an invite</div>
-  <form class="form-horizontal" id="inviteform" action="/functions/request_invite/" method="POST">
-      <div class="form-group">
-          <label for="inputUsername" class="control-label col-xs-2">Username</label>
-          <div class="col-xs-10">
-              <input type="username" name="username" class="form-control" id="inputUsername" placeholder="Username">
-          </div>
-      </div>
-      <div class="form-group">
-          <label for="inputEmail" class="control-label col-xs-2">Email</label>
-          <div class="col-xs-10">
-              <input type="email" name="email" class="form-control" id="inputEmail" placeholder="Email">
-          </div>
-      </div>
-      <div class="form-group">
-          <label for="inputReason" class="control-label col-xs-2">Reason</label>
-          <div class="col-xs-10">
-              <textarea type="reason" name="reason" class="form-control" id="inputReason" placeholder="Your reason for requesting an invite"></textarea>
-          </div>
-      </div>
-      <div class="form-group">
-          <div class="col-xs-offset-2 col-xs-10">
-              <button type="submit" class="btn btn-primary">Request Invite</button>
-          </div>
-      </div>
-  </form>
+<div class="inner-container">
+  <div class="thread-title">Request an invite</div>
+    <form class="form-horizontal" id="inviteform" action="/functions/request_invite/" method="POST">
+        <div class="form-group">
+            <label for="inputUsername" class="control-label col-xs-2">Username</label>
+            <div class="col-xs-10">
+                <input type="username" name="username" class="form-control" id="inputUsername" placeholder="Username">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputEmail" class="control-label col-xs-2">Email</label>
+            <div class="col-xs-10">
+                <input type="email" name="email" class="form-control" id="inputEmail" placeholder="Email">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputReason" class="control-label col-xs-2">Reason</label>
+            <div class="col-xs-10">
+                <textarea type="reason" name="reason" class="form-control" id="inputReason" placeholder="Your reason for requesting an invite"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-offset-2 col-xs-10">
+                <button type="submit" class="btn btn-primary">Request Invite</button>
+            </div>
+        </div>
+    </form>
+<div class="inner-container">
 {% endblock %}

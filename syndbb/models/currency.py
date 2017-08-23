@@ -25,3 +25,15 @@ def get_currency(userid):
         return user.points
     else:
         return 0
+
+def give_posts(userid, amount):
+    user = d2_user.query.filter_by(user_id=userid).first()
+    if user:
+        user.post_count = int(user.post_count) + int(amount)
+        syndbb.db.session.commit()
+
+def take_posts(userid, amount):
+    user = d2_user.query.filter_by(user_id=userid).first()
+    if user:
+        user.post_count = int(user.post_count) - int(amount)
+        syndbb.db.session.commit()

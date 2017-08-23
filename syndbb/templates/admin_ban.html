@@ -1,6 +1,6 @@
 {% extends "layout.html" %} {% block body %}
 {% if isbanned %}
-<div class="banform">
+<div class="banform inner-container">
   <form id="banform" class="form-horizontal" action="/functions/unban_user/" method="POST">
     <div class="form-group">
       <label class="control-label col-xs-2">User ID</label>
@@ -23,7 +23,7 @@
   </form>
 </div>
 {% else %}
-<div class="banform">
+<div class="banform inner-container">
   <form id="banform" class="form-horizontal" action="/functions/ban_user/" method="POST">
     <div class="form-group">
       <label class="control-label col-xs-2">User ID</label>

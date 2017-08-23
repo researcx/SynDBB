@@ -43,18 +43,48 @@ def unix_time_current():
 
 #Display how long ago something happened in a readable format
 @syndbb.app.template_filter('time_ago')
+@syndbb.cache.memoize(timeout=60)
 def time_ago(unixtime):
     return syndbb.humanize.naturaltime(syndbb.datetime.now() - syndbb.timedelta(seconds=unix_time_current() - int(unixtime)))
 syndbb.app.jinja_env.globals.update(time_ago=time_ago)
 
 #Display a somewhat normal date
 @syndbb.app.template_filter('human_date')
+@syndbb.cache.memoize(timeout=60)
 def human_date(unixtime):
     return syndbb.datetime.fromtimestamp(int(unixtime)).strftime('%Y-%m-%d %H:%M:%S')
 syndbb.app.jinja_env.globals.update(human_date=human_date)
 
+#Display a somewhat normal date for threads/forums
+@syndbb.app.template_filter('recent_date')
+@syndbb.cache.memoize(timeout=60)
+def recent_date(unixtime):
+    dt = syndbb.datetime.fromtimestamp(unixtime)
+    today = syndbb.datetime.now()
+    today_start = syndbb.datetime(today.year, today.month, today.day)
+    yesterday_start = syndbb.datetime(today.year, today.month, today.day - 1)
+
+    def day_in_this_week(date):
+        startday = syndbb.datetime(today.year,today.month,today.day - today.weekday())
+        if(date >= startday):
+            return True
+        else:
+            return False
+
+    timeformat = '%b %d, %Y'
+    if day_in_this_week(dt):
+        timeformat = '%A at %H:%M'
+    if(dt >= yesterday_start):
+        timeformat = 'Yesterday at %H:%M'
+    if(dt >= today_start):
+        timeformat = 'Today at %H:%M'
+
+    return(dt.strftime(timeformat))
+syndbb.app.jinja_env.globals.update(recent_date=recent_date)
+
 #Display a somewhat normal size
 @syndbb.app.template_filter('human_size')
+@syndbb.cache.memoize(timeout=60)
 def human_size(filesize):
     return syndbb.humanize.naturalsize(filesize)
 syndbb.app.jinja_env.globals.update(human_size=human_size)

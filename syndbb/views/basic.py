@@ -12,8 +12,9 @@ import syndbb.models.version
 
 @syndbb.app.route("/")
 def home():
+    dynamic_css_header = ["css/fluid.css"]
     dynamic_js_footer = ["js/inline.js", "js/bootbox.min.js"]
-    return syndbb.render_template('home.html', dynamic_js_footer=dynamic_js_footer)
+    return syndbb.render_template('home.html', dynamic_js_footer=dynamic_js_footer, dynamic_css_header=dynamic_css_header)
 
 @syndbb.app.route('/robots.txt')
 def robotstxt():
@@ -25,35 +26,39 @@ def faviconico():
 
 @syndbb.app.route("/chat/")
 def chat():
-    return syndbb.render_template('chat.html', title="Chat")
+    return syndbb.render_template('chat.html', title="Chat", subheading=[""])
 
 @syndbb.app.route("/terms/")
 def terms():
-    return syndbb.render_template('terms.html', title="Terms of Service")
+    return syndbb.render_template('terms.html', title="Terms of Service", subheading=[""])
 
 @syndbb.app.route("/rules/")
 def rules():
-    return syndbb.render_template('rules.html', title="Forum Rules")
+    return syndbb.render_template('rules.html', title="Forum Rules", subheading=[""])
 
 @syndbb.app.route("/chat-rules/")
 def chat_rules():
-    return syndbb.render_template('chat-rules.html', title="IRC Rules")
+    return syndbb.render_template('chat-rules.html', title="IRC Rules", subheading=[""])
 
 @syndbb.app.route("/info/")
 def info():
-    return syndbb.render_template('info.html', title="Information")
+    return syndbb.render_template('info.html', title="Information", subheading=[""])
 
 @syndbb.app.route("/discord/")
 def discord():
-    return syndbb.render_template('discord.html', title="Discord")
+    return syndbb.render_template('discord.html', title="Discord", subheading=[""])
 
 @syndbb.app.route("/vidya/")
 def vidya():
+    title="Video Chat"
+    subheading = [""]
     roomName = syndbb.request.args.get('room', '')
     room = False
     if roomName:
         if syndbb.re.match("^[A-Za-z0-9_-]*$", roomName):
             room = roomName
+            subheading.append("<a href='/vidya/'>Video Chat</a>")
+            title=roomName
         else:
             syndbb.flash('Room name can only contain letters and numbers.', 'danger')
-    return syndbb.render_template('vidya.html', room=room, title="Video Chat")
+    return syndbb.render_template('vidya.html', room=room, title=title, subheading=subheading)

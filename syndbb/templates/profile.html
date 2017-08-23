@@ -2,7 +2,7 @@
 {% extends "layout.html" %}
 {% endif %}
 {% block body %}
-	<div class="media">
+	<div class="media inner-container">
 		<div class="media-left">
 			{% if not isInline %}
 				{% if user.user_id == profile.user_id %}
@@ -53,7 +53,10 @@
 		<div class="media-body">
 			{% if not isInline %}
 			<div class="text-muted" style="float:right; text-align: right;">
-				<span style="font-size: 18pt;">{{get_user_title(profile.title)}}</span>&nbsp;
+				<span style="font-size: 18pt;">{{get_user_title(profile.user_id)}}</span>&nbsp;
+				{% if profile.title %}
+				<br/>{{profile.title|safe}}
+				{% endif %}
         {% if user.rank >= 500 %}
 				<br/>
         {% if profile.last_activity %}
@@ -72,6 +75,11 @@
 			<a href="/user/{{profile.username}}">
 				<span class="profile-username" style="{{get_group_style_from_id(profile.user_id)}}">{{profile.username}}</span>
 			</a>
+			{% if not isInline %}
+				{% if profile.status %}
+				<br/>{{profile.status}}
+				{% endif %}
+			{% endif %}
 			<dl class="dl-horizontal" style="margin-top: 10px;">
         {% if profile.gender %}
 				<dt>Gender:</dt>

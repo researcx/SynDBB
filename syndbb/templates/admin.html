@@ -1,4 +1,5 @@
 {% extends "layout.html" %} {% block body %}
+<div class="inner-container">
 <h2>Users:</h2>
 <a href="/account/admin/ban" style="color: #fff; text-decoration: none;" class="btn btn-info">Ban User</a>
 <a href="/account/admin/users" style="color: #fff; text-decoration: none;" class="btn btn-info">Member List</a>
@@ -14,20 +15,20 @@
 <dl class="dl-horizontal">
 
 				<dt>Registered Users:</dt>
-				<dd>{{usercount}}</dd>
+				<dd>{{get_stats()['usercount']}}</dd>
 
 				<dt>Threads:</dt>
-				<dd>{{threadcount}}</dd>
+				<dd>{{get_stats()['threadcount']}}</dd>
 
 				<dt>Posts:</dt>
-				<dd>{{postcount}}</dd>
+				<dd>{{get_stats()['postcount']}}</dd>
 
         <dt>Bans:</dt>
-				<dd>{{bancount}}</dd>
+				<dd>{{get_stats()['bancount']}}</dd>
 
 				<dt>Channels:</dt>
-				<dd>Official: {{officialforumcount}} / Unofficial: {{unofficialforumcount}} ({{unapprovedforumcount}} unapproved)</dd>
+				<dd>Official: {{get_stats()['officialforumcount']}} / Unofficial: {{get_stats()['unofficialforumcount']}} ({{get_stats()['unapprovedforumcount']}} unapproved)</dd>
 
 			</dl>
-
+</div>
 {% endblock %}

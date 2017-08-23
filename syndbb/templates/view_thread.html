@@ -1,55 +1,76 @@
 {% extends "layout.html" %}
 {% block body %}
-<div class="thread-title"><a href="/{{forum.short_name}}/{{thread.id}}/gallery" title="Gallery View" style="float:right;"><i class="fa fa-picture-o" aria-hidden="true"></i></a> {{thread.title|striptags}}</div>
-<div class="reply-container panel panel-default" id="{{thread.id}}">
-  <div class="panel-body">
+<div class="posthead text-muted" id="{{thread.id}}">
+  <span style="float: right;">
+      <a name="post{{thread.id}}" href="#{{thread.id}}" class="postcounter"><i class="silk-icon icon_link" aria-hidden="true"></i> #4</a>
+  </span>
+  <span style="float: left; max-width: 100px;">
+      <i class="silk-icon icon_time" aria-hidden="true"></i> <span title="{{human_date(thread.time)}}">{{recent_date(thread.time)}}&nbsp;</span><br/>
+  </span>
+  {% if user_session.sessionid %}
+  <div>
+      {% if (thread.user_id == user.user_id) or (user.rank >= 500) %}
+      <a href="/post/{{thread.id}}/edit" title="Edit Post" class="posthead-button text-muted">Edit</i></a>
+
+      <a href="/functions/delete_post/?post_id={{thread.id}}&uniqid={{user_session.sessionid}}" title="Delete Post" class="posthead-button text-muted deletebutton">Delete</a>
+      {% endif %}
+
+      {% if user.rank >= 500 %}
+      <a href="/account/admin/ban/?user={{thread.user_id}}&post_id={{thread.id}}" target="_blank" title="Ban User" class="posthead-button text-muted">Ban</a>
+      {% endif %}
+  </div>
+  {% endif %}
+</div>
+<div class="reply-container panel panel-default postbg">
+  <div>
     <div class="media">
       <div class="thread-left">
+        <div style="max-width: 138px; margin-bottom: 4px;">
+          <span style="float: right;">
+            {% if (thread.user.karma_positive - thread.user.karma_negative) < 0 %}
+            <i class="silk-icon icon_cross" title="Karma: {{thread.user.karma_positive - thread.user.karma_negative}} (+{{thread.user.karma_positive}}/-{{thread.user.karma_negative}})" aria-hidden="true"></i>
+            {% elif (thread.user.karma_positive - thread.user.karma_negative) > 0 %}
+            <i class="silk-icon icon_tick" title="Karma: {{thread.user.karma_positive - thread.user.karma_negative}} (+{{thread.user.karma_positive}}/-{{thread.user.karma_negative}})" aria-hidden="true"></i>
+            {% endif %}
+          </span>
+          <a href="/user/{{thread.user.username}}" class="forum_poster" style="{{get_group_style_from_id(thread.user_id)}}"><b>{{thread.user.username}}</b></a>
+          {% if thread.user.title %}
+            <div class="post-usertitle">{{thread.user.title|safe}}</div>
+          {% endif %}
+        </div>
         <a href="/user/{{thread.user.username}}" class="profile-inline">
-                    <img src="{{get_avatar(thread.user_id)}}" title="{{thread.user.username}}" alt="Avatar" class="img-circle pull-left activity-avatar-size">
-                  </a>
+          <img src="{{get_avatar(thread.user_id)}}" title="{{thread.user.username}}" alt="Avatar" class="thread-avatar-size">
+        </a>
+        <div class="user-regdate text-muted">{{recent_date(thread.user.join_date)}}</div>
       </div>
       <div class="media-body">
-        <div class="text-muted" style="float:right; text-align: right;">
-          <div class="RatingContainer Rating">
-              <a href="/functions/rate_post/?post_id={{thread.id}}&type=up&uniqid={{user_session.sessionid}}" class="RatingUp DoRatingUp"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
-              <span class="PostRating-{{thread.id}} Rating">{{thread.rating}}</span>
-              <a href="/functions/rate_post/?post_id={{thread.id}}&type=down&uniqid={{user_session.sessionid}}" class="RatingDown DoRatingDown"><i class="fa fa-chevron-down" aria-hidden="true"></i></a>
+        <div class="post-container">
+          <div class="text-muted" style="float:right; text-align: right;">
+            <div class="RatingContainer Rating">
+                <span class="PostRating-{{thread.id}} Rating">{{thread.rating}}</span>
+            </div>
           </div>
-          <div class="PostInfoContainer">
-            <a href="/post/{{thread.id}}"><i>#{{thread.id}}</i></a>&nbsp;<br/>
-            <i title="{{human_date(thread.time)}}">{{time_ago(thread.time)}}&nbsp;</i><br/>
-          </div>
+          {{parse_bbcode(thread.content)|safe}}
         </div>
-        <a href="/user/{{thread.user.username}}" class="activity_poster" style="{{get_group_style_from_id(thread.user_id)}}"><b>{{thread.user.username}}</b></a><br/>
-        {{parse_bbcode(thread.content)|safe}}
-
-
-
+      </div>
+      <div class="post-extrainfo">
         <div style="font-size: 12px; padding-top: 4px;">
           {% if replies_to_post(thread.id) %}
-        	<strong>Replies: </strong>
+          <strong>Replies: </strong>
           {% for replyID in replies_to_post(thread.id) %}
-        	<a href="/post/{{replyID.id}}" class="reply-inline">#{{replyID.id}}</a>
+          <a href="/post/{{replyID.id}}" class="reply-inline">#{{replyID.id}}</a>
           {% endfor %}
           {% else %}
           &nbsp;
           {% endif %}
         </div>
-
         {% if user_session.sessionid %}
-        <div class="text-muted actions-main" style="float:right; text-align: right;">
-            <a href="#reply" onclick="replyToThread('{{thread.id}}')" title="Reply" class="text-muted"><i class="fa fa-fw fa-reply" aria-hidden="true"></i></a>
-
-            {% if (thread.user_id == user.user_id) or (user.rank >= 500) %}
-            <a href="/post/{{thread.id}}/edit" title="Edit Post" class="text-muted"><i class="fa fa-fw fa-pencil" aria-hidden="true"></i></a>
-
-            <a href="/functions/delete_post/?post_id={{thread.id}}&uniqid={{user_session.sessionid}}" title="Delete Post" class="text-muted deletebutton"><i class="fa fa-fw fa-trash" aria-hidden="true"></i></a>
-            {% endif %}
-
-            {% if user.rank >= 500 %}
-            <a href="/account/admin/ban/?user={{thread.user_id}}&post_id={{thread.id}}" target="_blank" title="Ban User" class="text-muted"><i class="fa fa-fw fa-ban" aria-hidden="true"></i></a>
-            {% endif %}
+        <div class="text-muted actions-main replybutton" style="float:right; text-align: right;">
+            <i class="silk-icon icon_comment_add" aria-hidden="true"></i><a href="#reply" onclick="replyToThread('{{thread.id}}')" title="Reply" class="text-muted">Reply</a>
+        </div>
+        <div class="text-muted actions-main" style="margin-top: -5px; margin-right: 20px; float:right; text-align: right;">
+          <a href="/functions/rate_post/?post_id={{thread.id}}&type=up&uniqid={{user_session.sessionid}}" title="Thanks" class="RatingUp DoRatingUp"><i class="silk-icon icon_add" aria-hidden="true"></i></a>
+          <a href="/functions/rate_post/?post_id={{thread.id}}&type=down&uniqid={{user_session.sessionid}}" title="No Thanks" class="RatingDown DoRatingDown"><i class="silk-icon icon_delete" aria-hidden="true"></i></a>
         </div>
         {% endif %}
       </div>
@@ -57,51 +78,77 @@
   </div>
 </div>
 {% for reply in replies %}
-<div class="reply-container panel panel-default" id="{{reply.id}}">
-  <div class="panel-body">
+<div class="posthead text-muted" id="{{reply.id}}">
+  <span style="float: right;">
+      <a name="post{{reply.id}}" href="#{{reply.id}}" class="postcounter"><i class="silk-icon icon_link" aria-hidden="true"></i> #4</a>
+  </span>
+  <span style="float: left; max-width: 100px;">
+      <i class="silk-icon icon_time" aria-hidden="true"></i> <span title="{{human_date(reply.time)}}">{{recent_date(reply.time)}}&nbsp;</span><br/>
+  </span>
+  {% if user_session.sessionid %}
+  <div>
+      {% if (reply.user_id == user.user_id) or (user.rank >= 500) %}
+      <a href="/post/{{reply.id}}/edit" title="Edit Post" class="posthead-button text-muted">Edit</i></a>
+
+      <a href="/functions/delete_post/?post_id={{reply.id}}&uniqid={{user_session.sessionid}}" title="Delete Post" class="posthead-button text-muted deletebutton">Delete</a>
+      {% endif %}
+
+      {% if user.rank >= 500 %}
+      <a href="/account/admin/ban/?user={{reply.user_id}}&post_id={{reply.id}}" target="_blank" title="Ban User" class="posthead-button text-muted">Ban</a>
+      {% endif %}
+  </div>
+  {% endif %}
+</div>
+<div class="reply-container panel panel-default postbg">
+  <div>
     <div class="media">
       <div class="thread-left">
+        <div style="max-width: 138px; margin-bottom: 4px;">
+          <span style="float: right;">
+            {% if (reply.user.karma_positive - reply.user.karma_negative) < 0 %}
+            <i class="silk-icon icon_cross" title="Karma: {{reply.user.karma_positive - reply.user.karma_negative}} (+{{reply.user.karma_positive}}/-{{reply.user.karma_negative}})" aria-hidden="true"></i>
+            {% elif (reply.user.karma_positive - reply.user.karma_negative) > 0 %}
+            <i class="silk-icon icon_tick" title="Karma: {{reply.user.karma_positive - reply.user.karma_negative}} (+{{reply.user.karma_positive}}/-{{reply.user.karma_negative}})" aria-hidden="true"></i>
+            {% endif %}
+          </span>
+          <a href="/user/{{reply.user.username}}" class="forum_poster" style="{{get_group_style_from_id(reply.user_id)}}"><b>{{reply.user.username}}</b></a>
+          {% if reply.user.title %}
+            <div class="post-usertitle">{{reply.user.title|safe}}</div>
+          {% endif %}
+        </div>
         <a href="/user/{{reply.user.username}}" class="profile-inline">
-          <img src="{{get_avatar(reply.user_id)}}" title="{{reply.user.username}}" alt="Avatar" class="img-circle pull-left activity-avatar-size">
+          <img src="{{get_avatar(reply.user_id)}}" title="{{reply.user.username}}" alt="Avatar" class="thread-avatar-size">
         </a>
+        <div class="user-regdate text-muted">{{recent_date(reply.user.join_date)}}</div>
       </div>
       <div class="media-body">
-        <span class="text-muted" style="float:right; text-align: right;">
-          <div class="RatingContainer Rating">
-              <a href="/functions/rate_post/?post_id={{reply.id}}&type=up&uniqid={{user_session.sessionid}}" class="RatingUp DoRatingUp"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
+        <div class="post-container">
+          <div class="text-muted" style="float:right; text-align: right;">
+            <div class="RatingContainer Rating">
               <span class="PostRating-{{reply.id}} Rating">{{reply.rating}}</span>
-              <a href="/functions/rate_post/?post_id={{reply.id}}&type=down&uniqid={{user_session.sessionid}}" class="RatingDown DoRatingDown"><i class="fa fa-chevron-down" aria-hidden="true"></i></a>
+            </div>
           </div>
-          <div class="PostInfoContainer">
-            <a href="/post/{{reply.id}}"><i>#{{reply.id}}</i></a>&nbsp;<br/>
-            <i title="{{human_date(reply.time)}}">{{time_ago(reply.time)}}&nbsp;</i><br/>
-          </div>
-        </span>
-        <a href="/user/{{reply.user.username}}" class="activity_poster" style="{{get_group_style_from_id(reply.user_id)}}"><b>{{reply.user.username}}</b></a><br/>
-        {{parse_bbcode(reply.content)|safe}}
+          {{parse_bbcode(reply.content)|safe}}
+        </div>
+      </div>
+      <div class="post-extrainfo">
         <div style="font-size: 12px; padding-top: 4px;">
           {% if replies_to_post(reply.id) %}
-        	<strong>Replies: </strong>
+          <strong>Replies: </strong>
           {% for replyID in replies_to_post(reply.id) %}
-        	<a href="/post/{{replyID.id}}" class="reply-inline">#{{replyID.id}}</a>
+          <a href="/post/{{replyID.id}}" class="reply-inline">#{{replyID.id}}</a>
           {% endfor %}
           {% else %}
           &nbsp;
           {% endif %}
         </div>
         {% if user_session.sessionid %}
-        <div class="text-muted actions-main" style="float:right; text-align: right;">
-            <a href="#reply" onclick="replyToThread('{{reply.id}}')" title="Reply" class="text-muted"><i class="fa fa-fw fa-reply" aria-hidden="true"></i></a>
-
-            {% if (reply.user_id == user.user_id) or (user.rank >= 500) %}
-            <a href="/post/{{reply.id}}/edit" title="Edit Post" class="text-muted"><i class="fa fa-fw fa-pencil" aria-hidden="true"></i></a>
-
-            <a href="/functions/delete_post/?post_id={{reply.id}}&uniqid={{user_session.sessionid}}" title="Delete Post" class="text-muted deletebutton"><i class="fa fa-fw fa-trash" aria-hidden="true"></i></a>
-            {% endif %}
-
-            {% if user.rank >= 500 %}
-            <a href="/account/admin/ban/?user={{reply.user_id}}&post_id={{reply.id}}" target="_blank" title="Ban User" class="text-muted"><i class="fa fa-fw fa-ban" aria-hidden="true"></i></a>
-            {% endif %}
+        <div class="text-muted actions-main replybutton" style="float:right; text-align: right;">
+            <i class="silk-icon icon_comment_add" aria-hidden="true"></i><a href="#reply" onclick="replyToThread('{{reply.id}}')" title="Reply" class="text-muted">Reply</a>
+        </div>
+        <div class="text-muted actions-main" style="margin-top: -5px; margin-right: 20px; float:right; text-align: right;">
+          <a href="/functions/rate_post/?post_id={{reply.id}}&type=up&uniqid={{user_session.sessionid}}" title="Thanks" class="RatingUp DoRatingUp"><i class="silk-icon icon_add" aria-hidden="true"></i></a>
+          <a href="/functions/rate_post/?post_id={{reply.id}}&type=down&uniqid={{user_session.sessionid}}" title="No Thanks" class="RatingDown DoRatingDown"><i class="silk-icon icon_delete" aria-hidden="true"></i></a>
         </div>
         {% endif %}
       </div>
@@ -113,40 +160,36 @@
 <div class="panel panel-default">
   <div class="panel-body">
     <div class="media">
-      <div class="thread-left">
-        <img src="{{get_avatar(user.user_id)}}" alt="Avatar" class="img-circle pull-left activity-avatar-size">
-      </div>
       <div class="media-body">
         <div class="bbcode-editor">
           <div class="bbcode-buttons">
             <span class="bbcode-interact">
-            <button id="uploadContent" class="btn btn-primary">Upload File</button>
-            <button id="previewContent" class="btn btn-primary">Preview Post</button>
-            <button id="submitContent" class="btn btn-primary">Submit Post</button>
-          </span>
-
-            <span class="bbcode-button" title="Bold" onclick="insert_bbcode('b');"><i class="fa fa-bold" aria-hidden="true"></i></span>
-            <span class="bbcode-button" title="Italics" onclick="insert_bbcode('i');"><i class="fa fa-italic" aria-hidden="true"></i></span>
-            <span class="bbcode-button" title="Underline" onclick="insert_bbcode('u');"><i class="fa fa-underline" aria-hidden="true"></i></span>
-            <span class="bbcode-button" title="Strikethrough" onclick="insert_bbcode('s');"><i class="fa fa-strikethrough" aria-hidden="true"></i></span>
+              <button id="uploadContent" class="btn btn-primary">Upload File</button>
+              <button id="previewContent" class="btn btn-primary">Preview Post</button>
+              <button id="submitContent" class="btn btn-primary">Submit Post</button>
+            </span>
+            <span class="bbcode-button" title="Bold" onclick="insert_bbcode('b');"><i class="silk-icon icon_text_bold" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Italics" onclick="insert_bbcode('i');"><i class="silk-icon icon_text_italic" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Underline" onclick="insert_bbcode('u');"><i class="silk-icon icon_text_underline" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Strikethrough" onclick="insert_bbcode('s');"><i class="silk-icon icon_text_strikethrough" aria-hidden="true"></i></span>
             <span class="bbcode-button-spacer"></span>
-            <span class="bbcode-button" title="Link" onclick="insert_bbcode('url');"><i class="fa fa-link" aria-hidden="true"></i></span>
-            <span class="bbcode-button" title="Image" onclick="insert_bbcode('img');"><i class="fa fa-file-image-o" aria-hidden="true"></i></span>
-            <span class="bbcode-button" title="YouTube" onclick="insert_bbcode('youtube');"><i class="fa fa-youtube-play" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Link" onclick="insert_bbcode('url');"><i class="silk-icon icon_link" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Image" onclick="insert_bbcode('img');"><i class="silk-icon icon_image" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="YouTube" onclick="insert_bbcode('youtube');"><i class="silk-icon icon_film" aria-hidden="true"></i></span>
             <span class="bbcode-button-spacer"></span>
-            <span class="bbcode-button" title="Font Size" onclick="insert_bbcode('size');"><i class="fa fa-text-height" aria-hidden="true"></i></span>
-            <span class="bbcode-button" title="Font Color" onclick="insert_bbcode('color');"><i class="fa fa-eyedropper" aria-hidden="true"></i></span>
-            <span class="bbcode-button" title="Emoticons" onclick="show_emoticons();"><i class="fa fa-smile-o" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Font Size" onclick="insert_bbcode('size');"><i class="silk-icon icon_text_smallcaps" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Font Color" onclick="insert_bbcode('color');"><i class="silk-icon icon_color_swatch" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Emoticons" onclick="show_emoticons();"><i class="silk-icon icon_emoticon_smile" aria-hidden="true"></i></span>
             <span class="bbcode-button-spacer"></span>
-            <span class="bbcode-button" title="Bullet List" onclick="insert_bbcode('bulletlist');"><i class="fa fa-list-ul" aria-hidden="true"></i></span>
-            <span class="bbcode-button" title="Ordered List" onclick="insert_bbcode('orderedlist');"><i class="fa fa-list-ol" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Bullet List" onclick="insert_bbcode('bulletlist');"><i class="silk-icon icon_text_list_bullets" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Ordered List" onclick="insert_bbcode('orderedlist');"><i class="silk-icon icon_text_list_numbers" aria-hidden="true"></i></span>
             <span class="bbcode-button-spacer"></span>
-            <span class="bbcode-button" title="Code" onclick="insert_bbcode('code');"><i class="fa fa-code" aria-hidden="true"></i></span>
-            <span class="bbcode-button" title="Quote" onclick="insert_bbcode('quote');"><i class="fa fa-quote-left" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Code" onclick="insert_bbcode('code');"><i class="silk-icon icon_script_code" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Quote" onclick="insert_bbcode('quote');"><i class="silk-icon icon_comment" aria-hidden="true"></i></span>
             <span class="bbcode-button-spacer"></span>
-            <span class="bbcode-button" title="Align Left" onclick="insert_bbcode('left');"><i class="fa fa-align-left" aria-hidden="true"></i></span>
-            <span class="bbcode-button" title="Align Center" onclick="insert_bbcode('center');"><i class="fa fa-align-center" aria-hidden="true"></i></span>
-            <span class="bbcode-button" title="Align Right" onclick="insert_bbcode('right');"><i class="fa fa-align-right" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Align Left" onclick="insert_bbcode('left');"><i class="silk-icon icon_text_align_left" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Align Center" onclick="insert_bbcode('center');"><i class="silk-icon icon_text_align_center" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Align Right" onclick="insert_bbcode('right');"><i class="silk-icon icon_text_align_right" aria-hidden="true"></i></span>
           </div>
           <form class="form-horizontal" id="activityform" action="/functions/create_reply/" method="post">
             <textarea id="postform" class="form-control bbcode-textarea" name="post_content" rows="5"></textarea>

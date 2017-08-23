@@ -5,7 +5,7 @@
 #
 
 import syndbb
-from syndbb.models.users import checkSession
+from syndbb.models.users import d2_user, checkSession
 from syndbb.models.invites import d2_invites, d2_requests
 
 @syndbb.app.route("/account/invite")
@@ -13,8 +13,11 @@ def my_invites():
     if 'logged_in' in syndbb.session:
         userid = checkSession(str(syndbb.session['logged_in']))
         if userid:
+            user = d2_user.query.filter_by(user_id=userid).first()
             invites = d2_invites.query.filter_by(user_id=userid).all()
-            return syndbb.render_template('invites.html', invite_list=invites, title="Invites")
+            subheading = []
+            subheading.append("<a href='/user/" + user.username + "/'>" + user.username + "</a>")
+            return syndbb.render_template('invites.html', invite_list=invites, title="Invites", subheading=subheading)
         else:
             return syndbb.render_template('error_not_logged_in.html', title="Invites")
     else:

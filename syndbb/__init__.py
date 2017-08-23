@@ -9,6 +9,7 @@ from flask import request, session, g, redirect, url_for, abort, \
 from flask import Flask
 from flask.views import MethodView
 from flask_sqlalchemy import SQLAlchemy
+from flask_cache import Cache
 
 import uuid, time, os, time, re, signal
 import pkg_resources, platform
@@ -40,6 +41,14 @@ if db == "mysql://<user>:<password>@<host>/<database>":
     os.kill(os.getpid(), signal.SIGTERM)
 
 app = Flask(__name__)
+cache = Cache(app, config={
+    'CACHE_TYPE': 'redis',
+    'CACHE_KEY_PREFIX': 'fcache',
+    'CACHE_REDIS_HOST': 'localhost',
+    'CACHE_REDIS_PORT': '6379',
+    'CACHE_REDIS_URL': 'redis://localhost:6379'
+    })
+
 app.config.update(dict(
     SQLALCHEMY_DATABASE_URI=db,
     SQLALCHEMY_TRACK_MODIFICATIONS="false",

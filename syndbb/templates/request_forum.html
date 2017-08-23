@@ -1,4 +1,5 @@
 {% extends "layout.html" %} {% block body %}
+<div class="inner-container">
 	  <strong>Guidelines:</strong>
 	  <ul>
 		<li>Must have an appropriate name, short name and description.</li>
@@ -45,4 +46,5 @@
             <input type="hidden" name="uniqid" value="{{user_session.sessionid}}">
         </form>
       </div>
+</div>
 {% endblock %}

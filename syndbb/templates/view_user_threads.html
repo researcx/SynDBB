@@ -1,3 +1,7 @@
 {% extends "layout.html" %} {% block body %}
-{{ thread_list|safe }}
+<table class="home-forum-list table table-striped">
+  <tbody>
+    {{ thread_list|safe }}
+  </tbody>
+</table>
 {% endblock %}

@@ -30,19 +30,20 @@ def pastebin():
         userid = checkSession(str(syndbb.session['logged_in']))
         if userid:
             getPastes = d2_paste.query.filter(d2_paste.user_id == userid).order_by(syndbb.db.desc(d2_paste.time)).all()
-            return syndbb.render_template('pastebin.html', dynamic_js_footer=dynamic_js_footer, paste_list=getPastes, title="Pastebin")
+            return syndbb.render_template('pastebin.html', dynamic_js_footer=dynamic_js_footer, paste_list=getPastes, title="Pastebin", subheading=[""])
         else:
-            return syndbb.render_template('error_not_logged_in.html', title="Pastebin")
+            return syndbb.render_template('error_not_logged_in.html', title="Pastebin", subheading=[""])
     else:
-        return syndbb.render_template('error_not_logged_in.html', title="Pastebin")
+        return syndbb.render_template('error_not_logged_in.html', title="Pastebin", subheading=[""])
 
 @syndbb.app.route("/pastebin/<paste>")
 def paste(paste):
     getPaste = d2_paste.query.filter(d2_paste.paste_id == paste).first()
+    subheading = ['<a href="/pastebin/">Pastebin</a>']
     if getPaste:
-        return syndbb.render_template('pastebin.html', paste=getPaste, title="" + getPaste.title)
+        return syndbb.render_template('pastebin.html', paste=getPaste, title="" + getPaste.title, subheading=subheading)
     else:
-        return syndbb.render_template('invalid.html', title="Invalid Paste")
+        return syndbb.render_template('invalid.html', title="Invalid Paste", subheading=subheading)
 
 @syndbb.app.route("/functions/dopaste", methods=['GET', 'POST'])
 def dopaste():

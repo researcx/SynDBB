@@ -1,5 +1,7 @@
 flask
 flask-mysqldb
+flask-cache
+redis
 Flask_SQLAlchemy
 requests
 humanize

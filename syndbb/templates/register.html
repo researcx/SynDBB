@@ -1,42 +1,44 @@
 {% extends "layout.html" %} {% block body %}
-<form class="form-horizontal" id="regform" action="/functions/register/" method="get">
-    <div class="form-group" id="invite">
-        <label for="inputInvite" class="control-label col-xs-2">Invite Code</label>
-        <div class="col-xs-10">
-            <input type="invite" name="code" class="form-control" id="inputInvite" value="{{invite.code}}" placeholder="Invite Code" required>
-        </div>
-    </div>
-    <div class="form-group" id="username">
-        <label for="inputUsername" class="control-label col-xs-2">Username</label>
-        <div class="col-xs-10">
-            <input type="username" name="username" class="form-control" id="inputUsername" placeholder="Username" required>
-        </div>
-    </div>
-    <div class="form-group" id="password">
-        <label for="inputPassword" class="control-label col-xs-2">Password</label>
-        <div class="col-xs-10">
-            <input type="password" class="form-control" id="inputPassword" placeholder="Password" required>
-        </div>
-    </div>
-    <div class="form-group" id="confPassword">
-        <label for="confirmPassword" class="control-label col-xs-2">Confirm Password</label>
-        <div class="col-xs-10">
-            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password" required>
-            <br/>
-            <div class="progress">
-              <div class="progress-bar progress-bar-danger" id="stronk" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
-                <span id="score"></span>
+<div class="inner-container">
+  <form class="form-horizontal" id="regform" action="/functions/register/" method="get">
+      <div class="form-group" id="invite">
+          <label for="inputInvite" class="control-label col-xs-2">Invite Code</label>
+          <div class="col-xs-10">
+              <input type="invite" name="code" class="form-control" id="inputInvite" value="{{invite.code}}" placeholder="Invite Code" required>
+          </div>
+      </div>
+      <div class="form-group" id="username">
+          <label for="inputUsername" class="control-label col-xs-2">Username</label>
+          <div class="col-xs-10">
+              <input type="username" name="username" class="form-control" id="inputUsername" placeholder="Username" required>
+          </div>
+      </div>
+      <div class="form-group" id="password">
+          <label for="inputPassword" class="control-label col-xs-2">Password</label>
+          <div class="col-xs-10">
+              <input type="password" class="form-control" id="inputPassword" placeholder="Password" required>
+          </div>
+      </div>
+      <div class="form-group" id="confPassword">
+          <label for="confirmPassword" class="control-label col-xs-2">Confirm Password</label>
+          <div class="col-xs-10">
+              <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password" required>
+              <br/>
+              <div class="progress">
+                <div class="progress-bar progress-bar-danger" id="stronk" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                  <span id="score"></span>
+                </div>
               </div>
-            </div>
-            <b>For extra security, a unique and strong password is highly recommended.</b><br/>
-            <u>Never use the same password as you use everywhere else.</u>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-xs-offset-2 col-xs-10">
-            <button type="submit" id="submission" class="btn disabled btn-primary">Register</button>
-        </div>
-    </div>
-    <input type="hidden" name="password" id="pword">
-</form>
+              <b>For extra security, a unique and strong password is highly recommended.</b><br/>
+              <u>Never use the same password as you use everywhere else.</u>
+          </div>
+      </div>
+      <div class="form-group">
+          <div class="col-xs-offset-2 col-xs-10">
+              <button type="submit" id="submission" class="btn disabled btn-primary">Register</button>
+          </div>
+      </div>
+      <input type="hidden" name="password" id="pword">
+  </form>
+</div>
 {% endblock %}

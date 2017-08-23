@@ -9,8 +9,8 @@ import syndbb
 # Pages
 @syndbb.app.route("/events/")
 def events():
-    return syndbb.render_template('events.html', title="Event Log")
+    return syndbb.render_template('events.html', title="Event Log", subheading=[""])
 
 @syndbb.app.route("/ban_list/")
 def ban_list():
-    return syndbb.render_template('ban_list.html', title="Ban List")
+    return syndbb.render_template('ban_list.html', title="Ban List", subheading=[""])

@@ -4,13 +4,68 @@
 # The full license is included in LICENSE.md, which is distributed as part of this project.
 #
 
-import syndbb, glob, shutil
+import syndbb, glob, shutil, subprocess
 from syndbb.models.users import d2_user, d2_bans, d2_ip, d2_session, checkSession, is_banned
 from syndbb.models.invites import d2_requests
 from syndbb.models.d2_hash import d2_hash
 from syndbb.models.forums import d2_forums, d2_activity
 from syndbb.models.quotedb import d2_quotes
 from syndbb.models.time import unix_time_current
+
+@syndbb.cache.memoize(timeout=360)
+def get_stats():
+    #User Count
+    usercount = d2_user.query.count()
+    #Lines Total
+    linecount = 0
+    lineusers = d2_user.query.filter(d2_user.line_count != 0).all()
+    for user in lineusers:
+        linecount += user.line_count
+    #Post Count
+    postcount = d2_activity.query.filter(d2_activity.replyto != 0).count()
+    #Thread Count
+    threadcount = d2_activity.query.filter(d2_activity.category != 0).count()
+    #Ban Count
+    bancount = d2_bans.query.count()
+
+    #Forum/Channel Count
+    officialforumcount = d2_forums.query.filter(d2_forums.owned_by == 0).count()
+    unofficialforumcount = d2_forums.query.filter(d2_forums.owned_by != 0).count()
+    unapprovedforumcount = d2_forums.query.filter(d2_forums.approved == 0).count()
+
+    #Upload Statistics
+    datafolder = syndbb.os.getcwd() + "/syndbb/static/data/"
+    filecount = sum([len(files) for r, d, files in syndbb.os.walk(datafolder)])
+    filesize = 0
+    for dirpath, dirnames, filenames in syndbb.os.walk(datafolder):
+        for f in filenames:
+            fp = syndbb.os.path.join(dirpath, f)
+            filesize += syndbb.os.path.getsize(fp)
+
+    #Totals
+    stat = syndbb.os.statvfs(datafolder)
+    disk_total = syndbb.os.statvfs(datafolder).f_bfree*stat.f_bsize
+    disk_percentage = filesize/disk_total*100
+    disk_percentage = "%.0f" % disk_percentage
+
+    #Progress Indicator
+    if int(disk_percentage) <= 50:
+        progress_indicator = "progress-bar-success"
+    if int(disk_percentage) >= 50:
+        progress_indicator = "progress-bar-info"
+    if int(disk_percentage) >= 70:
+        progress_indicator = "progress-bar-warning"
+    if int(disk_percentage) >= 90:
+        progress_indicator = "progress-bar-danger"
+
+    #IRC User Count
+    irccount = 0
+    logfile = "logs/irc_users.log"
+    if syndbb.os.path.isfile(logfile):
+        file = open(logfile, "r")
+        count = file.read()
+    return {'usercount': usercount, 'postcount': postcount, 'threadcount': threadcount, 'bancount': bancount, 'officialforumcount': officialforumcount, 'unofficialforumcount': unofficialforumcount, 'unapprovedforumcount': unapprovedforumcount, 'irccount': irccount, 'filecount': filecount, 'filesize': filesize, 'disk_percentage': disk_percentage, 'disk_total': disk_total, 'progress_indicator': progress_indicator, 'linecount': linecount}
+syndbb.app.jinja_env.globals.update(get_stats=get_stats)
 
 @syndbb.app.route("/account/admin")
 def siteadmin():
@@ -19,14 +74,7 @@ def siteadmin():
         if userid:
             user = d2_user.query.filter_by(user_id=userid).first()
             if user.rank >= 500:
-                usercount = d2_user.query.count()
-                postcount = d2_activity.query.filter(d2_activity.replyto != 0).count()
-                threadcount = d2_activity.query.filter(d2_activity.category != 0).count()
-                bancount = d2_bans.query.count()
-                officialforumcount = d2_forums.query.filter(d2_forums.owned_by == 0).count()
-                unofficialforumcount = d2_forums.query.filter(d2_forums.owned_by != 0).count()
-                unapprovedforumcount = d2_forums.query.filter(d2_forums.approved == 0).count()
-                return syndbb.render_template('admin.html', usercount=usercount, postcount=postcount, threadcount=threadcount, bancount=bancount, officialforumcount=officialforumcount, unofficialforumcount=unofficialforumcount, unapprovedforumcount=unapprovedforumcount, title="Administration")
+                return syndbb.render_template('admin.html', title="Administration")
             else:
                 return syndbb.render_template('invalid.html', title="Not Found")
         else:
@@ -68,6 +116,11 @@ def siteadmin_invites():
     else:
         return syndbb.render_template('error_not_logged_in.html', title="Administration")
 
+@syndbb.cache.memoize(timeout=60)
+def get_all_logins():
+    logins = d2_ip.query.order_by(d2_ip.time.desc()).all()
+    return logins
+
 @syndbb.app.route("/account/admin/logins")
 def siteadmin_logins():
     if 'logged_in' in syndbb.session:
@@ -75,8 +128,7 @@ def siteadmin_logins():
         if userid:
             user = d2_user.query.filter_by(user_id=userid).first()
             if user.rank >= 900:
-                logins = d2_ip.query.order_by(d2_ip.time.desc()).all()
-                return syndbb.render_template('admin_logins.html', logins=logins, title="Administration &bull; Login History")
+                return syndbb.render_template('admin_logins.html', logins=get_all_logins(), title="Administration &bull; Login History")
             else:
                 return syndbb.render_template('invalid.html', title="Not Found")
         else:
@@ -300,8 +352,6 @@ def siteadmin_emoticons():
                         code = ":" + syndbb.re.sub(r'.*/', '', code) + ":"
                         emote_list.append([filepath, code])
                 emote_list.sort(reverse=False)
-
-                print(emote_list)
                 return syndbb.render_template('admin_emoticons.html', emote_list=emote_list, title="Administration &bull; Emoticon List")
             else:
                 return syndbb.render_template('invalid.html', title="Not Found")

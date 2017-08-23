@@ -1,5 +1,7 @@
-{% extends "layout.html" %} {% block body %} {% if error %}
-<p class=error><strong>Error:</strong> {{ error }}{% endif %} {% if not user_session.sessionid %}
+{% extends "layout.html" %}
+{% block body %}
+<div class="inner-container">
+{% if not user_session.sessionid %}
   <form class="form-horizontal" id="loginform" action="{{ url_for('dologin') }}" method="post">
     <div class="form-group">
       <label for="inputUsername" class="control-label col-xs-2">Username</label>
@@ -22,4 +24,6 @@
   </form>
   {% else %}
   <div class="thread-title">You are already logged in!</div>
-  {% endif %} {% endblock %}
+  {% endif %}
+</div>
+{% endblock %}

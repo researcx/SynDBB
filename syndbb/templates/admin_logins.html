@@ -1,30 +1,28 @@
 {% extends "layout.html" %} {% block body %}
-<table class="event-list table table-striped">
+<table class="event-list table table-striped table-header">
   <thead>
-    <tr>
-      <td class="">User</td>
-      <td class="">IP</td>
-      <td class="">Time</td>
-      <td class="">Date</td>
-      <td class="">Type</td>
-      <td class="">Page</td>
-    </tr>
+      <th>User</th>
+      <th>IP</th>
+      <th>Time</th>
+      <th>Date</th>
+      <th>Type</th>
+      <th>Page</th>
   </thead>
   <tbody>
     {% for login in logins %}
     <tr>
-      <td class=""><a href="/user/{{get_name(login.user_id)}}" style="{{get_group_style_from_id(login.user_id)}}">{{get_name(login.user_id)}}</a></td>
-      <td class="">{{login.ip}}</td>
-      <td class="">{{time_ago(login.time)}}</td>
-      <td class="">{{human_date(login.time)}}</td>
+      <td><a href="/user/{{get_name(login.user_id)}}" style="{{get_group_style_from_id(login.user_id)}}">{{get_name(login.user_id)}}</a></td>
+      <td>{{login.ip}}</td>
+      <td>{{time_ago(login.time)}}</td>
+      <td>{{human_date(login.time)}}</td>
       {% if login.login == 0 %}
-      <td class="">Failed login attempt</td>
+      <td>Failed login attempt</td>
       {% elif login.login == 1 %}
-      <td class="">Logged in</td>
+      <td>Logged in</td>
       {% elif login.login == 2 %}
-      <td class="">Successful login</td>
+      <td>Successful login</td>
       {% endif %}
-      <td class="">{{login.page}}</td>
+      <td>{{login.page}}</td>
     </tr>
     {% endfor %}
   </tbody>

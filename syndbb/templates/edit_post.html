@@ -1,31 +1,9 @@
 {% extends "layout.html" %}
 {% block body %}
-<a href="#{{post.id}}" onclick="bootbox.hideAll()"><i>Go to post #{{post.id}}</i></a><br/>
-<div class="reply-container panel panel-default" id="{{post.id}}">
-  <div class="panel-body">
-    <div class="media">
-      <div class="thread-left">
-        <a href="/user/{{post.user.username}}" class="profile-inline">
-          <img src="{{get_avatar(post.user_id)}}" title="{{post.user.username}}" alt="Avatar" class="img-circle pull-left activity-avatar-size">
-        </a>
-      </div>
-      <div class="media-body">
-        <span class="text-muted" style="float:right; text-align: right;">
-                  <a href="/post/{{post.id}}"><i>#{{post.id}}</i></a>&nbsp;<br/><i title="{{human_date(post.time)}}">{{time_ago(post.time)}}&nbsp;</i>
-                </span>
-        <a href="/user/{{post.user.username}}" class="activity_poster" style="{{get_group_style_from_id(post.user_id)}}"><b>{{post.user.username}}</b></a><br/>
-        {{parse_bbcode(post.content)|safe}}
-      </div>
-    </div>
-  </div>
-</div>
 {% if user_session.sessionid %}
 <div class="panel panel-default">
   <div class="panel-body">
     <div class="media">
-      <div class="thread-left">
-        <img src="{{get_avatar(user.user_id)}}" alt="Avatar" class="img-circle pull-left activity-avatar-size">
-      </div>
       <div class="media-body">
         <div class="bbcode-editor">
           <div class="bbcode-buttons">
@@ -35,28 +13,28 @@
             <button id="submitContent" class="btn btn-primary">Submit Post</button>
           </span>
 
-            <span class="bbcode-button" title="Bold" onclick="insert_bbcode('b');"><i class="fa fa-bold" aria-hidden="true"></i></span>
-            <span class="bbcode-button" title="Italics" onclick="insert_bbcode('i');"><i class="fa fa-italic" aria-hidden="true"></i></span>
-            <span class="bbcode-button" title="Underline" onclick="insert_bbcode('u');"><i class="fa fa-underline" aria-hidden="true"></i></span>
-            <span class="bbcode-button" title="Strikethrough" onclick="insert_bbcode('s');"><i class="fa fa-strikethrough" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Bold" onclick="insert_bbcode('b');"><i class="silk-icon icon_text_bold" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Italics" onclick="insert_bbcode('i');"><i class="silk-icon icon_text_italic" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Underline" onclick="insert_bbcode('u');"><i class="silk-icon icon_text_underline" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Strikethrough" onclick="insert_bbcode('s');"><i class="silk-icon icon_text_strikethrough" aria-hidden="true"></i></span>
             <span class="bbcode-button-spacer"></span>
-            <span class="bbcode-button" title="Link" onclick="insert_bbcode('url');"><i class="fa fa-link" aria-hidden="true"></i></span>
-            <span class="bbcode-button" title="Image" onclick="insert_bbcode('img');"><i class="fa fa-file-image-o" aria-hidden="true"></i></span>
-            <span class="bbcode-button" title="YouTube" onclick="insert_bbcode('youtube');"><i class="fa fa-youtube-play" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Link" onclick="insert_bbcode('url');"><i class="silk-icon icon_link" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Image" onclick="insert_bbcode('img');"><i class="silk-icon icon_image" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="YouTube" onclick="insert_bbcode('youtube');"><i class="silk-icon icon_film" aria-hidden="true"></i></span>
             <span class="bbcode-button-spacer"></span>
-            <span class="bbcode-button" title="Font Size" onclick="insert_bbcode('size');"><i class="fa fa-text-height" aria-hidden="true"></i></span>
-            <span class="bbcode-button" title="Font Color" onclick="insert_bbcode('color');"><i class="fa fa-eyedropper" aria-hidden="true"></i></span>
-            <span class="bbcode-button" title="Emoticons" onclick="show_emoticons();"><i class="fa fa-smile-o" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Font Size" onclick="insert_bbcode('size');"><i class="silk-icon icon_text_smallcaps" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Font Color" onclick="insert_bbcode('color');"><i class="silk-icon icon_color_swatch" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Emoticons" onclick="show_emoticons();"><i class="silk-icon icon_emoticon_smile" aria-hidden="true"></i></span>
             <span class="bbcode-button-spacer"></span>
-            <span class="bbcode-button" title="Bullet List" onclick="insert_bbcode('bulletlist');"><i class="fa fa-list-ul" aria-hidden="true"></i></span>
-            <span class="bbcode-button" title="Ordered List" onclick="insert_bbcode('orderedlist');"><i class="fa fa-list-ol" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Bullet List" onclick="insert_bbcode('bulletlist');"><i class="silk-icon icon_text_list_bullets" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Ordered List" onclick="insert_bbcode('orderedlist');"><i class="silk-icon icon_text_list_numbers" aria-hidden="true"></i></span>
             <span class="bbcode-button-spacer"></span>
-            <span class="bbcode-button" title="Code" onclick="insert_bbcode('code');"><i class="fa fa-code" aria-hidden="true"></i></span>
-            <span class="bbcode-button" title="Quote" onclick="insert_bbcode('quote');"><i class="fa fa-quote-left" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Code" onclick="insert_bbcode('code');"><i class="silk-icon icon_script_code" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Quote" onclick="insert_bbcode('quote');"><i class="silk-icon icon_comment" aria-hidden="true"></i></span>
             <span class="bbcode-button-spacer"></span>
-            <span class="bbcode-button" title="Align Left" onclick="insert_bbcode('left');"><i class="fa fa-align-left" aria-hidden="true"></i></span>
-            <span class="bbcode-button" title="Align Center" onclick="insert_bbcode('center');"><i class="fa fa-align-center" aria-hidden="true"></i></span>
-            <span class="bbcode-button" title="Align Right" onclick="insert_bbcode('right');"><i class="fa fa-align-right" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Align Left" onclick="insert_bbcode('left');"><i class="silk-icon icon_text_align_left" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Align Center" onclick="insert_bbcode('center');"><i class="silk-icon icon_text_align_center" aria-hidden="true"></i></span>
+            <span class="bbcode-button" title="Align Right" onclick="insert_bbcode('right');"><i class="silk-icon icon_text_align_right" aria-hidden="true"></i></span>
           </div>
           <form class="form-horizontal" id="activityform" action="/functions/edit_post/" method="post">
             <textarea id="postform" class="form-control bbcode-textarea" name="post_content" rows="5">{{post.content}}</textarea>

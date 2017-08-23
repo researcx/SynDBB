@@ -12,21 +12,53 @@ import syndbb.models.bbcode
 ### General Functions ###
 #Forum list
 @syndbb.app.context_processor
+@syndbb.cache.memoize(timeout=60)
 def inject_forums():
     forums = d2_forums.query.filter_by(approved='1', owned_by='0').all()
     return {'forums': forums}
 
 #Custom Forum List
 @syndbb.app.context_processor
+@syndbb.cache.memoize(timeout=60)
 def inject_custom_forums():
     forums = d2_forums.query.filter(d2_forums.owned_by != '0').filter(d2_forums.approved == '1').all()
     return {'custom_forums': forums}
 
+#Get post icons
+@syndbb.cache.memoize(timeout=60)
+def get_post_icons():
+    iconfolder = syndbb.os.getcwd() + "/syndbb/static/images/posticons/"
+    picon_list = []
+    for picon in syndbb.os.listdir(iconfolder):
+        filepath = iconfolder + "/" + picon
+        if syndbb.os.path.isfile(filepath):
+            addtime = int(syndbb.os.stat(filepath).st_mtime)
+            code = syndbb.os.path.splitext(picon)[0]
+            picon_list.append([picon, code])
+    picon_list.sort(reverse=False)
+    return picon_list
+syndbb.app.jinja_env.globals.update(get_post_icons=get_post_icons)
+
 #Forum icons
+@syndbb.app.template_filter('get_forum_logo')
+@syndbb.cache.memoize(timeout=60)
+def get_forum_logo(short_name):
+    forum_icon = '/static/images/logos/{}.png'.format(short_name)
+    forum_icon_default = '/static/images/logos/blank.png'
+    root_path = syndbb.app.root_path
+
+    if syndbb.os.path.isfile(root_path+forum_icon):
+        return forum_icon
+    else:
+        return forum_icon_default
+syndbb.app.jinja_env.globals.update(get_forum_logo=get_forum_logo)
+
+#Forum icons 2
 @syndbb.app.template_filter('get_forum_icon')
+@syndbb.cache.memoize(timeout=60)
 def get_forum_icon(short_name):
-    forum_icon = '/static/data/logos/{}.png'.format(short_name)
-    forum_icon_default = '/static/data/logos/blank.png'
+    forum_icon = '/static/images/forumicons/{}.png'.format(short_name)
+    forum_icon_default = '/static/images/forumicons/blank.png'
     root_path = syndbb.app.root_path
 
     if syndbb.os.path.isfile(root_path+forum_icon):
@@ -37,9 +69,9 @@ syndbb.app.jinja_env.globals.update(get_forum_icon=get_forum_icon)
 
 #Reply IDs for a post
 @syndbb.app.template_filter('replies_to_post')
+@syndbb.cache.memoize(timeout=30)
 def replies_to_post(post_id):
     replies = d2_activity.query.filter_by(replyToPost=post_id).all()
-
     if replies:
         return replies
     else:
@@ -48,6 +80,7 @@ syndbb.app.jinja_env.globals.update(replies_to_post=replies_to_post)
 
 #Get post rating
 @syndbb.app.template_filter('get_post_rating')
+@syndbb.cache.memoize(timeout=30)
 def get_post_rating(post_id):
     ratings = d2_post_ratings.query.filter_by(post_id=post_id).all()
 
@@ -110,8 +143,9 @@ class d2_activity(syndbb.db.Model):
     reply_time = syndbb.db.Column(syndbb.db.Integer, unique=False)
     reply_count = syndbb.db.Column(syndbb.db.Integer, unique=False)
     rating = syndbb.db.Column(syndbb.db.Integer, unique=False)
+    post_icon = syndbb.db.Column(syndbb.db.Integer, unique=False)
 
-    def __init__(self, user_id, time, content, replyto, replyToPost, title, category, reply_time, reply_count, rating):
+    def __init__(self, user_id, time, content, replyto, replyToPost, title, category, reply_time, reply_count, rating, post_icon):
         self.user_id = user_id
         self.time = time
         self.content = content
@@ -122,6 +156,7 @@ class d2_activity(syndbb.db.Model):
         self.reply_time = reply_time
         self.reply_count = reply_count
         self.rating = rating
+        self.post_icon = post_icon
 
     def __repr__(self):
         return '<Post %r>' % self.id

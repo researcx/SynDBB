@@ -7,6 +7,7 @@
 import syndbb
 from syndbb.models.users import d2_user, d2_session, checkSession
 
+@syndbb.cache.memoize(timeout=180)
 def get_emote():
     emotfolder = syndbb.os.getcwd() + "/syndbb/static/images/emots/"
 
@@ -20,7 +21,7 @@ def get_emote():
     emote_list.sort(reverse=False)
     return emote_list
 
-
+@syndbb.cache.memoize(timeout=180)
 def get_submitted_emote():
     emote_list = []
     if 'logged_in' in syndbb.session:

@@ -16,7 +16,7 @@ from syndbb.models.users import d2_user, d2_session, checkSession
 def emoticons():
     dynamic_js_footer = ["js/lazyload.transpiled.min.js"]
     emote_list = get_emote()
-    return syndbb.render_template('emoticons.html', emote_list=emote_list, dynamic_js_footer=dynamic_js_footer, title="Emoticons")
+    return syndbb.render_template('emoticons.html', emote_list=emote_list, dynamic_js_footer=dynamic_js_footer, title="Emoticons", subheading=[""])
 
 
 @syndbb.app.route("/submit-emoticon/")
@@ -24,9 +24,9 @@ def submit_emoticon():
     if 'logged_in' in syndbb.session:
         dynamic_js_footer = ["js/lazyload.transpiled.min.js", "js/bootbox.min.js", "js/delete.js"]
         emote_list = get_submitted_emote()
-        return syndbb.render_template('submit-emoticon.html', emote_list=emote_list, dynamic_js_footer=dynamic_js_footer, title="Submit Emoticon")
+        return syndbb.render_template('submit-emoticon.html', emote_list=emote_list, dynamic_js_footer=dynamic_js_footer, title="Submit Emoticon", subheading=["Emoticons"])
     else:
-        return syndbb.render_template('error_not_logged_in.html', title="Submit Emoticon")
+        return syndbb.render_template('error_not_logged_in.html', title="Submit Emoticon", subheading=["Emoticons"])
 
 
 @syndbb.app.route("/functions/delete_emoticon/")

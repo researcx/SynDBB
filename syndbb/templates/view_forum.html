@@ -1,69 +1,13 @@
 {% extends "layout.html" %} {% block body %}
-<div class="thread-title">
-{% if gridview %}
-<a href="/{{forum.short_name}}" title="List View" style="float:right;"><i class="fa fa-list-alt" aria-hidden="true"></i></a>
+{% if thread_list %}
+<table class="home-forum-list table table-striped">
+  <tbody>
+      {{ thread_list|safe }}
+  </tbody>
+</table>
 {% else %}
-<a href="/{{forum.short_name}}/grid" title="Grid View" style="float:right;"><i class="fa fa-picture-o" aria-hidden="true"></i></a>
-{% endif %}
-
-{% if forum.nsfw %}
-<span class="forum-title fa-stack">
-    <i class="fa fa-circle fa-stack-2x"></i>
-    <span class="fa fa-stack-1x fa-inverse fa-plus18"></span>
-</span>
-{% endif %}
-{{forum.name}}
-</div>
-<div class="forum-description">{{forum.description}}</div>
-{% if user_session.sessionid %}
-<div class="panel panel-default">
-  <div class="panel-body">
-    <div class="media">
-      <div class="thread-left">
-        <img src="{{get_avatar(user.user_id)}}" alt="Avatar" class="img-circle pull-left activity-avatar-size">
-      </div>
-      <div class="media-body">
-        <div class="bbcode-editor">
-          <form class="form-horizontal" id="activityform" action="/functions/create_thread/" method="post">
-            <input type="text" id="thread_title" class="form-control thread-title-form" name="thread_title" value="" placeholder="Thread Title">
-            <textarea id="postform" class="form-control bbcode-textarea" name="post_content" rows="5"></textarea>
-            <div class="bbcode-buttons">
-              <span class="bbcode-interact">
-                <button id="uploadContent" class="btn btn-primary">Upload File</button>
-                <button id="previewContent" class="btn btn-primary">Preview Thread</button>
-                <button id="submitContent" class="btn btn-primary">Create Thread</button>
-              </span>
-              <span class="bbcode-button" title="Bold" onclick="insert_bbcode('b');"><i class="fa fa-bold" aria-hidden="true"></i></span>
-              <span class="bbcode-button" title="Italics" onclick="insert_bbcode('i');"><i class="fa fa-italic" aria-hidden="true"></i></span>
-              <span class="bbcode-button" title="Underline" onclick="insert_bbcode('u');"><i class="fa fa-underline" aria-hidden="true"></i></span>
-              <span class="bbcode-button" title="Strikethrough" onclick="insert_bbcode('s');"><i class="fa fa-strikethrough" aria-hidden="true"></i></span>
-              <span class="bbcode-button-spacer"></span>
-              <span class="bbcode-button" title="Link" onclick="insert_bbcode('url');"><i class="fa fa-link" aria-hidden="true"></i></span>
-              <span class="bbcode-button" title="Image" onclick="insert_bbcode('img');"><i class="fa fa-file-image-o" aria-hidden="true"></i></span>
-              <span class="bbcode-button" title="YouTube" onclick="insert_bbcode('youtube');"><i class="fa fa-youtube-play" aria-hidden="true"></i></span>
-              <span class="bbcode-button-spacer"></span>
-              <span class="bbcode-button" title="Font Size" onclick="insert_bbcode('size');"><i class="fa fa-text-height" aria-hidden="true"></i></span>
-              <span class="bbcode-button" title="Font Color" onclick="insert_bbcode('color');"><i class="fa fa-eyedropper" aria-hidden="true"></i></span>
-              <span class="bbcode-button" title="Emoticons" onclick="show_emoticons();"><i class="fa fa-smile-o" aria-hidden="true"></i></span>
-              <span class="bbcode-button-spacer"></span>
-              <span class="bbcode-button" title="Bullet List" onclick="insert_bbcode('bulletlist');"><i class="fa fa-list-ul" aria-hidden="true"></i></span>
-              <span class="bbcode-button" title="Ordered List" onclick="insert_bbcode('orderedlist');"><i class="fa fa-list-ol" aria-hidden="true"></i></span>
-              <span class="bbcode-button-spacer"></span>
-              <span class="bbcode-button" title="Code" onclick="insert_bbcode('code');"><i class="fa fa-code" aria-hidden="true"></i></span>
-              <span class="bbcode-button" title="Quote" onclick="insert_bbcode('quote');"><i class="fa fa-quote-left" aria-hidden="true"></i></span>
-              <span class="bbcode-button-spacer"></span>
-              <span class="bbcode-button" title="Align Left" onclick="insert_bbcode('left');"><i class="fa fa-align-left" aria-hidden="true"></i></span>
-              <span class="bbcode-button" title="Align Center" onclick="insert_bbcode('center');"><i class="fa fa-align-center" aria-hidden="true"></i></span>
-              <span class="bbcode-button" title="Align Right" onclick="insert_bbcode('right');"><i class="fa fa-align-right" aria-hidden="true"></i></span>
-            </div>
-            <input type="hidden" name="uniqid" value="{{user_session.sessionid}}">
-            <input type="hidden" name="category" value="{{forum.id}}">
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="alert alert-info" role="alert">
+  No threads were found in this forum.
 </div>
 {% endif %}
-{{ thread_list|safe }}
 {% endblock %}

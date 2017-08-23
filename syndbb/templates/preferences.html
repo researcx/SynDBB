@@ -1,6 +1,12 @@
 {% extends "layout.html" %} {% block body %}
-<div class="preferences">
+<div class="preferences inner-container">
   <form class="form-horizontal" action="/functions/save_preferences" method="POST">
+    <div class="form-group">
+      <label class="control-label col-xs-2">Status</label>
+      <div class="col-xs-10">
+        <input type="text" name="status" class="form-control" value="{{user.status}}">
+      </div>
+    </div>
     <div class="form-group">
       <label class="control-label col-xs-2">Location</label>
       <div class="col-xs-10">

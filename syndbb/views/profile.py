@@ -10,13 +10,20 @@ from syndbb.models.time import unix_time_current
 from werkzeug.utils import secure_filename
 from PIL import Image
 
+@syndbb.cache.memoize(timeout=10)
+def get_user_profile(username):
+    user = d2_user.query.filter_by(username=username).first()
+    return user
+
 @syndbb.app.route("/user/<username>")
 def profile(username):
     isInline = syndbb.request.args.get('inlinecontent', '')
-    user = d2_user.query.filter_by(username=username).first()
+    user = get_user_profile(username)
     if user:
+        subheading = []
+        subheading.append("User Profile")
         dynamic_js_footer = ["js/bootbox.min.js", "js/delete.js", "js/profileAvatar.js"]
-        return syndbb.render_template('profile.html', isInline=isInline, dynamic_js_footer=dynamic_js_footer, profile=user, title="User Profile: "+user.username)
+        return syndbb.render_template('profile.html', isInline=isInline, dynamic_js_footer=dynamic_js_footer, profile=user, title=user.username, subheading=subheading)
     else:
         return syndbb.render_template('invalid.html', isInline=isInline, title="Invalid User")
 
@@ -33,7 +40,9 @@ def preferences():
                     uploadurls.append([uploadurl, " selected"])
                 else:
                     uploadurls.append([uploadurl, " "])
-            return syndbb.render_template('preferences.html', uploadurls=uploadurls, title="Preferences")
+            subheading = []
+            subheading.append("<a href='/user/" + user.username + "/'>" + user.username + "</a>")
+            return syndbb.render_template('preferences.html', uploadurls=uploadurls, title="Preferences", subheading=subheading)
         else:
             return syndbb.render_template('error_not_logged_in.html', title="Preferences")
     else:
@@ -46,7 +55,9 @@ def login_history():
         if userid:
             user = d2_user.query.filter_by(user_id=userid).first()
             logins = d2_ip.query.filter_by(user_id=userid).order_by(d2_ip.time.desc()).all()
-            return syndbb.render_template('login_info.html', logins=logins, title="Login History")
+            subheading = []
+            subheading.append("<a href='/user/" + user.username + "/'>" + user.username + "</a>")
+            return syndbb.render_template('login_info.html', logins=logins, title="Login History", subheading=subheading)
         else:
             return syndbb.render_template('error_not_logged_in.html', title="Login History")
     else:
@@ -57,8 +68,11 @@ def change_password():
     if 'logged_in' in syndbb.session:
         userid = checkSession(str(syndbb.session['logged_in']))
         if userid:
+            user = d2_user.query.filter_by(user_id=userid).first()
             dynamic_js_footer = ["js/crypt.js", "js/auth/auth_chpw.js", "js/bootbox.min.js"]
-            return syndbb.render_template('change_password.html', dynamic_js_footer=dynamic_js_footer, title="Change Password")
+            subheading = []
+            subheading.append("<a href='/user/" + user.username + "/'>" + user.username + "</a>")
+            return syndbb.render_template('change_password.html', dynamic_js_footer=dynamic_js_footer, title="Change Password", subheading=subheading)
         else:
             return syndbb.render_template('error_not_logged_in.html', title="Change Password")
     else:
@@ -68,6 +82,7 @@ def change_password():
 def save_preferences():
     possibleurls = ["local", "i.d2k5.com", "i.hardcats.net", "i.lulzsec.co.uk"]
 
+    status = syndbb.request.form['status']
     location = syndbb.request.form['location']
     gender = syndbb.request.form['gender']
     occupation = syndbb.request.form['occupation']
@@ -83,6 +98,8 @@ def save_preferences():
         if userid:
 
             user = d2_user.query.filter_by(user_id=userid).first()
+            user.status = status
+            user.status_time = unix_time_current()
             user.location = location
             user.gender = gender
             user.occupation = occupation
@@ -119,12 +136,31 @@ def save_preferences():
     else:
         return "Invalid Request"
 
+@syndbb.app.route("/functions/update_status", methods=['GET', 'POST'])
+def update_status():
+    status = syndbb.request.form['status']
+    uniqid = syndbb.request.form['uniqid']
+
+    if uniqid:
+        userid = checkSession(uniqid)
+        if userid:
+            user = d2_user.query.filter_by(user_id=userid).first()
+            user.status = status
+            user.status_time = unix_time_current()
+            syndbb.db.session.commit()
+            return syndbb.redirect(syndbb.url_for('home'))
+        else:
+            return "Invalid Session"
+    else:
+        return "Invalid Request"
+
 
 @syndbb.app.route("/account/avatar")
 def change_avatar():
     if 'logged_in' in syndbb.session:
         userid = checkSession(str(syndbb.session['logged_in']))
         if userid:
+            user = d2_user.query.filter_by(user_id=userid).first()
             dynamic_js_footer = ["js/jquery.cropit.js", "js/bootbox.min.js", "js/delete.js"]
             avatar_list = []
             avatar_sources = []
@@ -147,7 +183,11 @@ def change_avatar():
             avatar_list.sort(reverse=True)
             avatar_sources.sort(reverse=True)
 
-            return syndbb.render_template('change_avatar.html', avatar_list=avatar_list, avatar_sources=avatar_sources, dynamic_js_footer=dynamic_js_footer, title="Change Avatar")
+
+            subheading = []
+            subheading.append("<a href='/user/" + user.username + "/'>" + user.username + "</a>")
+
+            return syndbb.render_template('change_avatar.html', avatar_list=avatar_list, avatar_sources=avatar_sources, dynamic_js_footer=dynamic_js_footer, title="Change Avatar", subheading=subheading)
         else:
             return syndbb.render_template('error_not_logged_in.html', title="Change Avatar")
     else:
