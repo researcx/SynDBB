@@ -2,7 +2,7 @@
 {% block body %}
 <div class="posthead text-muted" id="{{thread.id}}">
   <span style="float: right;">
-      <a name="post{{thread.id}}" href="#{{thread.id}}" class="postcounter"><i class="silk-icon icon_link" aria-hidden="true"></i> #4</a>
+      <a name="post{{thread.id}}" href="#{{thread.id}}" class="postcounter"><i class="silk-icon icon_link" aria-hidden="true"></i> #{{thread.id}}</a>
   </span>
   <span style="float: left; max-width: 100px;">
       <i class="silk-icon icon_time" aria-hidden="true"></i> <span title="{{human_date(thread.time)}}">{{recent_date(thread.time)}}&nbsp;</span><br/>
@@ -80,7 +80,7 @@
 {% for reply in replies %}
 <div class="posthead text-muted" id="{{reply.id}}">
   <span style="float: right;">
-      <a name="post{{reply.id}}" href="#{{reply.id}}" class="postcounter"><i class="silk-icon icon_link" aria-hidden="true"></i> #4</a>
+      <a name="post{{reply.id}}" href="#{{reply.id}}" class="postcounter"><i class="silk-icon icon_link" aria-hidden="true"></i> #{{reply.id}}</a>
   </span>
   <span style="float: left; max-width: 100px;">
       <i class="silk-icon icon_time" aria-hidden="true"></i> <span title="{{human_date(reply.time)}}">{{recent_date(reply.time)}}&nbsp;</span><br/>
