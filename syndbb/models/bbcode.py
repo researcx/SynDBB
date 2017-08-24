@@ -21,6 +21,7 @@ swallow_trailing_newline=True, replace_links=False)
 
 #Images
 parser.add_simple_formatter('img', '<img src="%(value)s" onclick="window.open(this.src)" class="bbcode-image img-responsive inline-block" alt="[IMG]" />', replace_links=False)
+parser.add_simple_formatter('t', '<img src="%(value)s" onclick="window.open(this.src)" class="bbcode-image img-thumb inline-block" alt="[IMG]" />', replace_links=False)
 
 #Lists
 parser.add_simple_formatter('ul', '<ul>%(value)s</ul>', swallow_trailing_newline=True)
