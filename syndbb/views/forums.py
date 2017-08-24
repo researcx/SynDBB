@@ -42,8 +42,8 @@ def view_forum(category):
     dynamic_css_header = []
     if forumcheck:
         dynamic_js_footer = ["js/inline.js", "js/bootbox.min.js"]
-        if forumcheck.short_name == "yiff":
-            dynamic_css_header.append("css/oify.css")
+        # if forumcheck.short_name == "yiff":
+        #     dynamic_css_header.append("css/oify.css")
 
         logo_file = syndbb.os.getcwd() + "/syndbb/static/images/logos/" + forumcheck.short_name + ".png"
         if syndbb.os.path.isfile(logo_file):
@@ -98,8 +98,8 @@ def view_forum_grid(category):
     forumcheck = d2_forums.query.filter_by(short_name=category).first()
     forumlogo = ""
     if forumcheck:
-        if forumcheck.short_name == "yiff":
-            dynamic_css_header.append("css/oify.css")
+        # if forumcheck.short_name == "yiff":
+        #     dynamic_css_header.append("css/oify.css")
 
         logo_file = syndbb.os.getcwd() + "/syndbb/static/images/logos/" + forumcheck.short_name + ".png"
         if syndbb.os.path.isfile(logo_file):
@@ -170,8 +170,8 @@ def view_forum_create(category):
     if forumcheck:
         dynamic_css_header = ["css/bbcode_editor.css", "css/dropdown.css"]
         dynamic_js_footer = ["js/jquery.dd.min.js", "js/jquery.rangyinputs.js", "js/bbcode_editor_forums.js", "js/threads.js", "js/inline.js", "js/bootbox.min.js"]
-        if forumcheck.short_name == "yiff":
-            dynamic_css_header.append("css/oify.css")
+        # if forumcheck.short_name == "yiff":
+        #     dynamic_css_header.append("css/oify.css")
 
         subheading = []
         subheading.append('<a href="/'+forumcheck.short_name+'">'+forumcheck.name+'</a>')
@@ -186,104 +186,97 @@ def view_forum_create(category):
 
 @syndbb.app.route("/<category>/<thread>")
 def view_thread(category, thread):
-    if 'logged_in' in syndbb.session:
-        userid = checkSession(str(syndbb.session['logged_in']))
-        if userid:
-            forumcheck = d2_forums.query.filter_by(short_name=category).first()
-            forumlogo = ""
-            if forumcheck:
-                topbuttons = '<a href="/'+forumcheck.short_name+'/'+thread+'/gallery" title="Gallery View" style="float:right;"><i class="silk-icon icon_application_view_tile" aria-hidden="true"></i></a>'
-                dynamic_css_header = ["css/bbcode_editor.css"]
-                dynamic_js_footer = ["js/bootstrap-filestyle.min.js", "js/jquery.rangyinputs.js", "js/bbcode_editor_forums.js", "js/posts.js", "js/post_ratings.js", "js/bootbox.min.js", "js/delete.js", "js/inline.js"]
-                if forumcheck.short_name == "yiff":
-                    dynamic_css_header.append("css/oify.css")
-                logo_file = syndbb.os.getcwd() + "/syndbb/static/images/logos/" + forumcheck.short_name + ".png"
-                if syndbb.os.path.isfile(logo_file):
-                    forumlogo = '<img src="/static/images/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
-                threadcheck = d2_activity.query.filter_by(id=thread).first()
-                if threadcheck:
-                    subheading = []
-                    subheading.append('<a href="/'+forumcheck.short_name+'">'+forumcheck.name+'</a>')
-                    thread_title = (threadcheck.title[:75] + '...') if len(threadcheck.title) > 75 else threadcheck.title
-                    replycheck = d2_activity.query.filter_by(replyto=thread).all()
-                    return syndbb.render_template('view_thread.html', forum=forumcheck, replies=replycheck, thread=threadcheck, forumlogo=forumlogo, dynamic_css_header=dynamic_css_header, dynamic_js_footer=dynamic_js_footer, title="#"+forumcheck.short_name + " &bull; " + thread_title + " &bull; " + forumcheck.name, forumtitle=thread_title, topbuttons=topbuttons, subheading=subheading)
-                else:
-                    return syndbb.render_template('invalid.html', title="No thread found")
+    forumcheck = d2_forums.query.filter_by(short_name=category).first()
+    forumlogo = ""
+    if forumcheck:
+        if ('logged_in' in syndbb.session and checkSession(str(syndbb.session['logged_in']))) or not forumcheck.auth:
+            topbuttons = '<a href="/'+forumcheck.short_name+'/'+thread+'/gallery" title="Gallery View" style="float:right;"><i class="silk-icon icon_application_view_tile" aria-hidden="true"></i></a>'
+            dynamic_css_header = ["css/bbcode_editor.css"]
+            dynamic_js_footer = ["js/bootstrap-filestyle.min.js", "js/jquery.rangyinputs.js", "js/bbcode_editor_forums.js", "js/posts.js", "js/post_ratings.js", "js/bootbox.min.js", "js/delete.js", "js/inline.js"]
+            # if forumcheck.short_name == "yiff":
+            #     dynamic_css_header.append("css/oify.css")
+            logo_file = syndbb.os.getcwd() + "/syndbb/static/images/logos/" + forumcheck.short_name + ".png"
+            if syndbb.os.path.isfile(logo_file):
+                forumlogo = '<img src="/static/images/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
+            threadcheck = d2_activity.query.filter_by(id=thread).first()
+            if threadcheck:
+                subheading = []
+                subheading.append('<a href="/'+forumcheck.short_name+'">'+forumcheck.name+'</a>')
+                thread_title = (threadcheck.title[:75] + '...') if len(threadcheck.title) > 75 else threadcheck.title
+                replycheck = d2_activity.query.filter_by(replyto=thread).all()
+                return syndbb.render_template('view_thread.html', forum=forumcheck, replies=replycheck, thread=threadcheck, forumlogo=forumlogo, dynamic_css_header=dynamic_css_header, dynamic_js_footer=dynamic_js_footer, title="#"+forumcheck.short_name + " &bull; " + thread_title + " &bull; " + forumcheck.name, forumtitle=thread_title, topbuttons=topbuttons, subheading=subheading)
             else:
-                return syndbb.render_template('invalid.html', title="No page found")
+                return syndbb.render_template('invalid.html', title="No thread found")
+        else:
+            return syndbb.render_template('error_not_logged_in.html', title="Not logged in")
     else:
-        return syndbb.render_template('error_not_logged_in.html', title="Not logged in")
+        return syndbb.render_template('invalid.html', title="No page found")
+
 
 @syndbb.app.route("/<category>/<thread>/gallery")
 def view_thread_gallery(category, thread):
-    if 'logged_in' in syndbb.session:
-        userid = checkSession(str(syndbb.session['logged_in']))
-        if userid:
-            forumcheck = d2_forums.query.filter_by(short_name=category).first()
-            forumlogo = ""
-            if forumcheck:
-                topbuttons = '<a href="/'+forumcheck.short_name+'/'+thread+'" title="List View" style="float:right;"><i class="silk-icon icon_application_view_list" aria-hidden="true"></i></a>'
-                dynamic_css_header = ["css/bbcode_editor.css"]
-                dynamic_js_footer = ["js/jquery.rangyinputs.js", "js/bbcode_editor_forums.js", "js/posts.js", "js/bootbox.min.js", "js/delete.js", "js/inline.js"]
-                if forumcheck.short_name == "yiff":
-                    dynamic_css_header.append("css/oify.css")
-                logo_file = syndbb.os.getcwd() + "/syndbb/static/images/logos/" + forumcheck.short_name + ".png"
-                if syndbb.os.path.isfile(logo_file):
-                    forumlogo = '<img src="/static/images/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
-                threadcheck = d2_activity.query.filter_by(id=thread).first()
-                image_list = []
-                if threadcheck:
-                    thread_title = (threadcheck.title[:75] + '...') if len(threadcheck.title) > 75 else threadcheck.title
+    forumcheck = d2_forums.query.filter_by(short_name=category).first()
+    forumlogo = ""
+    if forumcheck:
+        if ('logged_in' in syndbb.session and checkSession(str(syndbb.session['logged_in']))) or not forumcheck.auth:
+            topbuttons = '<a href="/'+forumcheck.short_name+'/'+thread+'" title="List View" style="float:right;"><i class="silk-icon icon_application_view_list" aria-hidden="true"></i></a>'
+            dynamic_css_header = ["css/bbcode_editor.css"]
+            dynamic_js_footer = ["js/jquery.rangyinputs.js", "js/bbcode_editor_forums.js", "js/posts.js", "js/bootbox.min.js", "js/delete.js", "js/inline.js"]
+            # if forumcheck.short_name == "yiff":
+            #     dynamic_css_header.append("css/oify.css")
+            logo_file = syndbb.os.getcwd() + "/syndbb/static/images/logos/" + forumcheck.short_name + ".png"
+            if syndbb.os.path.isfile(logo_file):
+                forumlogo = '<img src="/static/images/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
+            threadcheck = d2_activity.query.filter_by(id=thread).first()
+            image_list = []
+            if threadcheck:
+                thread_title = (threadcheck.title[:75] + '...') if len(threadcheck.title) > 75 else threadcheck.title
 
-                    image_finder = "(?<=\[img\]).*?(?=\[/img\])"
-                    images = syndbb.re.findall(image_finder, threadcheck.content, syndbb.re.IGNORECASE)
+                image_finder = "(?<=\[img\]).*?(?=\[/img\])"
+                images = syndbb.re.findall(image_finder, threadcheck.content, syndbb.re.IGNORECASE)
+                for image in images:
+                    image_list.append(image)
+
+                replycheck = d2_activity.query.filter_by(replyto=thread).all()
+                for reply in replycheck:
+                    images = syndbb.re.findall(image_finder, reply.content, syndbb.re.IGNORECASE)
                     for image in images:
                         image_list.append(image)
 
-                    replycheck = d2_activity.query.filter_by(replyto=thread).all()
-                    for reply in replycheck:
-                        images = syndbb.re.findall(image_finder, reply.content, syndbb.re.IGNORECASE)
-                        for image in images:
-                            image_list.append(image)
+                imagecount = str(len(image_list)) + " images"
+                if len(image_list) == 1:
+                    imagecount = imagecount.rstrip('s')
 
-                    imagecount = str(len(image_list)) + " images"
-                    if len(image_list) == 1:
-                        imagecount = imagecount.rstrip('s')
+                subheading = []
+                subheading.append('<a href="/'+forumcheck.short_name+'">'+forumcheck.name+'</a>')
 
-                    subheading = []
-                    subheading.append('<a href="/'+forumcheck.short_name+'">'+forumcheck.name+'</a>')
-
-                    return syndbb.render_template('view_thread_gallery.html', forum=forumcheck, thread=threadcheck, forumlogo=forumlogo, images=image_list, imagecount=imagecount, title="#"+forumcheck.short_name + " &bull; " + thread_title + " &bull; " + forumcheck.name, forumtitle=thread_title, topbuttons=topbuttons, subheading=subheading)
-                else:
-                    return syndbb.render_template('invalid.html', title="No thread found")
+                return syndbb.render_template('view_thread_gallery.html', forum=forumcheck, thread=threadcheck, forumlogo=forumlogo, images=image_list, imagecount=imagecount, title="#"+forumcheck.short_name + " &bull; " + thread_title + " &bull; " + forumcheck.name, forumtitle=thread_title, topbuttons=topbuttons, subheading=subheading)
             else:
-                return syndbb.render_template('invalid.html', title="No page found")
+                return syndbb.render_template('invalid.html', title="No thread found")
+        else:
+            return syndbb.render_template('error_not_logged_in.html', title="Not logged in")
     else:
-        return syndbb.render_template('error_not_logged_in.html', title="Not logged in")
+        return syndbb.render_template('invalid.html', title="No page found")
 
 @syndbb.app.route("/post/<post>")
 def view_post(post):
-    if 'logged_in' in syndbb.session:
-        userid = checkSession(str(syndbb.session['logged_in']))
-        if userid:
-            isInline = syndbb.request.args.get('inlinecontent', '')
-            postcheck = d2_activity.query.filter_by(id=post).first()
-            if postcheck:
-                if postcheck.title:
-                    thread_title = (postcheck.title[:75] + '...') if len(postcheck.title) > 75 else postcheck.title
-                    postvars = postcheck
-                else:
-                    threadcheck = d2_activity.query.filter_by(id=postcheck.replyto).first()
-                    thread_title = (threadcheck.title[:75] + '...') if len(threadcheck.title) > 75 else threadcheck.title
-                    postvars = threadcheck
-                forumcheck = d2_forums.query.filter_by(id=postvars.category).first()
-
-
-                return syndbb.render_template('view_post.html', isInline=isInline, post=postcheck, title="#"+forumcheck.short_name + " &bull; " + thread_title + " &bull; " + forumcheck.name, forumtitle="<a href='/" + forumcheck.short_name + "/"+str(postvars.id)+"'>" + thread_title + "</a>")
-            else:
-                return syndbb.render_template('invalid.html', title=" &bull; No post found")
+    isInline = syndbb.request.args.get('inlinecontent', '')
+    postcheck = d2_activity.query.filter_by(id=post).first()
+    if postcheck:
+        if postcheck.title:
+            thread_title = (postcheck.title[:75] + '...') if len(postcheck.title) > 75 else postcheck.title
+            postvars = postcheck
+        else:
+            threadcheck = d2_activity.query.filter_by(id=postcheck.replyto).first()
+            thread_title = (threadcheck.title[:75] + '...') if len(threadcheck.title) > 75 else threadcheck.title
+            postvars = threadcheck
+        forumcheck = d2_forums.query.filter_by(id=postvars.category).first()
+        if ('logged_in' in syndbb.session and checkSession(str(syndbb.session['logged_in']))) or not forumcheck.auth:
+            return syndbb.render_template('view_post.html', isInline=isInline, post=postcheck, title="#"+forumcheck.short_name + " &bull; " + thread_title + " &bull; " + forumcheck.name, forumtitle="<a href='/" + forumcheck.short_name + "/"+str(postvars.id)+"'>" + thread_title + "</a>")
+        else:
+            return syndbb.render_template('error_not_logged_in.html', title="Not logged in")
     else:
-        return syndbb.render_template('error_not_logged_in.html', title="Not logged in")
+        return syndbb.render_template('invalid.html', title=" &bull; No post found")
 
 @syndbb.app.route("/posts/<user>")
 def view_user_posts(user):
@@ -608,6 +601,10 @@ def request_custom_forum():
         fnsfw = 1
     else:
         fnsfw = 0
+    if 'forum-auth' in syndbb.request.form:
+        fauth = 1
+    else:
+        fauth = 0
     if uniqid and fname and fdesc:
         userid = checkSession(uniqid)
         if userid:
@@ -647,7 +644,7 @@ def request_custom_forum():
                         syndbb.flash('You\'ve already requested a forum, wait for it to be approved.', 'danger')
                         return syndbb.redirect(syndbb.url_for('request_forum'))
                     else:
-                        new_forum = d2_forums(fname, facrn, fdesc, userid, fnsfw, 0)
+                        new_forum = d2_forums(fname, facrn, fdesc, userid, fnsfw, 0, fauth)
                         syndbb.db.session.add(new_forum)
                         syndbb.db.session.commit()
                         syndbb.flash('Your request has been submitted.', 'success')

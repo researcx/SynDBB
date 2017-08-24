@@ -1,4 +1,5 @@
 {% extends "layout.html" %} {% block body %}
+<div class="inner-container">
       {% if paste %}
       <div class="thread-title">{{paste.title|safe}}</div>
       <pre>{{paste.content|safe}}</pre>
@@ -39,10 +40,11 @@
               </span>
               <a href="/pastebin/{{paste.paste_id}}" class="activity_poster"><b>{{paste.title|safe}}</b></a><br/>
               <span class="text-muted">by <a href="/user/{{user.username}}" class="text-muted">{{user.username}}</a></span><br/>
-              <div class="text-muted actions-main" style="float:right; text-align: right;"> <a href="/functions/undopaste?paste_id={{paste.paste_id}}&uniqid={{user_session.sessionid}}" title="Delete paste" class="text-muted deletebutton"><i class="fa fa-trash" aria-hidden="true"></i></a></div>
+              <div class="text-muted actions-main actions-pastebin" style="float:right; text-align: right;"> <a href="/functions/undopaste?paste_id={{paste.paste_id}}&uniqid={{user_session.sessionid}}" title="Delete paste" class="text-muted deletebutton"><i class="fa fa-trash" aria-hidden="true"></i></a></div>
             </div>
           </div>
         </div>
       </div>
       {% endfor %}
+</div>
 {% endblock %}

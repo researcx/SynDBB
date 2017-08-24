@@ -118,14 +118,16 @@ class d2_forums(syndbb.db.Model):
     nsfw = syndbb.db.Column(syndbb.db.Integer, unique=False)
     owned_by = syndbb.db.Column(syndbb.db.Integer, unique=False)
     approved = syndbb.db.Column(syndbb.db.Integer, unique=False)
+    auth = syndbb.db.Column(syndbb.db.Integer, unique=False)
 
-    def __init__(self, name, short_name, description, owned_by, nsfw, approved):
+    def __init__(self, name, short_name, description, owned_by, nsfw, approved, auth):
         self.name = name
         self.short_name = short_name
         self.description = description
         self.owned_by = owned_by
         self.nsfw = nsfw
         self.approved = approved
+        self.auth = auth
 
     def __repr__(self):
         return '<Forum %r>' % self.name

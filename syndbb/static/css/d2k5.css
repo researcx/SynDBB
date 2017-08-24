@@ -499,6 +499,10 @@ a:hover, p a:active, p a:focus {
   margin-top: -20px;
 }
 
+.actions-pastebin{
+  margin-top: -30px;
+}
+
 .actions-main.replybutton a{
   color: #000;
 }
