@@ -252,6 +252,9 @@ def do_ban_user():
                 syndbb.db.session.add(new_ban)
                 syndbb.db.session.commit()
 
+                syndbb.cache.delete_memoized(syndbb.models.users.get_user_title)
+                syndbb.cache.delete_memoized(syndbb.models.users.get_group_style_from_id)
+
                 syndbb.flash('User banned successfully.', 'success')
                 return syndbb.redirect(syndbb.url_for('siteadmin_ban'))
             else:
@@ -275,6 +278,9 @@ def do_rank_user():
                 changeuser = d2_user.query.filter_by(user_id=rankuser).first()
                 changeuser.rank = rank
                 syndbb.db.session.commit()
+
+                syndbb.cache.delete_memoized(syndbb.models.users.get_user_title)
+                syndbb.cache.delete_memoized(syndbb.models.users.get_group_style_from_id)
 
                 syndbb.flash('User rank changed successfully.', 'success')
                 return syndbb.redirect(syndbb.url_for('siteadmin_users'))
@@ -321,6 +327,9 @@ def do_unban_user():
                     ban.length = -1
                 ban.expires = unix_time_current()
                 syndbb.db.session.commit()
+
+                syndbb.cache.delete_memoized(syndbb.models.users.get_user_title)
+                syndbb.cache.delete_memoized(syndbb.models.users.get_group_style_from_id)
 
                 syndbb.flash('User unbanned successfully.', 'success')
                 return syndbb.redirect(syndbb.url_for('siteadmin_ban'))

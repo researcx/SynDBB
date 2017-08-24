@@ -59,7 +59,7 @@ def inject_user():
 
 #Get status updates
 @syndbb.app.template_filter('get_all_status_updates')
-#@syndbb.cache.memoize(timeout=60)
+@syndbb.cache.memoize(timeout=60)
 def get_all_status_updates():
     statuses = []
     users = d2_user.query.filter(d2_user.status != "").order_by(d2_user.status_time.desc()).limit(20).all()

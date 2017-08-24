@@ -113,6 +113,8 @@ def save_preferences():
             user.bio = bio
             syndbb.db.session.commit()
 
+
+            syndbb.cache.delete_memoized(syndbb.models.users.get_all_status_updates)
             syndbb.flash('Preferences updated successfully.', 'success')
 
             try:
@@ -148,6 +150,7 @@ def update_status():
             user.status = status
             user.status_time = unix_time_current()
             syndbb.db.session.commit()
+            syndbb.cache.delete_memoized(syndbb.models.users.get_all_status_updates)
             return syndbb.redirect(syndbb.url_for('home'))
         else:
             return "Invalid Session"

@@ -450,6 +450,12 @@ def create_thread():
                         syndbb.db.session.commit()
                         give_currency(userid, 5)
                         give_posts(userid, 1)
+
+                        syndbb.cache.delete_memoized(syndbb.models.activity.get_recent_posts)
+                        syndbb.cache.delete_memoized(syndbb.models.activity.get_activity)
+                        syndbb.cache.delete_memoized(syndbb.views.xml_feed.feed_posts_xml)
+                        syndbb.cache.delete_memoized(syndbb.views.xml_feed.feed_threads_xml)
+
                         return  "/" + forumcheck.short_name + "/" + thread_id
             else:
                 return 'Trying to post in a forum which doesn\'t exist.'
@@ -492,6 +498,11 @@ def create_reply():
                         syndbb.db.session.commit()
                         give_currency(userid, 2)
                         give_posts(userid, 1)
+
+                        syndbb.cache.delete_memoized(syndbb.models.activity.get_recent_posts)
+                        syndbb.cache.delete_memoized(syndbb.models.activity.get_activity)
+                        syndbb.cache.delete_memoized(syndbb.views.xml_feed.feed_posts_xml)
+
                         return  "/"
             else:
                 return 'Trying to post in a thread which doesn\'t exist.'
@@ -566,6 +577,12 @@ def delete_post():
                         take_currency(postcheck.user_id, 5)
                         take_posts(userid, 1)
                         syndbb.flash('Thread has been deleted.', 'danger')
+
+                        syndbb.cache.delete_memoized(syndbb.models.activity.get_recent_posts)
+                        syndbb.cache.delete_memoized(syndbb.models.activity.get_activity)
+                        syndbb.cache.delete_memoized(syndbb.views.xml_feed.feed_posts_xml)
+                        syndbb.cache.delete_memoized(syndbb.views.xml_feed.feed_threads_xml)
+
                         return syndbb.redirect("/"+forumcheck.short_name)
                     else:
                         postvars.reply_count -= 1
@@ -576,6 +593,12 @@ def delete_post():
                         take_currency(postcheck.user_id, 2)
                         take_posts(userid, 1)
                         syndbb.flash('Post has been deleted.', 'danger')
+
+                        syndbb.cache.delete_memoized(syndbb.models.activity.get_recent_posts)
+                        syndbb.cache.delete_memoized(syndbb.models.activity.get_activity)
+                        syndbb.cache.delete_memoized(syndbb.views.xml_feed.feed_posts_xml)
+                        syndbb.cache.delete_memoized(syndbb.views.xml_feed.feed_threads_xml)
+
                         return syndbb.redirect("/"+forumcheck.short_name+"/"+str(postvars.id))
                 else:
                     return "Trying to delete a post which isn't yours."
