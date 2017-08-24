@@ -10,6 +10,24 @@ from syndbb.models.forums import d2_forums, d2_activity
 from syndbb.models.time import display_time, human_date
 from flask import make_response
 
+html_escape_table = {
+        "'":'&#39;',
+        '"':'&quot;',
+        '>':'&gt;',
+        '<':'&lt;',
+        '&':'&amp;'
+    }
+
+def html_escape(text):
+    """Produce entities within text."""
+    return "".join(html_escape_table.get(c,c) for c in text)
+
+def has_no_empty_params(rule):
+    defaults = rule.defaults if rule.defaults is not None else ()
+    arguments = rule.arguments if rule.arguments is not None else ()
+    return len(defaults) >= len(arguments)
+
+
 # Post Feed
 # /feed/posts/xml
 @syndbb.app.route("/feed/posts/xml")
@@ -38,7 +56,7 @@ def feed_posts_xml():
                 if post and thread and poster and forum:
                     activity_item += '''<item>
                                     		<guid>'''+str(post.id)+'''</guid>
-                                    		<title>'''+poster.username+''' replied to "'''+thread.title+'''" in '''+forum.name+'''</title>
+                                    		<title>'''+poster.username+''' replied to "'''+html_escape(thread.title)+'''" in '''+html_escape(forum.name)+'''</title>
                                     		<link>https://d2k5.com/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''#'''+str(post.id)+'''</link>
                                     		<pubDate>'''+human_date(post.time)+'''</pubDate>
                                     	</item>'''
@@ -76,7 +94,7 @@ def feed_threads_xml():
                 if thread and poster and forum:
                     activity_item += '''<item>
                                     		<guid>'''+str(thread.id)+'''</guid>
-                                    		<title>'''+poster.username+''' created "'''+thread.title+'''" in '''+forum.name+'''</title>
+                                    		<title>'''+poster.username+''' created "'''+html_escape(thread.title)+'''" in '''+html_escape(forum.name)+'''</title>
                                     		<link>https://d2k5.com/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''</link>
                                     		<pubDate>'''+human_date(thread.time)+'''</pubDate>
                                     	</item>'''
