@@ -16,7 +16,7 @@ def my_invites():
             user = d2_user.query.filter_by(user_id=userid).first()
             invites = d2_invites.query.filter_by(user_id=userid).all()
             subheading = []
-            subheading.append("<a href='/user/" + user.username + "/'>" + user.username + "</a>")
+            subheading.append("<a href='/user/" + user.username + "'>" + user.username + "</a>")
             return syndbb.render_template('invites.html', invite_list=invites, title="Invites", subheading=subheading)
         else:
             return syndbb.render_template('error_not_logged_in.html', title="Invites")

@@ -41,7 +41,7 @@ def preferences():
                 else:
                     uploadurls.append([uploadurl, " "])
             subheading = []
-            subheading.append("<a href='/user/" + user.username + "/'>" + user.username + "</a>")
+            subheading.append("<a href='/user/" + user.username + "'>" + user.username + "</a>")
             return syndbb.render_template('preferences.html', uploadurls=uploadurls, title="Preferences", subheading=subheading)
         else:
             return syndbb.render_template('error_not_logged_in.html', title="Preferences")
@@ -56,7 +56,7 @@ def login_history():
             user = d2_user.query.filter_by(user_id=userid).first()
             logins = d2_ip.query.filter_by(user_id=userid).order_by(d2_ip.time.desc()).all()
             subheading = []
-            subheading.append("<a href='/user/" + user.username + "/'>" + user.username + "</a>")
+            subheading.append("<a href='/user/" + user.username + "'>" + user.username + "</a>")
             return syndbb.render_template('login_info.html', logins=logins, title="Login History", subheading=subheading)
         else:
             return syndbb.render_template('error_not_logged_in.html', title="Login History")
@@ -71,7 +71,7 @@ def change_password():
             user = d2_user.query.filter_by(user_id=userid).first()
             dynamic_js_footer = ["js/crypt.js", "js/auth/auth_chpw.js", "js/bootbox.min.js"]
             subheading = []
-            subheading.append("<a href='/user/" + user.username + "/'>" + user.username + "</a>")
+            subheading.append("<a href='/user/" + user.username + "'>" + user.username + "</a>")
             return syndbb.render_template('change_password.html', dynamic_js_footer=dynamic_js_footer, title="Change Password", subheading=subheading)
         else:
             return syndbb.render_template('error_not_logged_in.html', title="Change Password")
@@ -188,7 +188,7 @@ def change_avatar():
 
 
             subheading = []
-            subheading.append("<a href='/user/" + user.username + "/'>" + user.username + "</a>")
+            subheading.append("<a href='/user/" + user.username + "'>" + user.username + "</a>")
 
             return syndbb.render_template('change_avatar.html', avatar_list=avatar_list, avatar_sources=avatar_sources, dynamic_js_footer=dynamic_js_footer, title="Change Avatar", subheading=subheading)
         else:

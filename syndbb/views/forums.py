@@ -106,6 +106,7 @@ def view_forum_grid(category):
             forumlogo = '<img src="/static/images/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
 
         image_finder = "(?<=\[img\]).*?(?=\[/img\])"
+        image_finder2 = "(?<=\[t\]).*?(?=\[/t\])"
         threads = d2_activity.query.filter_by(category=forumcheck.id).order_by(d2_activity.reply_time.desc()).all()
 
         topbuttons = '<a href="/'+forumcheck.short_name+'" title="List View" style="float:right;"><i class="silk-icon icon_application_view_list" aria-hidden="true"></i></a>'
@@ -132,7 +133,19 @@ def view_forum_grid(category):
 
             thumbfolder = syndbb.os.getcwd() + "/syndbb/static/data/threadimg/grid/"
             images = syndbb.re.findall(image_finder, thread.content, syndbb.re.IGNORECASE)
+            images2 = syndbb.re.findall(image_finder2, thread.content, syndbb.re.IGNORECASE)
             if images:
+                firstimg = images[0]
+                hashname = hashlib.sha256(firstimg.encode()).hexdigest()
+                thumbpath = thumbfolder + hashname + ".png"
+                if not syndbb.os.path.isfile(thumbpath):
+                    threadimg = requests.get(firstimg)
+                    im = Image.open(BytesIO(threadimg.content))
+                    im = ImageOps.fit(im, (150, 150),  Image.ANTIALIAS)
+                    im.save(thumbpath, "PNG")
+                timg = "/static/data/threadimg/grid/" + hashname + ".png"
+            elif images2:
+                images = images2
                 firstimg = images[0]
                 hashname = hashlib.sha256(firstimg.encode()).hexdigest()
                 thumbpath = thumbfolder + hashname + ".png"
@@ -229,17 +242,23 @@ def view_thread_gallery(category, thread):
                 forumlogo = '<img src="/static/images/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
             threadcheck = d2_activity.query.filter_by(id=thread).first()
             image_list = []
+            image_finder = "(?<=\[img\]).*?(?=\[/img\])"
+            image_finder2 = "(?<=\[t\]).*?(?=\[/t\])"
             if threadcheck:
                 thread_title = (threadcheck.title[:75] + '...') if len(threadcheck.title) > 75 else threadcheck.title
-
-                image_finder = "(?<=\[img\]).*?(?=\[/img\])"
                 images = syndbb.re.findall(image_finder, threadcheck.content, syndbb.re.IGNORECASE)
+                for image in images:
+                    image_list.append(image)
+                images = syndbb.re.findall(image_finder2, threadcheck.content, syndbb.re.IGNORECASE)
                 for image in images:
                     image_list.append(image)
 
                 replycheck = d2_activity.query.filter_by(replyto=thread).all()
                 for reply in replycheck:
                     images = syndbb.re.findall(image_finder, reply.content, syndbb.re.IGNORECASE)
+                    for image in images:
+                        image_list.append(image)
+                    images = syndbb.re.findall(image_finder2, reply.content, syndbb.re.IGNORECASE)
                     for image in images:
                         image_list.append(image)
 
