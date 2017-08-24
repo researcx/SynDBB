@@ -88,3 +88,16 @@ syndbb.app.jinja_env.globals.update(recent_date=recent_date)
 def human_size(filesize):
     return syndbb.humanize.naturalsize(filesize)
 syndbb.app.jinja_env.globals.update(human_size=human_size)
+
+
+@syndbb.app.template_filter('get_filemtime')
+@syndbb.cache.memoize(timeout=60)
+def get_filemtime(file):
+    filepath = syndbb.app.root_path + "/static/" + file
+    if syndbb.os.path.isfile(filepath):
+        filetime = int(syndbb.os.stat(filepath).st_mtime)
+        if filetime:
+            return file + "?v=" + str(filetime)
+    else:
+        return file
+syndbb.app.jinja_env.globals.update(get_filemtime=get_filemtime)

@@ -58,19 +58,20 @@
 
     <title>{% if title %} {{ title|striptags }} &bull; {% endif %}D2K5</title>
 
-    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/ie10-viewport-bug-workaround.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="/static/{{get_filemtime('css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="/static/{{get_filemtime('css/ie10-viewport-bug-workaround.css')}}" rel="stylesheet">
+    <link href="/static/{{get_filemtime('css/font-awesome.min.css')}}" rel="stylesheet">
 
     {% for style in dynamic_css_header %}
-    <link href="/static/{{style}}" rel="stylesheet">
+    <link href="/static/{{get_filemtime(style)}}" rel="stylesheet">
     {% endfor %}
-    <link href="{{ url_for('static', filename='icons/iconAtlas.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/d2k5.css') }}" rel="stylesheet">
+
+    <link href="/static/{{get_filemtime('icons/iconAtlas.css')}}" rel="stylesheet">
+    <link href="/static/{{get_filemtime('css/d2k5.css')}}" rel="stylesheet">
 
     <!--[if lt IE 9]>
-          <script src="{{ url_for('static', filename='js/html5shiv.min.js') }}"></script>
-          <script src="{{ url_for('static', filename='js/respond.min.js') }}"></script>
+          <script src="/static/{{get_filemtime('js/html5shiv.min.js')}}"></script>
+          <script src="/static/{{get_filemtime('js/respond.min.js')}}"></script>
         <![endif]-->
   </head>
 
@@ -218,12 +219,11 @@
           <i>Page generation took {{ g.request_time() }} seconds. &bull; All times are <abbr title="Greenwich Mean Time">GMT</abbr>.</i></p>
       </div>
     </footer>
-
-    <script src="{{ url_for('static', filename='js/ie10-viewport-bug-workaround.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="/static/{{get_filemtime('js/ie10-viewport-bug-workaround.js')}}"></script>
+    <script src="/static/{{get_filemtime('js/jquery-3.1.1.min.js')}}"></script>
+    <script src="/static/{{get_filemtime('js/bootstrap.min.js')}}"></script>
     {% for script in dynamic_js_footer %}
-    <script src="/static/{{script}}"></script>
+    <script src="/static/{{get_filemtime(script)}}"></script>
     {% endfor %}
   </body>
 </html>
