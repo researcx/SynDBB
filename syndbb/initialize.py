@@ -59,25 +59,23 @@ def uglify(route_function):
 
 #Error Logging (when not in debug mode)
 if not syndbb.app.debug:
-    global_log = "logs/global.log"
-    summary_log = "logs/summary.log"
-    log_size = 2097152
+    error_log = "logs/error.log"
+    access_log = "logs/access.log"
+
     logger = logging.getLogger('werkzeug')
     logFormatStr = '[%(asctime)s] p%(process)s {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s'
     formatter = logging.Formatter(logFormatStr,'%m-%d %H:%M:%S')
 
-    logging.basicConfig(format = logFormatStr, filename = global_log, level=logging.DEBUG)
-    access_handler = RotatingFileHandler(summary_log, maxBytes=log_size, backupCount=5)
+    logging.basicConfig(format = '%(message)s', filename = access_log, level=logging.INFO)
 
-    fileHandler = RotatingFileHandler(global_log, maxBytes=log_size, backupCount=5)
-    fileHandler.setLevel(logging.DEBUG)
+    fileHandler = logging.FileHandler(error_log)
+    fileHandler.setLevel(logging.ERROR)
     fileHandler.setFormatter(formatter)
 
     streamHandler = logging.StreamHandler()
     streamHandler.setLevel(logging.DEBUG)
     streamHandler.setFormatter(formatter)
 
-    logger.addHandler(access_handler)
     logger.addHandler(fileHandler)
     logger.addHandler(streamHandler)
 
@@ -85,9 +83,9 @@ if not syndbb.app.debug:
     def after_request(response):
         timestamp = strftime('%Y-%b-%d %H:%M:%S')
         useragent = request.user_agent
-        logger.info('[%s] [%s] [%s] [%s] [%s] [%s] [%s]',
+        logger.info('[%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s]',
             timestamp, request.remote_addr, useragent, request.method,
-            request.scheme, request.full_path, response.status)
+            request.scheme, request.full_path, response.status, request.referrer)
         return response
 
     @syndbb.app.errorhandler(Exception)
@@ -101,4 +99,4 @@ if not syndbb.app.debug:
 
 #Run the main app...
 if __name__ == '__main__':
-    syndbb.app.run()
+    syndbb.app.run(threaded=True)
