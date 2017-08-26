@@ -7,7 +7,7 @@
 import syndbb
 from syndbb.models.users import d2_user, d2_bans, is_banned, get_group_style_from_id
 from syndbb.models.forums import d2_forums, d2_activity, get_forum_icon
-from syndbb.models.time import display_time, recent_date, human_date
+from syndbb.models.time import display_time, recent_date, human_date, get_ban_expiry
 
 #Functions
 def unique_items(L):
@@ -133,7 +133,7 @@ def get_activity(limit=10):
 syndbb.app.jinja_env.globals.update(get_activity=get_activity)
 
 @syndbb.app.context_processor
-@syndbb.cache.memoize(timeout=180)
+@syndbb.cache.memoize(timeout=1)
 def ban_list():
     bans = d2_bans.query.filter(d2_bans.banned_id != 0).all()
     ban_list = ""
@@ -144,18 +144,22 @@ def ban_list():
 
         if ban.length is not 0:
             banduration = display_time(ban.length)
+            timeleft = get_ban_expiry(ban.expires)
         else:
             banduration = "FOREVER"
+            timeleft = "NEVER"
         if ban.length is -1:
             banduration = "UNBANNED"
+            timeleft = "EXPIRED"
 
-        ban_time = syndbb.datetime.fromtimestamp(int(ban.time)).strftime('%Y-%m-%d %H:%M:%S')
+
 
         ban_list += '''<tr>
-                        <td>'''+ban_time+'''</td>
+                        <td>'''+recent_date(ban.time)+'''</td>
                         <td><a href="/user/'''+banned.username+'''" style="'''+get_group_style_from_id(banned.user_id)+'''">'''+banned.username+'''</a></td>
                         <td>'''+ban.reason+'''</td>
                         <td>'''+banduration+'''</td>
+                        <td>'''+timeleft+'''</td>
                         <td><a href="/user/'''+banner.username+'''" style="'''+get_group_style_from_id(banner.user_id)+'''">'''+banner.username+'''</a></td>
                     </tr>'''
 

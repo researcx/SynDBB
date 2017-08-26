@@ -14,6 +14,68 @@ intervals = (
     ('seconds', 1),
     )
 
+
+SECOND = 1
+MINUTE = 60 * SECOND
+HOUR = 60 * MINUTE
+DAY = 24 * HOUR
+MONTH = 30 * DAY
+
+@syndbb.cache.memoize(timeout=60)
+def get_ban_expiry(unixtime):
+    dt = syndbb.datetime.fromtimestamp(unixtime)
+    now = syndbb.datetime.now()
+    delta_time = dt - now
+
+    delta =  delta_time.days * DAY + delta_time.seconds
+    minutes = delta / MINUTE
+    hours = delta / HOUR
+    days = delta / DAY
+
+    if delta <  0:
+        return "EXPIRED"
+
+    if delta < 1 * MINUTE:
+      if delta == 1:
+          return  "one second"
+      else:
+          return str(int(delta)) + " seconds"
+
+
+    if delta < 2 * MINUTE:
+        return str(int(minutes)) + " minutes"
+
+
+    if delta < 45 * MINUTE:
+        return str(int(minutes)) + " minutes"
+
+    if delta < 90 * MINUTE:
+        return str(int(minutes)) + " minutes"
+
+    if delta < 24 * HOUR:
+        return str(int(hours)) + " hours"
+
+    if delta < 48 * HOUR:
+        return str(int(hours)) + " hours"
+
+    if delta < 30 * DAY:
+        return str(int(days)) + " days"
+
+
+    if delta < 12 * MONTH:
+        months = delta / MONTH
+        if months <= 1:
+            return "one month"
+        else:
+            return str(int(months)) + " months"
+    else:
+      years = days / 365.0
+      if  years <= 1:
+          return "one year"
+      else:
+          return str(int(years)) + " years"
+syndbb.app.jinja_env.globals.update(get_ban_expiry=get_ban_expiry)
+
 def display_time(seconds, granularity=2):
     result = []
 

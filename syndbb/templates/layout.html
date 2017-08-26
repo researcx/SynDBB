@@ -30,7 +30,14 @@
     {% if bancheck.ban.reason %}
     <strong>Reason:</strong> {{bancheck.ban.reason}}<br/>
     {% endif %}
-    <strong>Expires:</strong> {{bancheck.banduration}} ({{human_date(bancheck.ban.expires)}})<br/>
+    {% if bancheck.ban.length != 0 %}
+      <strong>Duration:</strong> {{bancheck.banduration}}<br/>
+      <strong>Expires:</strong> {{get_ban_expiry(bancheck.ban.expires)}}
+    {% else %}
+    <strong>Duration:</strong> Forever<br/>
+    <strong>Expires:</strong> Never
+    {% endif %}
+    <br/>
 
     </div>
   </body>
