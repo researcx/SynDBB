@@ -333,8 +333,7 @@ a:hover, p a:active, p a:focus {
 }
 
 .img-thumb{
-  max-width: 200px;
-  max-height: 200px;
+  max-height: 215px !important;
 }
 
 .uploadimg {
