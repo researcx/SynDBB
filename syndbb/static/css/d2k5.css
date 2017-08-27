@@ -117,6 +117,10 @@
   width: 250px;
 }
 
+div.bootbox.modal.nsfwModal{
+    background: yellow url("../images/nsfwb.png");
+}
+
 .avatarModal div.modal-dialog.modal-sm{
   width: 528px;
 }
@@ -227,7 +231,7 @@ a.activity_poster.reply {
   font-size: 12pt;
 }
 
-a, a:visited {
+a {
   color: #000000;
   text-decoration: none;
 }

@@ -119,8 +119,9 @@ class d2_forums(syndbb.db.Model):
     owned_by = syndbb.db.Column(syndbb.db.Integer, unique=False)
     approved = syndbb.db.Column(syndbb.db.Integer, unique=False)
     auth = syndbb.db.Column(syndbb.db.Integer, unique=False)
+    anon = syndbb.db.Column(syndbb.db.Integer, unique=False)
 
-    def __init__(self, name, short_name, description, owned_by, nsfw, approved, auth):
+    def __init__(self, name, short_name, description, owned_by, nsfw, approved, auth, anon):
         self.name = name
         self.short_name = short_name
         self.description = description
@@ -128,6 +129,7 @@ class d2_forums(syndbb.db.Model):
         self.nsfw = nsfw
         self.approved = approved
         self.auth = auth
+        self.anon = anon
 
     def __repr__(self):
         return '<Forum %r>' % self.name
@@ -146,8 +148,9 @@ class d2_activity(syndbb.db.Model):
     reply_count = syndbb.db.Column(syndbb.db.Integer, unique=False)
     rating = syndbb.db.Column(syndbb.db.Integer, unique=False)
     post_icon = syndbb.db.Column(syndbb.db.Integer, unique=False)
+    anonymous = syndbb.db.Column(syndbb.db.Integer, unique=False)
 
-    def __init__(self, user_id, time, content, replyto, replyToPost, title, category, reply_time, reply_count, rating, post_icon):
+    def __init__(self, user_id, time, content, replyto, replyToPost, title, category, reply_time, reply_count, rating, post_icon, anonymous):
         self.user_id = user_id
         self.time = time
         self.content = content
@@ -159,6 +162,7 @@ class d2_activity(syndbb.db.Model):
         self.reply_count = reply_count
         self.rating = rating
         self.post_icon = post_icon
+        self.anonymous = anonymous
 
     def __repr__(self):
         return '<Post %r>' % self.id

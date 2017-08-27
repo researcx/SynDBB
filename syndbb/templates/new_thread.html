@@ -43,6 +43,14 @@
               <span class="bbcode-button" title="Align Left" onclick="insert_bbcode('left');"><i class="silk-icon icon_text_align_left" aria-hidden="true"></i></span>
               <span class="bbcode-button" title="Align Center" onclick="insert_bbcode('center');"><i class="silk-icon icon_text_align_center" aria-hidden="true"></i></span>
               <span class="bbcode-button" title="Align Right" onclick="insert_bbcode('right');"><i class="silk-icon icon_text_align_right" aria-hidden="true"></i></span>
+              <span class="bbcode-button-spacer"></span>
+              {% if forum.anon %}
+              <div class="bbcode-anon">
+                <label class="checkbox-inline">
+                    <input type="checkbox" id="anonymous" name="anonymous" value="1"><span class="text">Post Anonymously</span>
+                </label>
+              </div>
+              {% endif %}
             </div>
             <input type="hidden" name="uniqid" value="{{user_session.sessionid}}">
             <input type="hidden" name="category" value="{{forum.id}}">

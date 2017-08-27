@@ -50,13 +50,17 @@ def feed_posts_xml():
             if item[1] == "post":
                 post = d2_activity.query.filter(d2_activity.id == item[2]).first()
                 thread = d2_activity.query.filter(d2_activity.id == post.replyto).first()
-                poster = d2_user.query.filter_by(user_id=post.user_id).first()
                 forum = d2_forums.query.filter(d2_forums.id == thread.category).first()
 
-                if post and thread and poster and forum:
+                if post and thread and forum:
+                    if post.anonymous == 0:
+                        latestreplier = post.user.username
+                    else:
+                        latestreplier = 'Anonymous'
+
                     activity_item += '''<item>
                                     		<guid>'''+str(post.id)+'''</guid>
-                                    		<title>'''+poster.username+''' replied to "'''+html_escape(thread.title)+'''" in '''+html_escape(forum.name)+'''</title>
+                                    		<title>'''+latestreplier+''' replied to "'''+html_escape(thread.title)+'''" in '''+html_escape(forum.name)+'''</title>
                                     		<link>https://d2k5.com/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''#'''+str(post.id)+'''</link>
                                     		<pubDate>'''+human_date(post.time)+'''</pubDate>
                                     	</item>'''
@@ -88,13 +92,17 @@ def feed_threads_xml():
         if count < limit:
             if item[1] == "thread":
                 thread = d2_activity.query.filter(d2_activity.id == item[2]).first()
-                poster = d2_user.query.filter_by(user_id=thread.user_id).first()
                 forum = d2_forums.query.filter(d2_forums.id == thread.category).first()
 
-                if thread and poster and forum:
+                if thread and forum:
+                    if thread.anonymous == 0:
+                        threadcreator = thread.user.username
+                    else:
+                        threadcreator = 'Anonymous'
+
                     activity_item += '''<item>
                                     		<guid>'''+str(thread.id)+'''</guid>
-                                    		<title>'''+poster.username+''' created "'''+html_escape(thread.title)+'''" in '''+html_escape(forum.name)+'''</title>
+                                    		<title>'''+threadcreator+''' created "'''+html_escape(thread.title)+'''" in '''+html_escape(forum.name)+'''</title>
                                     		<link>https://d2k5.com/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''</link>
                                     		<pubDate>'''+human_date(thread.time)+'''</pubDate>
                                     	</item>'''

@@ -42,21 +42,29 @@ def get_recent_posts(limit=10):
             if item[1] == "post":
                 post = d2_activity.query.filter(d2_activity.id == item[2]).first()
                 thread = d2_activity.query.filter(d2_activity.id == post.replyto).first()
-                creator = d2_user.query.filter_by(user_id=thread.user_id).first()
-                poster = d2_user.query.filter_by(user_id=post.user_id).first()
                 forum = d2_forums.query.filter(d2_forums.id == thread.category).first()
 
-                if post and thread and poster and forum:
+                if post and thread and forum:
+                    if thread.anonymous == 0:
+                        threadcreator = '<a href="/user/'+thread.user.username+'" class="profile-inline">'+thread.user.username+'</a>'
+                    else:
+                        threadcreator = '<a href="#">Anonymous</a>'
+
+                    if post.anonymous == 0:
+                        latestreplier = '<a href="/user/'+post.user.username+'" class="profile-inline">'+post.user.username+'</a>'
+                    else:
+                        latestreplier = '<a href="#">Anonymous</a>'
+
                     activity_item += '''<tr>
                                             <td class="home-forum home-forum-icon"><a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''#'''+str(post.id)+'''"><img src="/static/images/posticons/icon'''+str(thread.post_icon)+'''.gif" alt=""/></a></td>
                                             <td class="home-forum">
                                             <span class="small" style="float:right; text-align: right;">
                                                 <span class="timedisplay">'''+recent_date(post.time)+'''</span><br/>
-                                                by <a href="/user/'''+poster.username+'''" class="profile-inline">'''+poster.username+'''</a> <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''#'''+str(post.id)+'''"><img src="/static/images/thread_new.png" style="margin-top: -2px;"/></a>
+                                                by '''+latestreplier+''' <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''#'''+str(post.id)+'''"><img src="/static/images/thread_new.png" style="margin-top: -2px;"/></a>
                                             </span>
                                             <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''#'''+str(post.id)+'''"><b>'''+thread.title+'''</b></a>
                                             <span class="small"><br/>
-                                            <a href="/user/'''+creator.username+'''" class="profile-inline">'''+creator.username+'''</a>, <span class="timedisplay">'''+recent_date(thread.time)+'''</span>, <a href="/'''+str(forum.short_name)+'''">'''+forum.name+'''</a>
+                                            '''+threadcreator+''', <span class="timedisplay">'''+recent_date(thread.time)+'''</span>, <a href="/'''+str(forum.short_name)+'''">'''+forum.name+'''</a>
                                             </span>
 
                                             </td>
@@ -64,20 +72,24 @@ def get_recent_posts(limit=10):
 
             if item[1] == "thread":
                 thread = d2_activity.query.filter(d2_activity.id == item[2]).first()
-                poster = d2_user.query.filter_by(user_id=thread.user_id).first()
                 forum = d2_forums.query.filter(d2_forums.id == thread.category).first()
 
-                if thread and poster and forum:
+                if thread.anonymous == 0:
+                    threadcreator = '<a href="/user/'+thread.user.username+'" class="profile-inline">'+thread.user.username+'</a>'
+                else:
+                    threadcreator = '<a href="#">Anonymous</a>'
+
+                if thread and forum:
                     activity_item += '''<tr>
                                             <td class="home-forum home-forum-icon"><a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''"><img src="/static/images/posticons/icon'''+str(thread.post_icon)+'''.gif" alt=""/></a></td>
                                             <td class="home-forum">
                                             <span class="small" style="float:right; text-align: right;">
                                                 <span class="timedisplay">'''+recent_date(thread.reply_time)+'''</span><br/>
-                                                by <a href="/user/'''+poster.username+'''" class="profile-inline">'''+poster.username+'''</a> <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''"><img src="/static/images/thread_new.png" style="margin-top: -2px;"/></a>
+                                                by '''+threadcreator+''' <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''"><img src="/static/images/thread_new.png" style="margin-top: -2px;"/></a>
                                             </span>
                                             <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''"><b>'''+thread.title+'''</b></a>
                                             <span class="small"><br/>
-                                            <a href="/user/'''+poster.username+'''" class="profile-inline">'''+poster.username+'''</a>, <span class="timedisplay">'''+recent_date(thread.time)+'''</span>, <a href="/'''+str(forum.short_name)+'''">'''+forum.name+'''</a>
+                                            '''+threadcreator+''', <span class="timedisplay">'''+recent_date(thread.time)+'''</span>, <a href="/'''+str(forum.short_name)+'''">'''+forum.name+'''</a>
                                             </span></td>
                                         </tr>'''
             count += 1
@@ -108,24 +120,33 @@ def get_activity(limit=10):
             if item[1] == "post":
                 post = d2_activity.query.filter(d2_activity.id == item[2]).first()
                 thread = d2_activity.query.filter(d2_activity.id == post.replyto).first()
-                poster = d2_user.query.filter_by(user_id=post.user_id).first()
                 forum = d2_forums.query.filter(d2_forums.id == thread.category).first()
 
-                if post and thread and poster and forum:
+                if post and thread and forum:
+                    if post.anonymous == 0:
+                        latestreplier = '<a href="/user/'+post.user.username+'" class="profile-inline">'+post.user.username+'</a>'
+                    else:
+                        latestreplier = '<a href="#">Anonymous</a>'
+
                     activity_item += '''<tr>
                                             <td class="event-icon"><i class="silk-icon icon_comment_add" aria-hidden="true"></i></td>
-                                            <td><a href="/user/'''+poster.username+'''" class="profile-inline">'''+poster.username+'''</a> replied to "<a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''#'''+str(post.id)+'''">'''+thread.title+'''</a>" in <a href="/'''+str(forum.short_name)+'''">'''+forum.name+'''</a></td>
+                                            <td>'''+latestreplier+''' replied to "<a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''#'''+str(post.id)+'''">'''+thread.title+'''</a>" in <a href="/'''+str(forum.short_name)+'''">'''+forum.name+'''</a></td>
                                         </tr>'''
 
             if item[1] == "thread":
                 thread = d2_activity.query.filter(d2_activity.id == item[2]).first()
-                poster = d2_user.query.filter_by(user_id=thread.user_id).first()
                 forum = d2_forums.query.filter(d2_forums.id == thread.category).first()
 
-                if thread and poster and forum:
+                if thread and forum:
+
+                    if thread.anonymous == 0:
+                        threadcreator = '<a href="/user/'+thread.user.username+'" class="profile-inline">'+thread.user.username+'</a>'
+                    else:
+                        threadcreator = '<a href="#">Anonymous</a>'
+
                     activity_item += '''<tr>
                                             <td class="event-icon"><i class="silk-icon icon_application_view_list" aria-hidden="true"></i></td>
-                                            <td><a href="/user/'''+poster.username+'''"  class="profile-inline">'''+poster.username+'''</a> created "<a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''">'''+thread.title+'''</a>" in <a href="/'''+str(forum.short_name)+'''">'''+forum.name+'''</a></td>
+                                            <td>'''+threadcreator+''' created "<a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''">'''+thread.title+'''</a>" in <a href="/'''+str(forum.short_name)+'''">'''+forum.name+'''</a></td>
                                         </tr>'''
             count += 1
 

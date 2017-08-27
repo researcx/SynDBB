@@ -44,6 +44,8 @@ def view_forum(category):
         dynamic_js_footer = ["js/inline.js", "js/bootbox.min.js"]
         # if forumcheck.short_name == "yiff":
         #     dynamic_css_header.append("css/oify.css")
+        if forumcheck.nsfw:
+            dynamic_js_footer.append("js/nsfwprompt.js")
 
         logo_file = syndbb.os.getcwd() + "/syndbb/static/images/logos/" + forumcheck.short_name + ".png"
         if syndbb.os.path.isfile(logo_file):
@@ -65,24 +67,35 @@ def view_forum(category):
                 replystr = "reply"
             else:
                 replystr = "replies"
+            if thread.anonymous == 0:
+                threadcreator = '<a href="/user/'+thread.user.username+'" class="profile-inline">'+thread.user.username+'</a>'
+                latestreplier = '<a href="/user/'+thread.user.username+'" class="profile-inline">'+thread.user.username+'</a>'
+            else:
+                threadcreator = '<a href="#">Anonymous</a>'
+                latestreplier = '<a href="#">Anonymous</a>'
+
             lastpost = d2_activity.query.filter_by(replyto=thread.id).order_by(d2_activity.time.desc()).first()
             if lastpost:
                 latest = lastpost.id
                 latestreplier = lastpost
+                if lastpost.anonymous == 0:
+                    latestreplier = '<a href="/user/'+lastpost.user.username+'" class="profile-inline">'+lastpost.user.username+'</a>'
+                else:
+                    latestreplier = '<a href="#">Anonymous</a>'
             else:
                 latest = thread.id
-                latestreplier = thread
+
 
             thread_list += '''<tr>
                                     <td class="home-forum home-forum-icon"><img src="/static/images/posticons/icon'''+str(thread.post_icon)+'''.gif" alt=""/></td>
                                     <td class="home-forum">
                                     <span class="small" style="float:right; text-align: right;">
                                         <span class="timedisplay">'''+recent_date(thread.reply_time)+'''</span><br/>
-                                        by <a href="/user/'''+latestreplier.user.username+'''" class="profile-inline">'''+latestreplier.user.username+'''</a> <a href="/'''+str(forumcheck.short_name)+'''/'''+str(thread.id)+'''#'''+str(latest)+'''"><img src="/static/images/thread_new.png" style="margin-top: -2px;"/></a>
+                                        by '''+latestreplier+'''</a> <a href="/'''+str(forumcheck.short_name)+'''/'''+str(thread.id)+'''#'''+str(latest)+'''"><img src="/static/images/thread_new.png" style="margin-top: -2px;"/></a>
                                     </span>
                                     <a href="/'''+str(forumcheck.short_name)+'''/'''+str(thread.id)+'''"><b>'''+thread.title+'''</b></a>
                                     <span class="small"><br/>
-                                    <a href="/user/'''+thread.user.username+'''" class="profile-inline">'''+thread.user.username+'''</a>, <span class="timedisplay">'''+recent_date(thread.time)+'''</span>
+                                    '''+threadcreator+''', <span class="timedisplay">'''+recent_date(thread.time)+'''</span>
                                     </span>
                                     </td>
                                 </tr>'''
@@ -100,6 +113,8 @@ def view_forum_grid(category):
     if forumcheck:
         # if forumcheck.short_name == "yiff":
         #     dynamic_css_header.append("css/oify.css")
+        if forumcheck.nsfw:
+            dynamic_js_footer.append("js/nsfwprompt.js")
 
         logo_file = syndbb.os.getcwd() + "/syndbb/static/images/logos/" + forumcheck.short_name + ".png"
         if syndbb.os.path.isfile(logo_file):
@@ -208,6 +223,8 @@ def view_thread(category, thread):
             dynamic_js_footer = ["js/bootstrap-filestyle.min.js", "js/jquery.rangyinputs.js", "js/bbcode_editor_forums.js", "js/posts.js", "js/post_ratings.js", "js/bootbox.min.js", "js/delete.js", "js/inline.js"]
             # if forumcheck.short_name == "yiff":
             #     dynamic_css_header.append("css/oify.css")
+            if forumcheck.nsfw:
+                dynamic_js_footer.append("js/nsfwprompt.js")
             logo_file = syndbb.os.getcwd() + "/syndbb/static/images/logos/" + forumcheck.short_name + ".png"
             if syndbb.os.path.isfile(logo_file):
                 forumlogo = '<img src="/static/images/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
@@ -237,6 +254,8 @@ def view_thread_gallery(category, thread):
             dynamic_js_footer = ["js/jquery.rangyinputs.js", "js/bbcode_editor_forums.js", "js/posts.js", "js/bootbox.min.js", "js/delete.js", "js/inline.js"]
             # if forumcheck.short_name == "yiff":
             #     dynamic_css_header.append("css/oify.css")
+            if forumcheck.nsfw:
+                dynamic_js_footer.append("js/nsfwprompt.js")
             logo_file = syndbb.os.getcwd() + "/syndbb/static/images/logos/" + forumcheck.short_name + ".png"
             if syndbb.os.path.isfile(logo_file):
                 forumlogo = '<img src="/static/images/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
@@ -304,7 +323,7 @@ def view_user_posts(user):
         if userid:
             dynamic_css_header = ["css/bbcode_editor.css"]
             isInline = syndbb.request.args.get('inlinecontent', '')
-            postcheck = d2_activity.query.filter_by(user_id=user).filter(d2_activity.replyto != 0).order_by(d2_activity.time.desc()).all()
+            postcheck = d2_activity.query.filter_by(user_id=user).filter(d2_activity.replyto != 0).filter(d2_activity.anonymous != 1).order_by(d2_activity.time.desc()).all()
             usercheck = d2_user.query.filter_by(user_id=user).first()
             if usercheck:
                 if postcheck:
@@ -325,7 +344,7 @@ def view_user_threads(user):
         if userid:
             dynamic_css_header = ["css/bbcode_editor.css"]
             isInline = syndbb.request.args.get('inlinecontent', '')
-            threadcheck = d2_activity.query.filter_by(user_id=user).filter(d2_activity.replyto == 0).order_by(d2_activity.time.desc()).all()
+            threadcheck = d2_activity.query.filter_by(user_id=user).filter(d2_activity.replyto == 0).filter(d2_activity.anonymous != 1).order_by(d2_activity.time.desc()).all()
             usercheck = d2_user.query.filter_by(user_id=user).first()
             if usercheck:
                 if threadcheck:
@@ -443,6 +462,18 @@ def create_thread():
     tpost = syndbb.request.form['post_content']
     ticon = syndbb.request.form['post_icon']
     tcat = syndbb.request.form['category']
+    if 'anonymous' in syndbb.request.form:
+        anonymous = 1
+    else:
+        anonymous = 0
+    if not tname:
+        return "Thread title not specified."
+    if not tpost:
+        return "No thread content."
+    if not tcat:
+        return "No category specified."
+    if not ticon:
+        return "No thread icon specified."
     if tname and tpost and tcat and ticon and uniqid:
         userid = checkSession(uniqid)
         if userid:
@@ -457,12 +488,14 @@ def create_thread():
 
             forumcheck = d2_forums.query.filter_by(id=tcat).first()
             if forumcheck:
+                    if forumcheck.anon == 0:
+                        anonymous = 0
                     lastpost = d2_activity.query.filter_by(user_id=userid).order_by(d2_activity.time.desc()).first()
                     if lastpost and (unix_time_current() - lastpost.time) <= 15:
                         return "Trying to create threads too quickly, wait a while before trying again."
                     else:
                         # syndbb.flash('Your thread has been created.', 'success')
-                        create_thread = d2_activity(userid, unix_time_current(), tpost, 0, 0, html_escape(tname), tcat, unix_time_current(), 0, 0, ticon)
+                        create_thread = d2_activity(userid, unix_time_current(), tpost, 0, 0, html_escape(tname), tcat, unix_time_current(), 0, 0, ticon, anonymous)
                         syndbb.db.session.add(create_thread)
                         syndbb.db.session.flush()
                         thread_id = str(create_thread.id)
@@ -492,37 +525,45 @@ def create_reply():
         reply_post = syndbb.request.form['reply_post']
     else:
         reply_post = "0"
+    if 'anonymous' in syndbb.request.form:
+        anonymous = 1
+    else:
+        anonymous = 0
     if tpost and reply_to and uniqid:
         userid = checkSession(uniqid)
         if userid:
             threadcheck = d2_activity.query.filter_by(id=reply_to).first()
             if threadcheck:
-                    if reply_post is not "0":
-                        postcheck = d2_activity.query.filter_by(id=reply_post).first()
-                        if not postcheck:
-                            return 'Trying to reply to a post which doesn\'t exist.'
-                    lastpost = d2_activity.query.filter_by(user_id=userid).order_by(d2_activity.time.desc()).first()
-                    if lastpost and (unix_time_current() - lastpost.time) <= 15:
-                        return "Trying to create posts too quickly, wait a while before trying again."
-                    else:
-                        # syndbb.flash('Your thread has been created.', 'success')
-                        threadcheck.reply_time = unix_time_current()
-                        threadcheck.reply_count += 1
-                        syndbb.db.session.commit()
+                forumcheck = d2_forums.query.filter_by(id=threadcheck.category).first()
+                if forumcheck and forumcheck.anon == 0:
+                    anonymous = 0
+                if reply_post is not "0":
+                    postcheck = d2_activity.query.filter_by(id=reply_post).first()
+                    if not postcheck:
+                        return 'Trying to reply to a post which doesn\'t exist.'
+                lastpost = d2_activity.query.filter_by(user_id=userid).order_by(d2_activity.time.desc()).first()
+                if lastpost and (unix_time_current() - lastpost.time) <= 15:
+                    return "Trying to create posts too quickly, wait a while before trying again."
+                else:
+                    # syndbb.flash('Your thread has been created.', 'success')
+                    threadcheck.reply_time = unix_time_current()
+                    threadcheck.reply_count += 1
+                    syndbb.db.session.commit()
 
-                        create_reply = d2_activity(userid, unix_time_current(), tpost, reply_to, reply_post, '', 0, 0, 0, 0, 1)
-                        syndbb.db.session.add(create_reply)
-                        syndbb.db.session.flush()
-                        thread_id = str(create_reply.id)
-                        syndbb.db.session.commit()
-                        give_currency(userid, 2)
-                        give_posts(userid, 1)
+                    create_reply = d2_activity(userid, unix_time_current(), tpost, reply_to, reply_post, '', 0, 0, 0, 0, 1, anonymous)
+                    syndbb.db.session.add(create_reply)
+                    syndbb.db.session.flush()
+                    thread_id = str(create_reply.id)
+                    syndbb.db.session.commit()
+                    give_currency(userid, 2)
+                    give_posts(userid, 1)
 
-                        syndbb.cache.delete_memoized(syndbb.models.activity.get_recent_posts)
-                        syndbb.cache.delete_memoized(syndbb.models.activity.get_activity)
-                        syndbb.cache.delete_memoized(syndbb.views.xml_feed.feed_posts_xml)
+                    syndbb.cache.delete_memoized(syndbb.models.activity.get_recent_posts)
+                    syndbb.cache.delete_memoized(syndbb.models.activity.get_activity)
+                    syndbb.cache.delete_memoized(syndbb.views.xml_feed.feed_posts_xml)
+                    syndbb.cache.delete_memoized(syndbb.models.forums.replies_to_post)
 
-                        return  "/"
+                    return  "/"
             else:
                 return 'Trying to post in a thread which doesn\'t exist.'
         else:
@@ -601,6 +642,7 @@ def delete_post():
                         syndbb.cache.delete_memoized(syndbb.models.activity.get_activity)
                         syndbb.cache.delete_memoized(syndbb.views.xml_feed.feed_posts_xml)
                         syndbb.cache.delete_memoized(syndbb.views.xml_feed.feed_threads_xml)
+                        syndbb.cache.delete_memoized(syndbb.models.forums.replies_to_post)
 
                         return syndbb.redirect("/"+forumcheck.short_name)
                     else:
@@ -617,6 +659,7 @@ def delete_post():
                         syndbb.cache.delete_memoized(syndbb.models.activity.get_activity)
                         syndbb.cache.delete_memoized(syndbb.views.xml_feed.feed_posts_xml)
                         syndbb.cache.delete_memoized(syndbb.views.xml_feed.feed_threads_xml)
+                        syndbb.cache.delete_memoized(syndbb.models.forums.replies_to_post)
 
                         return syndbb.redirect("/"+forumcheck.short_name+"/"+str(postvars.id))
                 else:
@@ -647,6 +690,10 @@ def request_custom_forum():
         fauth = 1
     else:
         fauth = 0
+    if 'forum-anon' in syndbb.request.form:
+        fanon = 1
+    else:
+        fanon = 0
     if uniqid and fname and fdesc:
         userid = checkSession(uniqid)
         if userid:
@@ -686,7 +733,7 @@ def request_custom_forum():
                         syndbb.flash('You\'ve already requested a forum, wait for it to be approved.', 'danger')
                         return syndbb.redirect(syndbb.url_for('request_forum'))
                     else:
-                        new_forum = d2_forums(fname, facrn, fdesc, userid, fnsfw, 0, fauth)
+                        new_forum = d2_forums(fname, facrn, fdesc, userid, fnsfw, 0, fauth, fanon)
                         syndbb.db.session.add(new_forum)
                         syndbb.db.session.commit()
                         syndbb.flash('Your request has been submitted.', 'success')
