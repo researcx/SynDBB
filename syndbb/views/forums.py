@@ -110,6 +110,7 @@ def view_forum(category):
 def view_forum_grid(category):
     forumcheck = d2_forums.query.filter_by(short_name=category).first()
     forumlogo = ""
+    dynamic_js_footer = []
     if forumcheck:
         # if forumcheck.short_name == "yiff":
         #     dynamic_css_header.append("css/oify.css")
