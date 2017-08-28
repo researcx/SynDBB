@@ -5,6 +5,7 @@
 #
 
 import syndbb, shutil, base64, requests
+from flask import send_from_directory
 from syndbb.models.users import d2_user, d2_ip, checkSession
 from syndbb.models.time import unix_time_current
 from werkzeug.utils import secure_filename
@@ -156,6 +157,15 @@ def update_status():
             return "Invalid Session"
     else:
         return "Invalid Request"
+
+@syndbb.app.route("/account/viewAvatar/<userid>")
+def view_avatar(userid):
+    if userid:
+        user = d2_user.query.filter_by(user_id=userid).first()
+        if user:
+            dynamic_js_footer = ["js/jquery.cropit.js", "js/bootbox.min.js", "js/delete.js"]
+            avatar = "/static/data/avatars/"+str(user.user_id)+".png?v="+str(user.avatar_date)
+            return syndbb.redirect(avatar)
 
 
 @syndbb.app.route("/account/avatar")
