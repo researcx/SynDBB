@@ -19,16 +19,16 @@
 body{
   background: darkgreen !important;
   font-family: "Comic Neue" !important;
+  color: #fff !important;
 }
 
-.navbar-title a{
+.navbar-title a, dt, dd{
   color: rgb(227, 0, 255) !important;
 }
 
 .panel, .alert {
   border: 3px dashed lime !important;
   color: rgb(227, 0, 255) !important;
-  font-size: 18pt;
 }
 
 .footer a{
@@ -37,7 +37,14 @@ body{
 
 .thread-title, .description, .panel a{
   color: rgb(227, 0, 255) !important;
-  font-size: 18pt;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: green !important;
+}
+
+.inner-header, .table-header, .thread-left, .posthead{
+  background: darkgreen !important;
 }
 
 .text-muted{

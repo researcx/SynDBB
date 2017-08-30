@@ -9,7 +9,7 @@ from syndbb.models.users import d2_user, d2_session, checkSession
 
 @syndbb.cache.memoize(timeout=180)
 def get_emote():
-    emotfolder = syndbb.os.getcwd() + "/syndbb/static/images/emots/"
+    emotfolder = syndbb.app.static_folder + "/images/emots/"
 
     emote_list = []
     for emote in syndbb.os.listdir(emotfolder):
@@ -28,7 +28,7 @@ def get_submitted_emote():
         userid = checkSession(str(syndbb.session['logged_in']))
         if userid:
             user = d2_user.query.filter_by(user_id=userid).first()
-            emotfolder = syndbb.os.getcwd() + "/syndbb/static/data/emoticons/" + user.username + "/"
+            emotfolder = syndbb.app.static_folder + "/data/emoticons/" + user.username + "/"
 
             if not syndbb.os.path.exists(emotfolder):
                 syndbb.os.makedirs(emotfolder)

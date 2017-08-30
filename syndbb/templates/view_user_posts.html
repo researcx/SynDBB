@@ -9,7 +9,7 @@
             <a href="#{{post.id}}"><i>#{{post.id}}</i></a>&nbsp;<br/>
             <i title="{{human_date(post.time)}}">{{time_ago(post.time)}}&nbsp;</i><br/>
         </span>
-        <a href="/user/{{post.user.username}}" class="activity_poster" style="{{get_group_style_from_id(post.user_id)}}"><b>{{post.user.username}}</b></a>
+        <a href="/user/{{post.user.username}}" class="activity_poster username {{get_group_style_from_id(post.user_id)}}"><b>{{post.user.username}}</b></a>
         <br/>
         {{parse_bbcode(post.content)|safe}}
       </div>

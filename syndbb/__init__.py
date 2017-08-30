@@ -18,6 +18,7 @@ import humanize
 
 #Configuration variables defined in the config file
 db = os.environ.get('SYNDBB_DB')
+cdn = os.environ.get('SYNDBB_CDN')
 secretkey = os.environ.get('SYNDBB_SECRET')
 hashkey = os.environ.get('SYNDBB_HASH')
 ircapi = os.environ.get('SYNDBB_IRC_API')
@@ -33,7 +34,7 @@ znc_port = os.environ.get('ZNC_PORT')
 znc_user = os.environ.get('ZNC_USER')
 znc_password = os.environ.get('ZNC_PASSWORD')
 
-if db == None or secretkey == None or hashkey == None or ircapi == None:
+if db == None or cdn == None or secretkey == None or hashkey == None or ircapi == None:
     print("*** No configuration variables defined! Exiting... ***")
     os.kill(os.getpid(), signal.SIGTERM)
 if db == "mysql://<user>:<password>@<host>/<database>":

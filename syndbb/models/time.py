@@ -155,7 +155,7 @@ syndbb.app.jinja_env.globals.update(human_size=human_size)
 @syndbb.app.template_filter('get_filemtime')
 @syndbb.cache.memoize(timeout=60)
 def get_filemtime(file):
-    filepath = syndbb.app.root_path + "/static/" + file
+    filepath = syndbb.app.static_folder + file
     if syndbb.os.path.isfile(filepath):
         filetime = int(syndbb.os.stat(filepath).st_mtime)
         if filetime:
@@ -163,3 +163,31 @@ def get_filemtime(file):
     else:
         return file
 syndbb.app.jinja_env.globals.update(get_filemtime=get_filemtime)
+
+@syndbb.app.template_filter('cdn_path')
+def cdn_path():
+    if not syndbb.app.debug:
+        cdn = syndbb.cdn
+    else:
+        cdn = syndbb.request.url_root + "static"
+
+    return cdn
+syndbb.app.jinja_env.globals.update(cdn_path=cdn_path)
+
+@syndbb.app.template_filter('get_theme')
+def get_theme():
+    themepath = '<link id="themeselector" href="#" rel="stylesheet">'
+    if 'theme' in syndbb.request.cookies:
+        theme = syndbb.request.cookies.get('theme')
+
+        if theme == "invert":
+            themepath = '<link id="themeselector" href="' + cdn_path() + get_filemtime('/css/invert.css') + '" rel="stylesheet">'
+
+        if theme == "oify":
+            themepath = '<link id="themeselector" href="' + cdn_path() + get_filemtime('/css/oify.css') + '" rel="stylesheet">'
+
+        return themepath
+    else:
+        return themepath
+
+syndbb.app.jinja_env.globals.update(get_theme=get_theme)

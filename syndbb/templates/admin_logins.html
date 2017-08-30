@@ -11,7 +11,7 @@
   <tbody>
     {% for login in logins %}
     <tr>
-      <td><a href="/user/{{get_name(login.user_id)}}" style="{{get_group_style_from_id(login.user_id)}}">{{get_name(login.user_id)}}</a></td>
+      <td><a href="/user/{{get_name(login.user_id)}}" class="username {{get_group_style_from_id(login.user_id)}}">{{get_name(login.user_id)}}</a></td>
       <td>{{login.ip}}</td>
       <td>{{time_ago(login.time)}}</td>
       <td>{{human_date(login.time)}}</td>

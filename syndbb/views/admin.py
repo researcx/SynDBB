@@ -5,6 +5,7 @@
 #
 
 import syndbb, glob, shutil, subprocess
+from sys import platform
 from syndbb.models.users import d2_user, d2_bans, d2_ip, d2_session, checkSession, is_banned
 from syndbb.models.invites import d2_requests
 from syndbb.models.d2_hash import d2_hash
@@ -34,7 +35,7 @@ def get_stats():
     unapprovedforumcount = d2_forums.query.filter(d2_forums.approved == 0).count()
 
     #Upload Statistics
-    datafolder = syndbb.os.getcwd() + "/syndbb/static/data/"
+    datafolder = syndbb.app.static_folder + "/data/"
     filecount = sum([len(files) for r, d, files in syndbb.os.walk(datafolder)])
     filesize = 0
     for dirpath, dirnames, filenames in syndbb.os.walk(datafolder):
@@ -43,8 +44,11 @@ def get_stats():
             filesize += syndbb.os.path.getsize(fp)
 
     #Totals
-    stat = syndbb.os.statvfs(datafolder)
-    disk_total = syndbb.os.statvfs(datafolder).f_bfree*stat.f_bsize
+    if platform == "linux" or platform == "linux2":
+        stat = syndbb.os.statvfs(datafolder)
+        disk_total = syndbb.os.statvfs(datafolder).f_bfree*stat.f_bsize
+    else:
+        disk_total = 64424509440
     disk_percentage = filesize/disk_total*100
     disk_percentage = "%.0f" % disk_percentage
 
@@ -349,7 +353,7 @@ def siteadmin_emoticons():
             user = d2_user.query.filter_by(user_id=userid).first()
             if user.rank >= 900:
                 emote_list = []
-                emotfolder = syndbb.os.getcwd() + "/syndbb/static/data/emoticons/"
+                emotfolder = syndbb.app.static_folder + "/data/emoticons/"
                 if not syndbb.os.path.exists(emotfolder):
                     syndbb.os.makedirs(emotfolder)
 
@@ -379,8 +383,8 @@ def approve_emoticon():
         if userid:
             user = d2_user.query.filter_by(user_id=userid).first()
             if user.rank >= 900:
-                emotepath = syndbb.os.getcwd() + "/syndbb/static/data/emoticons/" + emote
-                destpath = syndbb.os.getcwd() + "/syndbb/static/images/emots/"
+                emotepath = syndbb.app.static_folder + "/data/emoticons/" + emote
+                destpath = syndbb.app.static_folder + "/images/emots/"
                 if syndbb.os.path.isfile(emotepath):
                     shutil.copy2(emotepath, destpath)
                     syndbb.os.remove(emotepath)
@@ -406,7 +410,7 @@ def disapprove_emoticon():
         if userid:
             user = d2_user.query.filter_by(user_id=userid).first()
             if user.rank >= 900:
-                emotepath = syndbb.os.getcwd() + "/syndbb/static/data/emoticons/" + emote
+                emotepath = syndbb.app.static_folder + "/data/emoticons/" + emote
                 if syndbb.os.path.isfile(emotepath):
                     syndbb.os.remove(emotepath)
                     syndbb.flash('Emoticon deleted successfully.', 'success')

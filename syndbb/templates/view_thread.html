@@ -37,7 +37,7 @@
               <i class="silk-icon icon_tick" title="Karma: {{thread.user.karma_positive - thread.user.karma_negative}} (+{{thread.user.karma_positive}}/-{{thread.user.karma_negative}})" aria-hidden="true"></i>
               {% endif %}
             </span>
-            <a href="/user/{{thread.user.username}}" class="forum_poster" style="{{get_group_style_from_id(thread.user_id)}}"><b>{{thread.user.username}}</b></a>
+            <a href="/user/{{thread.user.username}}" class="forum_poster username {{get_group_style_from_id(thread.user_id)}}"><b>{{thread.user.username}}</b></a>
             {% if thread.user.title %}
               <div class="post-usertitle">{{thread.user.title|safe}}</div>
             {% endif %}
@@ -52,7 +52,7 @@
         <div class="user-regdate text-muted">{{recent_date(thread.user.join_date)}}</div>
         {% else %}
         <a href="#">
-          <img src="/static/images/anon_avatar.png" title="Anonymous User" alt="Avatar" class="thread-avatar-size">
+          <img src="{{cdn_path()|safe}}/images/anon_avatar.png" title="Anonymous User" alt="Avatar" class="thread-avatar-size">
         </a>
         {% endif %}
       </div>
@@ -126,7 +126,7 @@
               <i class="silk-icon icon_tick" title="Karma: {{reply.user.karma_positive - reply.user.karma_negative}} (+{{reply.user.karma_positive}}/-{{reply.user.karma_negative}})" aria-hidden="true"></i>
               {% endif %}
             </span>
-            <a href="/user/{{reply.user.username}}" class="forum_poster" style="{{get_group_style_from_id(reply.user_id)}}"><b>{{reply.user.username}}</b></a>
+            <a href="/user/{{reply.user.username}}" class="forum_poster username {{get_group_style_from_id(reply.user_id)}}"><b>{{reply.user.username}}</b></a>
             {% if reply.user.title %}
               <div class="post-usertitle">{{reply.user.title|safe}}</div>
             {% endif %}
@@ -141,7 +141,7 @@
         <div class="user-regdate text-muted">{{recent_date(reply.user.join_date)}}</div>
         {% else %}
         <a href="#">
-          <img src="/static/images/anon_avatar.png" title="Anonymous User" alt="Avatar" class="thread-avatar-size">
+          <img src="{{cdn_path()|safe}}/images/anon_avatar.png" title="Anonymous User" alt="Avatar" class="thread-avatar-size">
         </a>
         {% endif %}
       </div>

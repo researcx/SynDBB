@@ -20,8 +20,8 @@
   <div class="text-center img-grid">
     <div class="panel-body">
       <div class="emoticon-list center-block">
-        <a href="/static/data/emoticons/{{user.username}}/{{emote[0]}}" target="_blank">
-              <img src="#" data-original="/static/data/emoticons/{{user.username}}/{{emote[0]}}" alt="{{emote[1]}}" class="emoticon-list" title="{{emote[1]}}"/>
+        <a href="{{cdn_path()|safe}}/data/emoticons/{{user.username}}/{{emote[0]}}" target="_blank">
+              <img src="#" data-original="{{cdn_path()|safe}}/data/emoticons/{{user.username}}/{{emote[0]}}" alt="{{emote[1]}}" class="emoticon-list" title="{{emote[1]}}"/>
               </a>
           <div class="avatar_details">
             <span class="avatar_date">{{emote[1]}}</span>

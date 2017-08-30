@@ -5,7 +5,7 @@
 #
 
 import syndbb
-from syndbb.models.time import unix_time_current, display_time
+from syndbb.models.time import unix_time_current, display_time, cdn_path
 
 ### General Functions ###
 #Check if a session is valid
@@ -73,15 +73,15 @@ syndbb.app.jinja_env.globals.update(get_all_status_updates=get_all_status_update
 #Get user avatar by ID
 @syndbb.app.template_filter('get_avatar')
 def get_avatar(user_id):
-    default_avatar = '/static/images/default_avatar.png'
-    root_path = syndbb.app.root_path
+    default_avatar = '/images/default_avatar.png'
+    root_path = syndbb.app.static_folder
     user = d2_user.query.filter_by(user_id=user_id).first()
     if user.user_id:
-        avatar_path = '/static/data/avatars/{}.png'.format(user.user_id)
+        avatar_path = '/data/avatars/{}.png'.format(user.user_id)
         if syndbb.os.path.isfile(root_path+avatar_path):
-            return avatar_path + "?v=" +  str(user.avatar_date)
+            return cdn_path() + avatar_path + "?v=" +  str(user.avatar_date)
         else:
-            return default_avatar
+            return cdn_path() + default_avatar
     else:
         return default_avatar
 syndbb.app.jinja_env.globals.update(get_avatar=get_avatar)
@@ -89,12 +89,12 @@ syndbb.app.jinja_env.globals.update(get_avatar=get_avatar)
 #Get user avatar source by ID
 @syndbb.app.template_filter('get_avatar_source')
 def get_avatar_source(user_id):
-    root_path = syndbb.app.root_path
+    root_path = syndbb.app.static_folder
     user = d2_user.query.filter_by(user_id=user_id).first()
     if user.user_id:
-        avatar_path = '/static/data/avatars/{}-src.png'.format(user.user_id)
+        avatar_path = '/data/avatars/{}-src.png'.format(user.user_id)
         if syndbb.os.path.isfile(root_path+avatar_path):
-            return avatar_path + "?v=" +  str(user.avatar_date)
+            return cdn_path() + avatar_path + "?v=" +  str(user.avatar_date)
         else:
             return ""
     else:
@@ -162,19 +162,19 @@ def get_group_style_from_id(user_id):
     user = d2_user.query.filter_by(user_id=user_id).first()
     if user:
         if is_banned(user.user_id):
-            return "color: #FF0000; text-decoration: line-through;"
+            return "banned"
         if user.rank >= 900:
-            return "color: #DB0003; font-weight: bold;"
+            return "admin"
         elif user.rank >= 500:
-            return "color: #AC15F2; font-weight: bold;"
+            return "operator"
         elif user.rank >= 100:
-            return "color: #00BC1F; font-weight: bold;"
+            return "halfop"
         elif user.rank >= 50:
-            return "color: #B56236; font-weight: bold;"
+            return "goldmember"
         else:
-            return "color: #397FEF; font-weight bold;"
+            return "member"
     else:
-        return "color: #397FEF; font-weight bold;"
+        return "member"
 syndbb.app.jinja_env.globals.update(get_group_style_from_id=get_group_style_from_id)
 
 #User group color

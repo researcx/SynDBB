@@ -1,6 +1,6 @@
 {% extends "layout.html" %} {% block body %}
   <div class="row equal" style="max-width: 100%; margin: 0 auto;">
-    <div class="col-12 col-sm-9 col-lg-10 main">
+    <div class="cols-nopad col-12 col-sm-9 col-lg-10 main">
       <div class="inner-header">
         Recent Posts
       </div>
@@ -27,7 +27,7 @@
         </tbody>
       </table>
     </div>
-    <div class="col-12 col-sm-3 col-lg-2 left" style="border-top: 1px solid #ddd; border-left: 1px solid #ddd;">
+    <div class="cols-nopad col-12 col-sm-3 col-lg-2 left" style="border-top: 1px solid #ddd; border-left: 1px solid #ddd;">
       <div class="sidebar-userinfo text-center" style="border-bottom: 1px solid #ddd;">
       {% if user_session.sessionid %}
         <div style="padding-top: 20px;">
@@ -38,16 +38,16 @@
     				<dt>Karma:</dt>
     				<dd>
     					{% if (user.karma_positive - user.karma_negative) < 0 %}
-    					<span style="color: red; font-weight: bold;">
+    					<span class="karma negative">
     					{% elif (user.karma_positive - user.karma_negative) > 0 %}
-    					<span style="color: green; font-weight: bold;">
+    					<span class="karma positive">
     					{% else %}
-    					<span style="color: grey; font-weight: bold;">
+    					<span class="karma neutral">
     					{% endif %}
     					{{user.karma_positive - user.karma_negative}}
     					</span>
-              (<span style="color: green">+{{user.karma_positive}}</span>/
-    					<span style="color: red">-{{user.karma_negative}}</span>)
+              (<span class="karma positive">+{{user.karma_positive}}</span>/
+    					<span class="karma negative">-{{user.karma_negative}}</span>)
     				</dd>
             <dt>Currency:</dt>
     				<dd>&ETH;{{user.points}}</dd>
@@ -78,7 +78,7 @@
           </div>
           <div class="media-body" style="vertical-align: middle;">
             <a href="/user/{{status[2]}}">
-              <span style="{{get_group_style_from_id(status[3])}}">{{status[2]}}</span>
+              <span class="username {{get_group_style_from_id(status[3])}}">{{status[2]}}</span>
             </a>
             <span class="text-muted" style="font-size: 12px;"> {{status[1]}}</span>
           </div>
@@ -109,7 +109,7 @@
        </div>
       </div>
       <div class="sidebar-statistics text-center" style="padding: 18px;">
-        Donations help us afford our servers and continued existence. Users who donate $15 or more will receive the <a href="/gold-member/"><span style="color: #B56236; font-weight: bold;">Gold Member</span></a> rank.<br/><br/>
+        Donations help us afford our servers and continued existence. Users who donate $15 or more will receive the <a href="/gold-member/"><span class="username goldmember">Gold Member</span></a> rank.<br/><br/>
         <a href="https://paypal.me/d2k5" style="color: #fff; text-decoration: none;" class="btn btn-info" target="_blank">PayPal</a> <a href="https://blockchain.info/address/1DCGww1Y55fukRbLEkZuzJBb2nUJ5Xx1rn" style="color: #fff; text-decoration: none;" class="btn btn-info" target="_blank">Bitcoin</a>
       </div>
     </div>

@@ -9,7 +9,7 @@ from PIL import Image, ImageOps
 from io import BytesIO
 from syndbb.models.forums import d2_forums, d2_activity, d2_post_ratings, parse_bbcode
 from syndbb.models.users import d2_user, get_avatar, get_group_style_from_id, checkSession
-from syndbb.models.time import recent_date, human_date, unix_time_current
+from syndbb.models.time import recent_date, human_date, unix_time_current, cdn_path
 from syndbb.models.currency import give_currency, take_currency, give_posts, take_posts
 
 html_escape_table = {
@@ -47,9 +47,9 @@ def view_forum(category):
         if forumcheck.nsfw:
             dynamic_js_footer.append("js/nsfwprompt.js")
 
-        logo_file = syndbb.os.getcwd() + "/syndbb/static/images/logos/" + forumcheck.short_name + ".png"
+        logo_file = syndbb.app.static_folder + "/images/logos/" + forumcheck.short_name + ".png"
         if syndbb.os.path.isfile(logo_file):
-            forumlogo = '<img src="/static/images/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
+            forumlogo = '<img src="'+cdn_path()+'/images/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
 
         threads = d2_activity.query.filter_by(category=forumcheck.id).order_by(d2_activity.reply_time.desc()).all()
 
@@ -87,11 +87,11 @@ def view_forum(category):
 
 
             thread_list += '''<tr>
-                                    <td class="home-forum home-forum-icon"><img src="/static/images/posticons/icon'''+str(thread.post_icon)+'''.gif" alt=""/></td>
+                                    <td class="home-forum home-forum-icon"><img src="'''+cdn_path()+'''/images/posticons/icon'''+str(thread.post_icon)+'''.png" alt=""/></td>
                                     <td class="home-forum">
                                     <span class="small" style="float:right; text-align: right;">
                                         <span class="timedisplay">'''+recent_date(thread.reply_time)+'''</span><br/>
-                                        by '''+latestreplier+'''</a> <a href="/'''+str(forumcheck.short_name)+'''/'''+str(thread.id)+'''#'''+str(latest)+'''"><img src="/static/images/thread_new.png" style="margin-top: -2px;"/></a>
+                                        by '''+latestreplier+'''</a> <a href="/'''+str(forumcheck.short_name)+'''/'''+str(thread.id)+'''#'''+str(latest)+'''"><img src="'''+cdn_path()+'''/icons/thread_new.png" style="margin-top: -2px;"/></a>
                                     </span>
                                     <a href="/'''+str(forumcheck.short_name)+'''/'''+str(thread.id)+'''"><b>'''+thread.title+'''</b></a>
                                     <span class="small"><br/>
@@ -117,9 +117,9 @@ def view_forum_grid(category):
         if forumcheck.nsfw:
             dynamic_js_footer.append("js/nsfwprompt.js")
 
-        logo_file = syndbb.os.getcwd() + "/syndbb/static/images/logos/" + forumcheck.short_name + ".png"
+        logo_file = syndbb.app.static_folder + "/images/logos/" + forumcheck.short_name + ".png"
         if syndbb.os.path.isfile(logo_file):
-            forumlogo = '<img src="/static/images/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
+            forumlogo = '<img src="'+cdn_path()+'/images/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
 
         image_finder = "(?<=\[img\]).*?(?=\[/img\])"
         image_finder2 = "(?<=\[t\]).*?(?=\[/t\])"
@@ -147,7 +147,7 @@ def view_forum_grid(category):
             else:
                 latest = thread.id
 
-            thumbfolder = syndbb.os.getcwd() + "/syndbb/static/data/threadimg/grid/"
+            thumbfolder = syndbb.app.static_folder + "/data/threadimg/grid/"
             images = syndbb.re.findall(image_finder, thread.content, syndbb.re.IGNORECASE)
             images2 = syndbb.re.findall(image_finder2, thread.content, syndbb.re.IGNORECASE)
             if images:
@@ -159,7 +159,7 @@ def view_forum_grid(category):
                     im = Image.open(BytesIO(threadimg.content))
                     im = ImageOps.fit(im, (150, 150),  Image.ANTIALIAS)
                     im.save(thumbpath, "PNG")
-                timg = "/static/data/threadimg/grid/" + hashname + ".png"
+                timg = cdn_path() + "/data/threadimg/grid/" + hashname + ".png"
             elif images2:
                 images = images2
                 firstimg = images[0]
@@ -170,9 +170,9 @@ def view_forum_grid(category):
                     im = Image.open(BytesIO(threadimg.content))
                     im = ImageOps.fit(im, (150, 150),  Image.ANTIALIAS)
                     im.save(thumbpath, "PNG")
-                timg = "/static/data/threadimg/grid/" + hashname + ".png"
+                timg = cdn_path() + "/data/threadimg/grid/" + hashname + ".png"
             else:
-                timg = "/static/images/noimage-grid.png"
+                timg = cdn_path() + "/images/noimage-grid.png"
 
             thread_list += '''<div class="panel panel-default text-center thread-grid" id="''' + str(thread.id)+ '''" onclick="location.href='/''' + forumcheck.short_name+ '''/''' + str(thread.id)+ '''';" style="cursor: pointer;">
                                   <div class="panel-body">
@@ -205,9 +205,9 @@ def view_forum_create(category):
         subheading = []
         subheading.append('<a href="/'+forumcheck.short_name+'">'+forumcheck.name+'</a>')
 
-        logo_file = syndbb.os.getcwd() + "/syndbb/static/images/logos/" + forumcheck.short_name + ".png"
+        logo_file = syndbb.app.static_folder + "/images/logos/" + forumcheck.short_name + ".png"
         if syndbb.os.path.isfile(logo_file):
-            forumlogo = '<img src="/static/images/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
+            forumlogo = '<img src="'+cdn_path()+'/images/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
 
         return syndbb.render_template('new_thread.html', forum=forumcheck, forumlogo=forumlogo, dynamic_css_header=dynamic_css_header, dynamic_js_footer=dynamic_js_footer, title="New Thread", subheading=subheading)
     else:
@@ -226,9 +226,9 @@ def view_thread(category, thread):
             #     dynamic_css_header.append("css/oify.css")
             if forumcheck.nsfw:
                 dynamic_js_footer.append("js/nsfwprompt.js")
-            logo_file = syndbb.os.getcwd() + "/syndbb/static/images/logos/" + forumcheck.short_name + ".png"
+            logo_file = syndbb.app.static_folder + "/images/logos/" + forumcheck.short_name + ".png"
             if syndbb.os.path.isfile(logo_file):
-                forumlogo = '<img src="/static/images/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
+                forumlogo = '<img src="'+cdn_path()+'/images/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
             threadcheck = d2_activity.query.filter_by(id=thread).first()
             if threadcheck:
                 subheading = []
@@ -257,9 +257,9 @@ def view_thread_gallery(category, thread):
             #     dynamic_css_header.append("css/oify.css")
             if forumcheck.nsfw:
                 dynamic_js_footer.append("js/nsfwprompt.js")
-            logo_file = syndbb.os.getcwd() + "/syndbb/static/images/logos/" + forumcheck.short_name + ".png"
+            logo_file = syndbb.app.static_folder + "/images/logos/" + forumcheck.short_name + ".png"
             if syndbb.os.path.isfile(logo_file):
-                forumlogo = '<img src="/static/images/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
+                forumlogo = '<img src="'+cdn_path()+'/images/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
             threadcheck = d2_activity.query.filter_by(id=thread).first()
             image_list = []
             image_finder = "(?<=\[img\]).*?(?=\[/img\])"
@@ -364,11 +364,11 @@ def view_user_threads(user):
                             latest = thread.id
                             latestreplier = thread
                         thread_list += '''<tr>
-                                                <td class="home-forum home-forum-icon"><img src="/static/images/posticons/icon'''+str(thread.post_icon)+'''.gif" alt=""/></td>
+                                                <td class="home-forum home-forum-icon"><img src="'''+cdn_path()+'''/images/posticons/icon'''+str(thread.post_icon)+'''.png" alt=""/></td>
                                                 <td class="home-forum">
                                                 <span class="small" style="float:right; text-align: right;">
                                                     <span class="timedisplay">'''+recent_date(thread.reply_time)+'''</span><br/>
-                                                    by <a href="/user/'''+latestreplier.user.username+'''" class="profile-inline">'''+latestreplier.user.username+'''</a> <a href="/'''+str(forumcheck.short_name)+'''/'''+str(thread.id)+'''#'''+str(latest)+'''"><img src="/static/images/thread_new.png" style="margin-top: -2px;"/></a>
+                                                    by <a href="/user/'''+latestreplier.user.username+'''" class="profile-inline">'''+latestreplier.user.username+'''</a> <a href="/'''+str(forumcheck.short_name)+'''/'''+str(thread.id)+'''#'''+str(latest)+'''"><img src="'''+cdn_path()+'''/icons/thread_new.png" style="margin-top: -2px;"/></a>
                                                 </span>
                                                 <a href="/'''+str(forumcheck.short_name)+'''/'''+str(thread.id)+'''"><b>'''+thread.title+'''</b></a>
                                                 <span class="small"><br/>

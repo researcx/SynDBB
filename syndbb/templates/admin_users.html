@@ -17,7 +17,7 @@
           <a href="/account/admin/rank/?user={{luser.user_id}}" title="Change User Rank" class="text-muted"><i class="silk-icon icon_star" aria-hidden="true"></i></a>&nbsp;
           <a href="/account/admin/ban/?user={{luser.user_id}}" title="Ban User" class="text-muted"><i class="silk-icon icon_delete" aria-hidden="true"></i></a>&nbsp;
         </span>
-        <a href="/user/{{get_name(luser.user_id)}}" class="activity_poster" style="{{get_group_style_from_id(luser.user_id)}}"><b>{{get_name(luser.user_id)}}</b></a><br/>
+        <a href="/user/{{get_name(luser.user_id)}}" class="activity_poster username {{get_group_style_from_id(luser.user_id)}}"><b>{{get_name(luser.user_id)}}</b></a><br/>
         <span class="text-muted">Registered {{time_ago(luser.join_date)}}.</span><br/></div>
     </div>
   </div>

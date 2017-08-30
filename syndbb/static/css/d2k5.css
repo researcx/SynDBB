@@ -39,6 +39,9 @@
   .top-avatar, .extra-info-right, .footer-notice{
     display: none;
   }
+  #navbar{
+    background: #ffffff url("../images/linkbar.png");
+  }
   .navbar-container {
     position: absolute;
     border-top: 0px none #fff !important;
@@ -1021,6 +1024,11 @@ nav.navbar div.container-fluid{
   opacity: 1;
 }
 
+.cols-nopad{
+  padding-right: 0px !important;
+  padding-left: 0px !important;
+}
+
 blockquote {
   padding: 8px;
   margin: 0px;
@@ -1123,4 +1131,41 @@ table, .navbar-static-top{
   }
 .posthead-button{
   margin-left: 10px;
+}
+
+.align-right{
+	float:right; text-align: right;
+}
+
+.readnotice{
+  font-size: 15pt; font-weight: bold; color: #ff0000 !important;
+}
+
+.username.banned{
+	color: #FF0000; text-decoration: line-through;
+}
+.username.admin{
+	color: #DB0003; font-weight: bold;
+}
+.username.operator{
+	color: #AC15F2; font-weight: bold;
+}
+.username.halfop{
+	color: #00BC1F; font-weight: bold;
+}
+.username.goldmember{
+	color: #B56236; font-weight: bold;
+}
+.username.member{
+	color: #397FEF; font-weight bold;
+}
+
+.karma.positive{
+	color: green; font-weight: bold;
+}
+.karma.negative{
+	color: red; font-weight: bold;
+}
+.karma.neutral{
+	color: grey; font-weight: bold;
 }

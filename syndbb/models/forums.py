@@ -7,6 +7,7 @@
 import syndbb
 from syndbb.models.get_emote import get_emote
 from syndbb.models.users import d2_user, get_group_style_from_id
+from syndbb.models.time import cdn_path
 import syndbb.models.bbcode
 
 ### General Functions ###
@@ -27,7 +28,7 @@ def inject_custom_forums():
 #Get post icons
 @syndbb.cache.memoize(timeout=60)
 def get_post_icons():
-    iconfolder = syndbb.os.getcwd() + "/syndbb/static/images/posticons/"
+    iconfolder = syndbb.app.static_folder + "/images/posticons/"
     picon_list = []
     for picon in syndbb.os.listdir(iconfolder):
         filepath = iconfolder + "/" + picon
@@ -43,28 +44,28 @@ syndbb.app.jinja_env.globals.update(get_post_icons=get_post_icons)
 @syndbb.app.template_filter('get_forum_logo')
 @syndbb.cache.memoize(timeout=60)
 def get_forum_logo(short_name):
-    forum_icon = '/static/images/logos/{}.png'.format(short_name)
-    forum_icon_default = '/static/images/logos/blank.png'
-    root_path = syndbb.app.root_path
+    forum_icon = '/images/logos/{}.png'.format(short_name)
+    forum_icon_default = '/images/logos/blank.png'
+    root_path = syndbb.app.static_folder
 
     if syndbb.os.path.isfile(root_path+forum_icon):
-        return forum_icon
+        return cdn_path() + forum_icon
     else:
-        return forum_icon_default
+        return cdn_path() + forum_icon_default
 syndbb.app.jinja_env.globals.update(get_forum_logo=get_forum_logo)
 
 #Forum icons 2
 @syndbb.app.template_filter('get_forum_icon')
 @syndbb.cache.memoize(timeout=60)
 def get_forum_icon(short_name):
-    forum_icon = '/static/images/forumicons/{}.png'.format(short_name)
-    forum_icon_default = '/static/images/forumicons/blank.png'
-    root_path = syndbb.app.root_path
+    forum_icon = '/images/forumicons/{}.png'.format(short_name)
+    forum_icon_default = '/images/forumicons/blank.png'
+    root_path = syndbb.app.static_folder
 
     if syndbb.os.path.isfile(root_path+forum_icon):
-        return forum_icon
+        return cdn_path() + forum_icon
     else:
-        return forum_icon_default
+        return cdn_path() + forum_icon_default
 syndbb.app.jinja_env.globals.update(get_forum_icon=get_forum_icon)
 
 #Reply IDs for a post
@@ -101,11 +102,11 @@ def parse_bbcode(text):
         highlighted_user = user[1:]
         d2user = d2_user.query.filter_by(username=highlighted_user).first()
         if d2user:
-            user_link = '<a href="/user/'+d2user.username+'" style="'+get_group_style_from_id(d2user.user_id)+'" class="link-postname profile-inline">'+d2user.username+'</a>'
+            user_link = '<a href="/user/'+d2user.username+'" class="username '+get_group_style_from_id(d2user.user_id)+' link-postname profile-inline">'+d2user.username+'</a>'
             text = syndbb.re.sub(user, user_link, text)
     # Add in emotes
     for k, v in get_emote():
-        text = text.replace(v, '<img src="/static/images/emots/'+k+'" alt="'+k+'" title="'+v+'" class="emoticon" />')
+        text = text.replace(v, '<img src="'+cdn_path()+'/images/emots/'+k+'" alt="'+k+'" title="'+v+'" class="emoticon" />')
     return text
 syndbb.app.jinja_env.globals.update(parse_bbcode=parse_bbcode)
 

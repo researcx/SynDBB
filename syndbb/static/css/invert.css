@@ -1,0 +1,51 @@
+html{
+  filter: invert(100%);
+  -webkit-filter: invert(100%);
+  background: #000;
+}
+img, button, .forum_poster, .post-usertitle, .silk-icon, .username, .karma, .btn, .readnotice, iframe, .regnotice, .authbutton{
+  filter: invert(100%);
+  -webkit-filter: invert(100%);
+}
+
+.navbar-brand>img{
+  filter: invert(0%);
+  -webkit-filter: invert(0%);
+}
+
+.mask{
+  filter: invert(100%) !important;
+  -webkit-filter: invert(100%) !important;
+}
+
+.btn, .btn-info {
+    background-color: #252525;
+    border-color: #1b1b1b;
+}
+
+.btn:hover {
+  background-color: #222222 !important;
+  border-color: #111111 !important;
+}
+
+.btn:active {
+  background-color: #222222 !important;
+  border-color: #111111 !important;
+}
+
+.btn:focus {
+  background-color: #222222 !important;
+  border-color: #111111 !important;
+}
+.modal-backdrop{
+  background-color: #fff !important;
+}
+
+.modal-content{
+  -webkit-box-shadow: 0 3px 9px rgba(200,200,200,.5);
+  box-shadow: 0 3px 9px rgba(200,200,200,.5);
+}
+
+.table-header, .inner-header, div.bootbox.modal.nsfwModal{
+  background: #f1f1f1 !important;
+}

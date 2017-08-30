@@ -38,7 +38,7 @@ def delete_emoticon():
         userid = checkSession(uniqid)
         if userid:
             user = d2_user.query.filter_by(user_id=userid).first()
-            emotepath = syndbb.os.getcwd() + "/syndbb/static/data/emoticons/" + user.username + "/" + emote
+            emotepath = syndbb.app.static_folder + "/data/emoticons/" + user.username + "/" + emote
             if syndbb.os.path.isfile(emotepath):
                 syndbb.os.remove(emotepath)
                 syndbb.flash('Emoticon deleted successfully.', 'success')
@@ -58,7 +58,7 @@ def upload_emoticon():
             userid = checkSession(str(syndbb.session['logged_in']))
             if userid:
                 user = d2_user.query.filter_by(user_id=userid).first()
-                uploadfolder = syndbb.os.getcwd() + "/syndbb/static/data/emoticons/" + user.username + "/"
+                uploadfolder = syndbb.app.static_folder + "/data/emoticons/" + user.username + "/"
                 if 'file' not in syndbb.request.files:
                     syndbb.flash('No emoticon selected.', 'danger')
                     return syndbb.redirect(syndbb.url_for('submit_emoticon'))

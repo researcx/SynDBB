@@ -34,24 +34,24 @@ import syndbb.views.admin
 import syndbb.views.irc_api
 import syndbb.views.xml_feed
 
-def prettify(route_function):
-    @functools.wraps(route_function)
-    def wrapped(*args, **kwargs):
-        yielded_html = route_function(*args, **kwargs)
-        soup = bs4.BeautifulSoup(yielded_html, 'html.parser')
-        return soup.prettify()
-
-    return wrapped
-
-def uglify(route_function):
-    @functools.wraps(route_function)
-    def wrapped(*args, **kwargs):
-        yielded_html = route_function(*args, **kwargs)
-        minified_html = htmlmin.minify(yielded_html)
-        return minified_html
-
-    return wrapped
-
+# def prettify(route_function):
+#     @functools.wraps(route_function)
+#     def wrapped(*args, **kwargs):
+#         yielded_html = route_function(*args, **kwargs)
+#         soup = bs4.BeautifulSoup(yielded_html, 'html.parser')
+#         return soup.prettify()
+#
+#     return wrapped
+#
+# def uglify(route_function):
+#     @functools.wraps(route_function)
+#     def wrapped(*args, **kwargs):
+#         yielded_html = route_function(*args, **kwargs)
+#         minified_html = htmlmin.minify(yielded_html)
+#         return minified_html
+#
+#     return wrapped
+#
 # if syndbb.app.debug:
 #     syndbb.render_template = prettify(syndbb.render_template)
 # else:
@@ -60,13 +60,13 @@ def uglify(route_function):
 #Error Logging (when not in debug mode)
 if not syndbb.app.debug:
     error_log = "logs/error.log"
-    access_log = "logs/access.log"
+    crit_log = "logs/crit.log"
 
     logger = logging.getLogger('werkzeug')
     logFormatStr = '[%(asctime)s] p%(process)s {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s'
     formatter = logging.Formatter(logFormatStr,'%m-%d %H:%M:%S')
 
-    logging.basicConfig(format = '%(message)s', filename = access_log, level=logging.INFO)
+    logging.basicConfig(format = '%(message)s', filename = crit_log, level=logging.CRITICAL)
 
     fileHandler = logging.FileHandler(error_log)
     fileHandler.setLevel(logging.ERROR)

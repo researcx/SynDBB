@@ -9,13 +9,13 @@
     <meta name="author" content="https://faggqt.pw/">
     <meta name="referrer" content="no-referrer">
 
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon-32x32.png') }}" sizes="32x32">
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon-16x16.png') }}" sizes="16x16">
-    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
-    <link rel="mask-icon" href="{{ url_for('static', filename='safari-pinned-tab.svg') }}" color="#000000">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <meta name="msapplication-config" content="{{ url_for('static', filename='browserconfig.xml') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{cdn_path()|safe}}/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="{{cdn_path()|safe}}/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="{{cdn_path()|safe}}/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="{{cdn_path()|safe}}/manifest.json">
+    <link rel="mask-icon" href="{{cdn_path()|safe}}/safari-pinned-tab.svg" color="#000000">
+    <link rel="shortcut icon" href="{{cdn_path()|safe}}/favicon.ico">
+    <meta name="msapplication-config" content="{{cdn_path()|safe}}/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
 
     <title>YOU ARE BANNED &bull; D2K5</title>
@@ -54,31 +54,32 @@
     <meta name="author" content="https://faggqt.pw/">
     <meta name="referrer" content="no-referrer">
 
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon-32x32.png') }}" sizes="32x32">
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon-16x16.png') }}" sizes="16x16">
-    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
-    <link rel="mask-icon" href="{{ url_for('static', filename='safari-pinned-tab.svg') }}" color="#000000">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <meta name="msapplication-config" content="{{ url_for('static', filename='browserconfig.xml') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{cdn_path()|safe}}/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="{{cdn_path()|safe}}/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="{{cdn_path()|safe}}/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="{{cdn_path()|safe}}/manifest.json">
+    <link rel="mask-icon" href="{{cdn_path()|safe}}/safari-pinned-tab.svg" color="#000000">
+    <link rel="shortcut icon" href="{{cdn_path()|safe}}/favicon.ico">
+    <meta name="msapplication-config" content="{{cdn_path()|safe}}/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
 
     <title>{% if title %} {{ title|striptags }} &bull; {% endif %}D2K5</title>
 
-    <link href="/static/{{get_filemtime('css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="/static/{{get_filemtime('css/ie10-viewport-bug-workaround.css')}}" rel="stylesheet">
-    <link href="/static/{{get_filemtime('css/font-awesome.min.css')}}" rel="stylesheet">
+    <link href="{{cdn_path()|safe}}/{{get_filemtime('css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{cdn_path()|safe}}/{{get_filemtime('css/ie10-viewport-bug-workaround.css')}}" rel="stylesheet">
+    <link href="{{cdn_path()|safe}}/{{get_filemtime('css/font-awesome.min.css')}}" rel="stylesheet">
 
     {% for style in dynamic_css_header %}
-    <link href="/static/{{get_filemtime(style)}}" rel="stylesheet">
+    <link href="{{cdn_path()|safe}}/{{get_filemtime(style)}}" rel="stylesheet">
     {% endfor %}
 
-    <link href="/static/{{get_filemtime('icons/iconAtlas.css')}}" rel="stylesheet">
-    <link href="/static/{{get_filemtime('css/d2k5.css')}}" rel="stylesheet">
+    <link href="{{cdn_path()|safe}}/{{get_filemtime('icons/iconAtlas.css')}}" rel="stylesheet">
+    <link href="{{cdn_path()|safe}}/{{get_filemtime('css/d2k5.css')}}" rel="stylesheet">
+    {{get_theme()|safe}}
 
     <!--[if lt IE 9]>
-          <script src="/static/{{get_filemtime('js/html5shiv.min.js')}}"></script>
-          <script src="/static/{{get_filemtime('js/respond.min.js')}}"></script>
+          <script src="{{cdn_path()|safe}}/{{get_filemtime('js/html5shiv.min.js')}}"></script>
+          <script src="{{cdn_path()|safe}}/{{get_filemtime('js/respond.min.js')}}"></script>
         <![endif]-->
   </head>
 
@@ -129,7 +130,7 @@
                 {% if forumlogo %}
                 {{forumlogo|safe}}
                 {% else %}
-                <img src="{{ url_for('static', filename='images/d2k5_logo.svg') }}" alt="D2K5" class="sitelogo mask">
+                <img src="{{cdn_path()|safe}}/images/d2k5_logo.svg" alt="D2K5" class="sitelogo">
                 {% endif %}
               </a>
         </div>
@@ -221,17 +222,19 @@
         <p class="text-muted footer-notice" style="font-style: italic; float:right; text-align: right;">
           All trademarks and copyrights on this page are owned by their respective parties.<br/> Images and files uploaded are the responsibility of the user. Comments are owned by the user.<br/> If you continue to use this site, you are consenting to our
           use of cookies.</p>
-        <p class="text-muted"><a href="{{ url_for('terms') }}">D2K5 &copy; 2002 - {{ now.year }}</a> - <a href="{{ url_for('info') }}">Powered by SynDBB {{ syndbb_version }} ({{ syndbb_hash }})</a><br/>
-          <a href="https://github.com/D2K5/SynDBB" target="_blank">Submit bug reports, fixes and feature requests on GitHub!</a><br/>
-          <i>Page generation took {{ g.request_time() }} seconds. &bull; All times are <abbr title="Greenwich Mean Time">GMT</abbr>.</i></p>
+          <p class="text-muted">
+            <a href="{{ url_for('terms') }}">D2K5 &copy; 2002 - {{ now.year }}</a> - <a href="https://github.com/D2K5/SynDBB" target="_blank">Powered by SynDBB {{ syndbb_version }} ({{ syndbb_hash }})</a><br/>
+            Theme: &nbsp;<a href="#" onclick="set_theme('white');">White</a> &bull; <a href="#" onclick="set_theme('invert');">Dark</a> &bull; <a href="#" onclick="set_theme('oify');">OIFY</a><br/>
+            <i>Page generation took {{ g.request_time() }} seconds. &bull; All times are <abbr title="Greenwich Mean Time">GMT</abbr>.</i>
+          </p>
       </div>
     </footer>
-    <script src="/static/{{get_filemtime('js/ie10-viewport-bug-workaround.js')}}"></script>
-    <script src="/static/{{get_filemtime('js/jquery-3.1.1.min.js')}}"></script>
-    <script src="/static/{{get_filemtime('js/bootstrap.min.js')}}"></script>
+    <script src="{{cdn_path()|safe}}/{{get_filemtime('js/jquery-3.1.1.min.js')}}"></script>
+    <script src="{{cdn_path()|safe}}/{{get_filemtime('js/bootstrap.min.js')}}"></script>
     {% for script in dynamic_js_footer %}
-    <script src="/static/{{get_filemtime(script)}}"></script>
+    <script src="{{cdn_path()|safe}}/{{get_filemtime(script)}}"></script>
     {% endfor %}
+    <script src="{{cdn_path()|safe}}/{{get_filemtime('js/includes.js')}}"></script>
   </body>
 </html>
 {% endif %}

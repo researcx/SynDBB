@@ -9,7 +9,7 @@
             <select id="post_icon" name="post_icon" style="width:100px;">
               <option value="">Thread Icon</option>
               {% for icon in get_post_icons() %}
-              <option value="{{icon[1]}}" data-image="/static/images/posticons/{{icon[0]}}"></option>
+              <option value="{{icon[1]}}" data-image="{{cdn_path()|safe}}/images/posticons/{{icon[0]}}"></option>
               {% endfor %}
             </select>
             <input type="text" id="thread_title" class="form-control thread-title-form" name="thread_title" value="" placeholder="Thread Title">

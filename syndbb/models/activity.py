@@ -7,7 +7,7 @@
 import syndbb
 from syndbb.models.users import d2_user, d2_bans, is_banned, get_group_style_from_id
 from syndbb.models.forums import d2_forums, d2_activity, get_forum_icon
-from syndbb.models.time import display_time, recent_date, human_date, get_ban_expiry
+from syndbb.models.time import display_time, recent_date, human_date, get_ban_expiry, cdn_path
 
 #Functions
 def unique_items(L):
@@ -56,11 +56,11 @@ def get_recent_posts(limit=10):
                         latestreplier = '<a href="#">Anonymous</a>'
 
                     activity_item += '''<tr>
-                                            <td class="home-forum home-forum-icon"><a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''#'''+str(post.id)+'''"><img src="/static/images/posticons/icon'''+str(thread.post_icon)+'''.gif" alt=""/></a></td>
+                                            <td class="home-forum home-forum-icon"><a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''#'''+str(post.id)+'''"><img src="'''+cdn_path()+'''/images/posticons/icon'''+str(thread.post_icon)+'''.png" alt=""/></a></td>
                                             <td class="home-forum">
-                                            <span class="small" style="float:right; text-align: right;">
+                                            <span class="small align-right">
                                                 <span class="timedisplay">'''+recent_date(post.time)+'''</span><br/>
-                                                by '''+latestreplier+''' <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''#'''+str(post.id)+'''"><img src="/static/images/thread_new.png" style="margin-top: -2px;"/></a>
+                                                by '''+latestreplier+''' <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''#'''+str(post.id)+'''"><img src="'''+cdn_path()+'''/icons/thread_new.png" alt="Recent" style="margin-top: -2px;"/></a>
                                             </span>
                                             <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''#'''+str(post.id)+'''"><b>'''+thread.title+'''</b></a>
                                             <span class="small"><br/>
@@ -81,11 +81,11 @@ def get_recent_posts(limit=10):
 
                 if thread and forum:
                     activity_item += '''<tr>
-                                            <td class="home-forum home-forum-icon"><a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''"><img src="/static/images/posticons/icon'''+str(thread.post_icon)+'''.gif" alt=""/></a></td>
+                                            <td class="home-forum home-forum-icon"><a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''"><img src="'''+cdn_path()+'''/images/posticons/icon'''+str(thread.post_icon)+'''.png" alt=""/></a></td>
                                             <td class="home-forum">
-                                            <span class="small" style="float:right; text-align: right;">
+                                            <span class="small align-right">
                                                 <span class="timedisplay">'''+recent_date(thread.reply_time)+'''</span><br/>
-                                                by '''+threadcreator+''' <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''"><img src="/static/images/thread_new.png" style="margin-top: -2px;"/></a>
+                                                by '''+threadcreator+''' <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''"><img src="'''+cdn_path()+'''/icons/thread_new.png" alt="Recent" style="margin-top: -2px;"/></a>
                                             </span>
                                             <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''"><b>'''+thread.title+'''</b></a>
                                             <span class="small"><br/>
@@ -177,11 +177,11 @@ def ban_list():
 
         ban_list += '''<tr>
                         <td>'''+recent_date(ban.time)+'''</td>
-                        <td><a href="/user/'''+banned.username+'''" style="'''+get_group_style_from_id(banned.user_id)+'''">'''+banned.username+'''</a></td>
+                        <td><a href="/user/'''+banned.username+'''" class="username '''+get_group_style_from_id(banned.user_id)+'''">'''+banned.username+'''</a></td>
                         <td>'''+ban.reason+'''</td>
                         <td>'''+banduration+'''</td>
                         <td>'''+timeleft+'''</td>
-                        <td><a href="/user/'''+banner.username+'''" style="'''+get_group_style_from_id(banner.user_id)+'''">'''+banner.username+'''</a></td>
+                        <td><a href="/user/'''+banner.username+'''" class="username '''+get_group_style_from_id(banner.user_id)+'''">'''+banner.username+'''</a></td>
                     </tr>'''
 
     return {'ban_list': ban_list}

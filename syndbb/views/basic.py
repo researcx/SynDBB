@@ -12,9 +12,8 @@ import syndbb.models.version
 
 @syndbb.app.route("/")
 def home():
-    dynamic_css_header = ["css/fluid.css"]
     dynamic_js_footer = ["js/inline.js", "js/bootbox.min.js"]
-    return syndbb.render_template('home.html', dynamic_js_footer=dynamic_js_footer, dynamic_css_header=dynamic_css_header)
+    return syndbb.render_template('home.html', dynamic_js_footer=dynamic_js_footer)
 
 @syndbb.app.route('/robots.txt')
 def robotstxt():

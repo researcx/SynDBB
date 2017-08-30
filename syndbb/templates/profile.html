@@ -73,7 +73,7 @@
 			</div>
 			{% endif %}
 			<a href="/user/{{profile.username}}">
-				<span class="profile-username" style="{{get_group_style_from_id(profile.user_id)}}">{{profile.username}}</span>
+				<span class="profile-username username {{get_group_style_from_id(profile.user_id)}}">{{profile.username}}</span>
 			</a>
 			{% if not isInline %}
 				{% if profile.status %}
@@ -114,16 +114,16 @@
 				<dt>Karma:</dt>
 				<dd>
 					{% if (profile.karma_positive - profile.karma_negative) < 0 %}
-					<span style="color: red; font-weight: bold;">
+					<span class="karma negative">
 					{% elif (profile.karma_positive - profile.karma_negative) > 0 %}
-					<span style="color: green; font-weight: bold;">
+					<span class="karma positive">
 					{% else %}
-					<span style="color: grey; font-weight: bold;">
+					<span class="karma neutral">
 					{% endif %}
 					{{profile.karma_positive - profile.karma_negative}}
 					</span>
-          (<span style="color: green">+{{profile.karma_positive}}</span>/
-					<span style="color: red">-{{profile.karma_negative}}</span>)
+          (<span class="karma positive">+{{profile.karma_positive}}</span>/
+					<span class="karma negative">-{{profile.karma_negative}}</span>)
 				</dd>
 			</dl>
 			{% if not isInline %}

@@ -7,6 +7,7 @@
 import syndbb, random, string, hashlib, piexif
 from PIL import Image
 from syndbb.models.users import d2_user, d2_session, checkSession
+from syndbb.models.time import cdn_path
 from werkzeug.utils import secure_filename
 
 @syndbb.app.route("/upload/")
@@ -16,8 +17,8 @@ def upload():
         userid = checkSession(str(syndbb.session['logged_in']))
         if userid:
             user = d2_user.query.filter_by(user_id=userid).first()
-            uploadfolder = syndbb.os.getcwd() + "/syndbb/static/data/uploads/" + user.username + "/"
-            thumbfolder = syndbb.os.getcwd() + "/syndbb/static/data/uploads/.thumbnails/"
+            uploadfolder = syndbb.app.static_folder + "/data/uploads/" + user.username + "/"
+            thumbfolder = syndbb.app.static_folder + "/data/uploads/.thumbnails/"
 
             if not syndbb.os.path.exists(uploadfolder):
                 syndbb.os.makedirs(uploadfolder)
@@ -34,7 +35,7 @@ def upload():
 
             uploadurl = user.upload_url
             if uploadurl == "local":
-                uploadurl = syndbb.request.url_root + "static/data/uploads/"
+                uploadurl = cdn_path() + "/data/uploads/"
             else:
                 uploadurl = "https://" + uploadurl + "/"
 
@@ -47,7 +48,7 @@ def upload():
                     extension = syndbb.os.path.splitext(fn)[1].lower()
                     hashname = hashlib.sha256(fn.encode()).hexdigest()
                     if extension in image_types:
-                        type_icon = '<img src="#" data-original="/static/data/uploads/.thumbnails/'+ hashname +'.png" alt="'+ fn +'" class="uploadimg"></a>'
+                        type_icon = '<img src="#" data-original="'+cdn_path()+'/data/uploads/.thumbnails/'+ hashname +'.png" alt="'+ fn +'" class="uploadimg"></a>'
                         thumbpath = thumbfolder + hashname + ".png"
                         if not syndbb.os.path.isfile(thumbpath):
                             im = Image.open(filepath)
@@ -85,7 +86,7 @@ def upload_album():
         if user:
             uploadurl = user.upload_url
             if uploadurl == "local":
-                uploadurl = syndbb.request.url_root + "static/data/uploads/" + user.username + "/"
+                uploadurl = cdn_path() + "/data/uploads/" + user.username + "/"
             else:
                 uploadurl = "https://" + uploadurl + "/" + user.username + "/"
 
@@ -108,8 +109,8 @@ def upload_gallery():
         userid = checkSession(str(syndbb.session['logged_in']))
         if userid:
             user = d2_user.query.filter_by(user_id=userid).first()
-            uploadfolder = syndbb.os.getcwd() + "/syndbb/static/data/uploads/" + user.username + "/"
-            thumbfolder = syndbb.os.getcwd() + "/syndbb/static/data/uploads/.thumbnails/"
+            uploadfolder = syndbb.app.static_folder + "/data/uploads/" + user.username + "/"
+            thumbfolder = syndbb.app.static_folder + "/data/uploads/.thumbnails/"
 
             if not syndbb.os.path.exists(uploadfolder):
                 syndbb.os.makedirs(uploadfolder)
@@ -121,7 +122,7 @@ def upload_gallery():
 
             uploadurl = user.upload_url
             if uploadurl == "local":
-                uploadurl = syndbb.request.url_root + "static/data/uploads/"
+                uploadurl = cdn_path + "/data/uploads/"
             else:
                 uploadurl = "https://" + uploadurl + "/"
 
@@ -134,7 +135,7 @@ def upload_gallery():
                     extension = syndbb.os.path.splitext(fn)[1].lower()
                     hashname = hashlib.sha256(fn.encode()).hexdigest()
                     if extension in image_types:
-                        type_icon = '/static/data/uploads/.thumbnails/'+ hashname + '.png'
+                        type_icon = cdn_path() + '/data/uploads/.thumbnails/'+ hashname + '.png'
                         thumbpath = thumbfolder + hashname + ".png"
                         if not syndbb.os.path.isfile(thumbpath):
                             im = Image.open(filepath)
@@ -156,8 +157,8 @@ def upload_simple():
         if userid:
             dynamic_js_footer = ["js/bootstrap-filestyle.min.js", "js/bootbox.min.js", "js/delete.js", "js/lazyload.transpiled.min.js"]
             user = d2_user.query.filter_by(user_id=userid).first()
-            uploadfolder = syndbb.os.getcwd() + "/syndbb/static/data/uploads/" + user.username + "/"
-            thumbfolder = syndbb.os.getcwd() + "/syndbb/static/data/uploads/.thumbnails/"
+            uploadfolder = syndbb.app.static_folder + "/data/uploads/" + user.username + "/"
+            thumbfolder = syndbb.app.static_folder + "/data/uploads/.thumbnails/"
             ufile = syndbb.request.args.get('file', '')
 
             if not syndbb.os.path.exists(uploadfolder):
@@ -174,7 +175,7 @@ def upload_simple():
 
                 uploadurl = user.upload_url
                 if uploadurl == "local":
-                    uploadurl = syndbb.request.url_root + "static/data/uploads/"
+                    uploadurl = cdn_path() + "/data/uploads/"
                 else:
                     uploadurl = "https://" + uploadurl + "/"
 
@@ -186,7 +187,7 @@ def upload_simple():
                     extension = syndbb.os.path.splitext(ufile)[1].lower()
                     hashname = hashlib.sha256(ufile.encode()).hexdigest()
                     if extension in image_types:
-                        type_icon = '<img src="/static/data/uploads/.thumbnails/'+ hashname +'.png" alt="'+ ufile +'" class="uploadimg"></a>'
+                        type_icon = '<img src="'+cdn_path()+'/data/uploads/.thumbnails/'+ hashname +'.png" alt="'+ ufile +'" class="uploadimg"></a>'
                         thumbpath = thumbfolder + hashname + ".png"
                         if not syndbb.os.path.isfile(thumbpath):
                             im = Image.open(filepath)
@@ -210,7 +211,7 @@ def upload_file():
             uploader = syndbb.request.form['uploader']
             if userid:
                 user = d2_user.query.filter_by(user_id=userid).first()
-                uploadfolder = syndbb.os.getcwd() + "/syndbb/static/data/uploads/" + user.username + "/"
+                uploadfolder = syndbb.app.static_folder + "/data/uploads/" + user.username + "/"
                 if 'file' not in syndbb.request.files:
                     syndbb.flash('No file selected.', 'danger')
                     return syndbb.redirect(syndbb.url_for(uploader))
@@ -239,7 +240,7 @@ def upload_file_external():
         password = syndbb.request.form['password']
         user = d2_user.query.filter_by(username=username).filter_by(uploadauth=password).first()
         if user:
-            uploadfolder = syndbb.os.getcwd() + "/syndbb/static/data/uploads/" + user.username + "/"
+            uploadfolder = syndbb.app.static_folder + "/data/uploads/" + user.username + "/"
             if 'file' not in syndbb.request.files:
                 return "No file selected."
             file = syndbb.request.files['file']
@@ -255,7 +256,7 @@ def upload_file_external():
 
                 uploadurl = user.upload_url
                 if uploadurl == "local":
-                    uploadurl = syndbb.request.url_root + "static/data/uploads/" + user.username + "/" + newname
+                    uploadurl = cdn_path() + "/data/uploads/" + user.username + "/" + newname
                 else:
                     uploadurl = "https://" + uploadurl + "/" + user.username + "/" + newname
 
@@ -274,7 +275,7 @@ def delete_file():
         userid = checkSession(str(uniqid))
         if userid:
             user = d2_user.query.filter_by(user_id=userid).first()
-            uploaded_file = syndbb.os.getcwd() + "/syndbb/static/data/uploads/" + user.username + "/" + ufile
+            uploaded_file = syndbb.app.static_folder + "/data/uploads/" + user.username + "/" + ufile
             if syndbb.os.path.isfile(uploaded_file):
                 syndbb.os.system("shred -u "+uploaded_file)
                 syndbb.flash('File deleted successfully.', 'success')
