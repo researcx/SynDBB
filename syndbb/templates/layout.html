@@ -65,21 +65,21 @@
 
     <title>{% if title %} {{ title|striptags }} &bull; {% endif %}D2K5</title>
 
-    <link href="{{cdn_path()|safe}}/{{get_filemtime('css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{cdn_path()|safe}}/{{get_filemtime('css/ie10-viewport-bug-workaround.css')}}" rel="stylesheet">
-    <link href="{{cdn_path()|safe}}/{{get_filemtime('css/font-awesome.min.css')}}" rel="stylesheet">
+    <link href="{{cdn_path()|safe}}{{get_filemtime('/css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{cdn_path()|safe}}{{get_filemtime('/css/ie10-viewport-bug-workaround.css')}}" rel="stylesheet">
+    <link href="{{cdn_path()|safe}}{{get_filemtime('/css/font-awesome.min.css')}}" rel="stylesheet">
 
     {% for style in dynamic_css_header %}
     <link href="{{cdn_path()|safe}}/{{get_filemtime(style)}}" rel="stylesheet">
     {% endfor %}
 
-    <link href="{{cdn_path()|safe}}/{{get_filemtime('icons/iconAtlas.css')}}" rel="stylesheet">
-    <link href="{{cdn_path()|safe}}/{{get_filemtime('css/d2k5.css')}}" rel="stylesheet">
+    <link href="{{cdn_path()|safe}}{{get_filemtime('/icons/iconAtlas.css')}}" rel="stylesheet">
+    <link href="{{cdn_path()|safe}}{{get_filemtime('/css/d2k5.css')}}" rel="stylesheet">
     {{get_theme()|safe}}
 
     <!--[if lt IE 9]>
-          <script src="{{cdn_path()|safe}}/{{get_filemtime('js/html5shiv.min.js')}}"></script>
-          <script src="{{cdn_path()|safe}}/{{get_filemtime('js/respond.min.js')}}"></script>
+          <script src="{{cdn_path()|safe}}{{get_filemtime('/js/html5shiv.min.js')}}"></script>
+          <script src="{{cdn_path()|safe}}{{get_filemtime('/js/respond.min.js')}}"></script>
         <![endif]-->
   </head>
 
@@ -229,12 +229,12 @@
           </p>
       </div>
     </footer>
-    <script src="{{cdn_path()|safe}}/{{get_filemtime('js/jquery-3.1.1.min.js')}}"></script>
-    <script src="{{cdn_path()|safe}}/{{get_filemtime('js/bootstrap.min.js')}}"></script>
+    <script src="{{cdn_path()|safe}}{{get_filemtime('/js/jquery-3.1.1.min.js')}}"></script>
+    <script src="{{cdn_path()|safe}}{{get_filemtime('/js/bootstrap.min.js')}}"></script>
     {% for script in dynamic_js_footer %}
     <script src="{{cdn_path()|safe}}/{{get_filemtime(script)}}"></script>
     {% endfor %}
-    <script src="{{cdn_path()|safe}}/{{get_filemtime('js/includes.js')}}"></script>
+    <script src="{{cdn_path()|safe}}{{get_filemtime('/js/includes.js')}}"></script>
   </body>
 </html>
 {% endif %}
