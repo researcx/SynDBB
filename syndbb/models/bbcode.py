@@ -36,7 +36,7 @@ parser.add_simple_formatter('right', '<span style="float: right;">%(value)s</spa
 parser.add_simple_formatter('reply', '<a href="#%(value)s" style="border-bottom: 1px dashed #111;">&gt;%(value)s</a>', swallow_trailing_newline=False)
 
 #Ban Message
-parser.add_simple_formatter('ban', '<span style="color: #ff0000; font-weight: bold;">%(value)s</span>', swallow_trailing_newline=False)
+parser.add_simple_formatter('ban', '<span class="textcolor" style="color: #ff0000; font-weight: bold;">%(value)s</span>', swallow_trailing_newline=False)
 
 #YouTube
 def youtubelink(tag_name, value, options, parent, context):
@@ -52,7 +52,7 @@ parser.add_formatter('youtube', youtubelink, replace_links=False, strip=True, sw
 def render_bg(tag_name, value, options, parent, context):
     if 'bg' in options:
         bg = options['bg'].strip()
-    return '<span style="background-color:'+bg+'; padding: 1px 4px 1px 4px;">'+value+'</span>'
+    return '<span class="textcolor" style="background-color:'+bg+'; padding: 1px 4px 1px 4px;">'+value+'</span>'
 parser.add_formatter('bg', render_bg)
 
 #Text Font
@@ -94,6 +94,22 @@ def render_size(tag_name, value, options, parent, context):
         'value': value,
     }
 parser.add_formatter('size', render_size)
+
+#Text Color
+def _render_color(name, value, options, parent, context):
+    if 'color' in options:
+        color = options['color'].strip()
+    elif options:
+        color = list(options.keys())[0].strip()
+    else:
+        return value
+    match = re.match(r'^([a-z]+)|^(#[a-f0-9]{3,6})', color, re.I)
+    color = match.group() if match else 'inherit'
+    return '<span class="textcolor" style="color:%(color)s;">%(value)s</span>' % {
+        'color': color,
+        'value': value,
+    }
+parser.add_formatter('color', _render_color)
 
 #Dotted links
 def _render_url(name, value, options, parent, context):

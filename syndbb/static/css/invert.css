@@ -3,7 +3,7 @@ html{
   -webkit-filter: invert(100%);
   background: #000;
 }
-img, button, .forum_poster, .post-usertitle, .silk-icon, .username, .karma, .btn, .readnotice, iframe, .regnotice, .authbutton{
+img, button, .forum_poster, .post-usertitle, .silk-icon, .username, .karma, .btn, .readnotice, iframe, .regnotice, .authbutton, .textcolor{
   filter: invert(100%);
   -webkit-filter: invert(100%);
 }
@@ -16,6 +16,13 @@ img, button, .forum_poster, .post-usertitle, .silk-icon, .username, .karma, .btn
 .mask{
   filter: invert(100%) !important;
   -webkit-filter: invert(100%) !important;
+}
+
+code{
+  filter: invert(100%) !important;
+  -webkit-filter: invert(100%) !important;
+  color: #c7254e;
+  background-color: #111;
 }
 
 .btn, .btn-info {

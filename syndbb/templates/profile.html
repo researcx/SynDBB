@@ -55,7 +55,7 @@
 			<div class="text-muted" style="float:right; text-align: right;">
 				<span style="font-size: 18pt;">{{get_user_title(profile.user_id)}}</span>&nbsp;
 				{% if profile.title %}
-				<br/>{{profile.title|safe}}
+				<br/><div class="textcolor">{{profile.title|safe}}</div>
 				{% endif %}
         {% if user.rank >= 500 %}
 				<br/>

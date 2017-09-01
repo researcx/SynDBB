@@ -87,14 +87,11 @@
       </div>
       <div class="sidebar-statistics text-center" style="border-bottom: 1px solid #ddd;">
         <dl class="dl-horizontal statistics" style="margin-top: 10px; margin-bottom: 10px;">
-  				<dt>Posts:</dt>
-  				<dd>{{get_stats()['threadcount'] + get_stats()['postcount']}}</dd>
+  				<dt>Messages:</dt>
+  				<dd>{{get_stats()['threadcount'] + get_stats()['postcount'] + get_stats()['linecount']}}</dd>
 
           <dt>Channels:</dt>
   				<dd>{{get_stats()['officialforumcount'] + get_stats()['unofficialforumcount']}}</dd>
-
-          <dt>Lines Spoken:</dt>
-  				<dd>{{get_stats()['linecount']}}</dd>
 
           <dt>Bans:</dt>
   				<dd>{{get_stats()['bancount']}}</dd>
