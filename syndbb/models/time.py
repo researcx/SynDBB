@@ -124,10 +124,10 @@ def recent_date(unixtime):
     dt = syndbb.datetime.fromtimestamp(unixtime)
     today = syndbb.datetime.now()
     today_start = syndbb.datetime(today.year, today.month, today.day)
-    yesterday_start = syndbb.datetime(today.year, today.month, today.day - 1)
+    yesterday_start = syndbb.datetime.now() - syndbb.timedelta(days=1)
 
     def day_in_this_week(date):
-        startday = syndbb.datetime(today.year,today.month,today.day - today.weekday())
+        startday = syndbb.datetime.now() - syndbb.timedelta(days=today.weekday())
         if(date >= startday):
             return True
         else:
@@ -165,6 +165,7 @@ def get_filemtime(file):
 syndbb.app.jinja_env.globals.update(get_filemtime=get_filemtime)
 
 @syndbb.app.template_filter('cdn_path')
+@syndbb.cache.memoize(timeout=60)
 def cdn_path():
     if not syndbb.app.debug:
         cdn = syndbb.cdn

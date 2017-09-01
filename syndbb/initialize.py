@@ -59,23 +59,25 @@ import syndbb.views.xml_feed
 
 #Error Logging (when not in debug mode)
 if not syndbb.app.debug:
-    error_log = "logs/error.log"
-    crit_log = "logs/crit.log"
-
+    global_log = "logs/global.log"
+    summary_log = "logs/summary.log"
+    log_size = 2097152
     logger = logging.getLogger('werkzeug')
     logFormatStr = '[%(asctime)s] p%(process)s {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s'
     formatter = logging.Formatter(logFormatStr,'%m-%d %H:%M:%S')
 
-    logging.basicConfig(format = '%(message)s', filename = crit_log, level=logging.CRITICAL)
+    logging.basicConfig(format = logFormatStr, filename = global_log, level=logging.DEBUG)
+    access_handler = RotatingFileHandler(global_log, maxBytes=log_size, backupCount=5)
 
-    fileHandler = logging.FileHandler(error_log)
-    fileHandler.setLevel(logging.ERROR)
+    fileHandler = RotatingFileHandler(summary_log, maxBytes=log_size, backupCount=5)
+    fileHandler.setLevel(logging.DEBUG)
     fileHandler.setFormatter(formatter)
 
     streamHandler = logging.StreamHandler()
     streamHandler.setLevel(logging.DEBUG)
     streamHandler.setFormatter(formatter)
 
+    logger.addHandler(access_handler)
     logger.addHandler(fileHandler)
     logger.addHandler(streamHandler)
 
