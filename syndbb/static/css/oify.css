@@ -43,7 +43,7 @@ body{
     background-color: green !important;
 }
 
-.inner-header, .table-header, .thread-left, .posthead{
+.inner-header, .table-header, .thread-left, .posthead, .table-header>tbody>tr{
   background: darkgreen !important;
 }
 

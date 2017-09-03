@@ -20,7 +20,7 @@ $(document).ready(function() {
           },
           callback: function (result) {
               if(result == true) {
-                this.modal('hide')
+                window.location.reload();
                 setCookie("nsfwAllow", "1", 356);
               }else{
                 window.location.assign("/");

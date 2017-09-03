@@ -226,10 +226,16 @@ def do_ban_user():
     else:
         banreason = ""
 
-    if 'post_id' in syndbb.request.form:
+    if 'post_id' in syndbb.request.form and syndbb.request.form['post_id'] != "":
         banpost = syndbb.request.form['post_id']
     else:
         banpost = 0
+
+    if 'display' in syndbb.request.form:
+        display = 1
+    else:
+        display = 0
+
     uniqid = syndbb.request.form['uniqid']
 
     if banuser and bantime and uniqid:
@@ -252,12 +258,13 @@ def do_ban_user():
                     post.content += banmessage
                     syndbb.db.session.commit()
 
-                new_ban = d2_bans(banned_id=banuser, reason=banreason, length=bantime, time=unix_time_current(), expires=banexpire, post=banpost, banner=userid)
+                new_ban = d2_bans(banned_id=banuser, reason=banreason, length=bantime, time=unix_time_current(), expires=banexpire, post=banpost, banner=userid, display=display)
                 syndbb.db.session.add(new_ban)
                 syndbb.db.session.commit()
 
                 syndbb.cache.delete_memoized(syndbb.models.users.get_user_title)
                 syndbb.cache.delete_memoized(syndbb.models.users.get_group_style_from_id)
+                syndbb.cache.delete_memoized(syndbb.models.activity.ban_list)
 
                 syndbb.flash('User banned successfully.', 'success')
                 return syndbb.redirect(syndbb.url_for('siteadmin_ban'))
@@ -326,14 +333,15 @@ def do_unban_user():
         if userid:
             user = d2_user.query.filter_by(user_id=userid).first()
             if user.rank >= 500:
-                ban = d2_bans.query.filter_by(banned_id=banuser).first()
+                ban = d2_bans.query.filter_by(banned_id=banuser).order_by(d2_bans.time.desc()).first()
                 if ban.length == 0:
-                    ban.length = -1
+                    ban.length = "-1"
                 ban.expires = unix_time_current()
                 syndbb.db.session.commit()
 
                 syndbb.cache.delete_memoized(syndbb.models.users.get_user_title)
                 syndbb.cache.delete_memoized(syndbb.models.users.get_group_style_from_id)
+                syndbb.cache.delete_memoized(syndbb.models.activity.ban_list)
 
                 syndbb.flash('User unbanned successfully.', 'success')
                 return syndbb.redirect(syndbb.url_for('siteadmin_ban'))

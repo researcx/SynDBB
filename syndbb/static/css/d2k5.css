@@ -120,10 +120,6 @@
   width: 250px;
 }
 
-div.bootbox.modal.nsfwModal{
-    background: yellow url("../images/nsfwb.png");
-}
-
 .avatarModal div.modal-dialog.modal-sm{
   width: 528px;
 }

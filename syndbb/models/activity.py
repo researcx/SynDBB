@@ -154,9 +154,9 @@ def get_activity(limit=10):
 syndbb.app.jinja_env.globals.update(get_activity=get_activity)
 
 @syndbb.app.context_processor
-@syndbb.cache.memoize(timeout=1)
+@syndbb.cache.memoize(timeout=60)
 def ban_list():
-    bans = d2_bans.query.filter(d2_bans.banned_id != 0).all()
+    bans = d2_bans.query.filter(d2_bans.banned_id != 0).filter(d2_bans.display != 0).all()
     ban_list = ""
 
     for ban in bans:

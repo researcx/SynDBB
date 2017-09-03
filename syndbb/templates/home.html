@@ -17,7 +17,7 @@
           {% for forum in forums %}
           <tr>
             <td class="home-forum home-forum-icon"><a href="/{{ forum.short_name }}"><img src="{{get_forum_icon(forum.short_name)}}" alt=""/></a></td>
-            <td class="home-forum"><a href="/{{ forum.short_name }}"><b><span style="float: right;">#{{ forum.short_name }}</span>{{ forum.name }}</b></a>
+            <td class="home-forum"><a href="/{{ forum.short_name }}"><b><span style="float: right; margin-top: 8px;">#{{ forum.short_name }}</span>{{ forum.name }}</b></a>
             {% if forum.description %}
               <br/><span class="small">{{forum.description}}</span>
             {% endif %}

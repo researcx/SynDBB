@@ -282,8 +282,9 @@ class d2_bans(syndbb.db.Model):
     expires = syndbb.db.Column(syndbb.db.Integer, unique=False)
     post = syndbb.db.Column(syndbb.db.Integer, unique=False)
     banner = syndbb.db.Column(syndbb.db.Integer, unique=False)
+    display = syndbb.db.Column(syndbb.db.Integer, unique=False)
 
-def __init__(self, banned_id, reason, length, time, expires, post, banner):
+def __init__(self, banned_id, reason, length, time, expires, post, banner, display):
     self.banned_id = banned_id
     self.reason = reason
     self.length = length
@@ -291,6 +292,7 @@ def __init__(self, banned_id, reason, length, time, expires, post, banner):
     self.expires = expires
     self.post = post
     self.banner = banner
+    self.display = display
 
 def __repr__(self):
     return '<Banned %r>' % self.banned_id

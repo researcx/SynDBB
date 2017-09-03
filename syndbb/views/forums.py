@@ -44,8 +44,9 @@ def view_forum(category):
         dynamic_js_footer = ["js/inline.js", "js/bootbox.min.js"]
         # if forumcheck.short_name == "yiff":
         #     dynamic_css_header.append("css/oify.css")
-        if forumcheck.nsfw:
+        if (forumcheck.nsfw) and ('nsfwAllow' not in syndbb.request.cookies):
             dynamic_js_footer.append("js/nsfwprompt.js")
+            dynamic_css_header.append("css/nsfw_fill.css")
 
         logo_file = syndbb.app.static_folder + "/images/logos/" + forumcheck.short_name + ".png"
         if syndbb.os.path.isfile(logo_file):
@@ -54,6 +55,7 @@ def view_forum(category):
         threads = d2_activity.query.filter_by(category=forumcheck.id).order_by(d2_activity.reply_time.desc()).all()
 
         topbuttons = '<a href="/'+forumcheck.short_name+'/grid" title="Grid View" style="float:right;"><i class="silk-icon icon_application_view_tile" aria-hidden="true"></i></a>'
+        topbuttons += '<a href="irc://irc.d2k5.com:6697/'+forumcheck.short_name+'" title="Join #'+forumcheck.short_name+' on IRC" style="float:right;"><i class="silk-icon icon_comment" aria-hidden="true"></i></a>'
         if 'logged_in' in syndbb.session:
             userid = checkSession(str(syndbb.session['logged_in']))
             if userid:
@@ -114,8 +116,9 @@ def view_forum_grid(category):
     if forumcheck:
         # if forumcheck.short_name == "yiff":
         #     dynamic_css_header.append("css/oify.css")
-        if forumcheck.nsfw:
+        if (forumcheck.nsfw) and ('nsfwAllow' not in syndbb.request.cookies):
             dynamic_js_footer.append("js/nsfwprompt.js")
+            dynamic_css_header.append("css/nsfw_fill.css")
 
         logo_file = syndbb.app.static_folder + "/images/logos/" + forumcheck.short_name + ".png"
         if syndbb.os.path.isfile(logo_file):
@@ -126,6 +129,7 @@ def view_forum_grid(category):
         threads = d2_activity.query.filter_by(category=forumcheck.id).order_by(d2_activity.reply_time.desc()).all()
 
         topbuttons = '<a href="/'+forumcheck.short_name+'" title="List View" style="float:right;"><i class="silk-icon icon_application_view_list" aria-hidden="true"></i></a>'
+        topbuttons += '<a href="irc://irc.d2k5.com:6697/'+forumcheck.short_name+'" title="Join #'+forumcheck.short_name+' on IRC" style="float:right;"><i class="silk-icon icon_comment" aria-hidden="true"></i></a>'
         if 'logged_in' in syndbb.session:
             userid = checkSession(str(syndbb.session['logged_in']))
             if userid:
@@ -224,8 +228,9 @@ def view_thread(category, thread):
             dynamic_js_footer = ["js/bootstrap-filestyle.min.js", "js/jquery.rangyinputs.js", "js/bbcode_editor_forums.js", "js/posts.js", "js/post_ratings.js", "js/bootbox.min.js", "js/delete.js", "js/inline.js"]
             # if forumcheck.short_name == "yiff":
             #     dynamic_css_header.append("css/oify.css")
-            if forumcheck.nsfw:
+            if (forumcheck.nsfw) and ('nsfwAllow' not in syndbb.request.cookies):
                 dynamic_js_footer.append("js/nsfwprompt.js")
+                dynamic_css_header.append("css/nsfw_fill.css")
             logo_file = syndbb.app.static_folder + "/images/logos/" + forumcheck.short_name + ".png"
             if syndbb.os.path.isfile(logo_file):
                 forumlogo = '<img src="'+cdn_path()+'/images/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
@@ -255,8 +260,9 @@ def view_thread_gallery(category, thread):
             dynamic_js_footer = ["js/jquery.rangyinputs.js", "js/bbcode_editor_forums.js", "js/posts.js", "js/bootbox.min.js", "js/delete.js", "js/inline.js"]
             # if forumcheck.short_name == "yiff":
             #     dynamic_css_header.append("css/oify.css")
-            if forumcheck.nsfw:
+            if (forumcheck.nsfw) and ('nsfwAllow' not in syndbb.request.cookies):
                 dynamic_js_footer.append("js/nsfwprompt.js")
+                dynamic_css_header.append("css/nsfw_fill.css")
             logo_file = syndbb.app.static_folder + "/images/logos/" + forumcheck.short_name + ".png"
             if syndbb.os.path.isfile(logo_file):
                 forumlogo = '<img src="'+cdn_path()+'/images/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
