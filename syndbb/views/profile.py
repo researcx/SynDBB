@@ -4,7 +4,7 @@
 # The full license is included in LICENSE.md, which is distributed as part of this project.
 #
 
-import syndbb, shutil, base64, requests
+import syndbb, shutil, base64, requests, hashlib, hmac, json
 from flask import send_from_directory
 from syndbb.models.users import d2_user, d2_ip, checkSession
 from syndbb.models.time import unix_time_current, cdn_path
@@ -105,33 +105,60 @@ def save_preferences():
             user.gender = gender
             user.occupation = occupation
             user.site = url
-            user.ircauth = ircauth
             user.uploadauth = uploadauth
             if upload_url in possibleurls:
                 user.upload_url = upload_url
             else:
                 user.upload_url = "i.d2k5.com"
             user.bio = bio
-            syndbb.db.session.commit()
 
+            #Do the Matrix API stuff
+            matrixuser = user.username
+            matrixpass = ircauth
+            authstring = matrixuser+"\x00"+matrixpass+"\x00notadmin"
+            matrix_hmac = hmac.new(syndbb.matrix_api_reg_key.encode(), authstring.encode(), hashlib.sha1).hexdigest()
 
+            #Matrix User Registration
+            try:
+                udata = {'user': matrixuser, 'password': matrixpass, 'type': 'org.matrix.login.shared_secret', 'mac': matrix_hmac}
+                reg = requests.post(syndbb.matrix_api + "client/api/v1/register", data=json.dumps(udata), verify=False)
+                matrix_response = json.loads(reg.text)
+
+                #Remember access token and set display name
+                if 'access_token' in matrix_response:
+                    access_token = matrix_response['access_token']
+                    user.token = access_token
+                    udata = {'displayname': matrixuser}
+                    reg = requests.put(syndbb.matrix_api + "client/r0/profile/%40"+matrixuser+"%3Aim.d2k5.com/displayname?access_token="+user.token, data=json.dumps(udata), verify=False)
+                    syndbb.flash("Chat user created.", "success")
+            except requests.exceptions.RequestException:
+                syndbb.flash('Couldn\'t create a chat user.', 'danger')
+
+            if user.token:
+                udata = {'new_password': matrixpass, 'type': 'm.login.password', 'user': "%40"+matrixuser+"%3Aim.d2k5.com", 'password': user.ircauth}
+                reg = requests.post(syndbb.matrix_api + "client/r0/account/password?access_token="+user.token, data=json.dumps(udata), verify=False)
+                matrix_response = json.loads(reg.text)
+                syndbb.flash(matrix_response)
+
+            user.ircauth = ircauth
             syndbb.cache.delete_memoized(syndbb.models.users.get_all_status_updates)
             syndbb.flash('Preferences updated successfully.', 'success')
+            syndbb.db.session.commit()
 
-            try:
-                requests.get("https://" + syndbb.znc_address + ":" + syndbb.znc_port + "/mods/global/httpadmin/adduser?username=" + user.username + "&password=" + ircauth, auth=(syndbb.znc_user, syndbb.znc_password), verify=False)
-            except requests.exceptions.RequestException:
-                syndbb.flash('Couldn\'t create an IRC user.', 'danger')
-
-            try:
-                requests.get("https://" + syndbb.znc_address + ":" + syndbb.znc_port + "/mods/global/httpadmin/userpassword?username=" + user.username + "&password=" + ircauth, auth=(syndbb.znc_user, syndbb.znc_password), verify=False)
-            except requests.exceptions.RequestException:
-                syndbb.flash('Couldn\'t change IRC password.', 'danger')
-
-            try:
-                requests.get("https://" + syndbb.znc_address + ":" + syndbb.znc_port + "/mods/global/httpadmin/addnetwork?username=" + user.username + "&net_name=" + syndbb.irc_network_name + "&net_addr=" + syndbb.irc_network_address + "&net_port=" + syndbb.irc_network_port, auth=(syndbb.znc_user, syndbb.znc_password), verify=False)
-            except requests.exceptions.RequestException:
-                syndbb.flash('Couldn\'t assign an IRC network.', 'danger')
+            # try:
+            #     requests.get("https://" + syndbb.znc_address + ":" + syndbb.znc_port + "/mods/global/httpadmin/adduser?username=" + user.username + "&password=" + ircauth, auth=(syndbb.znc_user, syndbb.znc_password), verify=False)
+            # except requests.exceptions.RequestException:
+            #     syndbb.flash('Couldn\'t create an IRC user.', 'danger')
+            #
+            # try:
+            #     requests.get("https://" + syndbb.znc_address + ":" + syndbb.znc_port + "/mods/global/httpadmin/userpassword?username=" + user.username + "&password=" + ircauth, auth=(syndbb.znc_user, syndbb.znc_password), verify=False)
+            # except requests.exceptions.RequestException:
+            #     syndbb.flash('Couldn\'t change IRC password.', 'danger')
+            #
+            # try:
+            #     requests.get("https://" + syndbb.znc_address + ":" + syndbb.znc_port + "/mods/global/httpadmin/addnetwork?username=" + user.username + "&net_name=" + syndbb.irc_network_name + "&net_addr=" + syndbb.irc_network_address + "&net_port=" + syndbb.irc_network_port, auth=(syndbb.znc_user, syndbb.znc_password), verify=False)
+            # except requests.exceptions.RequestException:
+            #     syndbb.flash('Couldn\'t assign an IRC network.', 'danger')
 
             return syndbb.redirect(syndbb.url_for('preferences'))
         else:

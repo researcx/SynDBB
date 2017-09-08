@@ -214,7 +214,7 @@ class d2_session(syndbb.db.Model):
 class d2_user(syndbb.db.Model):
     user_id = syndbb.db.Column(syndbb.db.Integer, primary_key=True)
     username = syndbb.db.Column(syndbb.db.String(150), unique=True)
-    email = syndbb.db.Column(syndbb.db.String, unique=False)
+    token = syndbb.db.Column(syndbb.db.String, unique=False)
     title = syndbb.db.Column(syndbb.db.String, unique=False)
     status = syndbb.db.Column(syndbb.db.String, unique=False)
     status_time = syndbb.db.Column(syndbb.db.Integer, unique=False)
@@ -241,9 +241,9 @@ class d2_user(syndbb.db.Model):
     upload_url = syndbb.db.Column(syndbb.db.String, unique=False)
 
 
-    def __init__(self, username, email, title, status, status_time, rank, gender, location, occupation, bio, site, avatar_date, password, post_count, line_count, word_count, profanity_count, karma_positive, karma_negative, points, join_date, last_login, last_activity, ircauth, uploadauth, upload_url):
+    def __init__(self, username, token, title, status, status_time, rank, gender, location, occupation, bio, site, avatar_date, password, post_count, line_count, word_count, profanity_count, karma_positive, karma_negative, points, join_date, last_login, last_activity, ircauth, uploadauth, upload_url):
         self.username = username
-        self.email = email
+        self.token = token
         self.title = title
         self.status = status
         self.status_time = status_time
