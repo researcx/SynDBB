@@ -67,12 +67,14 @@ pre{
   margin-left: 4px;
 }
 .login{
+width: 600px;
+margin: 0 auto;
 margin-top: 10%;
 }
 a, a:link, a:hover, a:visited{
 border: 0px none #000;
 text-decoration: none;
-color: #000;
+color: #efefef;
 }
 a.copyright{
 	border-bottom: 1px dashed #ffffff;
@@ -80,3 +82,15 @@ a.copyright{
 	color: #ffffff;
 }
 img { border: 0; }
+.splashbtn{
+	margin-bottom: 1px;
+}
+#doirc{
+	color: #fff;
+	text-align: left;
+}
+.tab-content{
+	font-size: 13px;
+	margin: 0 auto;
+	width: 400px;
+}

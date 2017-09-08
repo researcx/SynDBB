@@ -237,10 +237,17 @@ def upload_file_external():
     if syndbb.request.method == 'POST':
         image_types = [".jpg", ".jpeg", ".jpe"]
         username = syndbb.request.form['username']
-        password = syndbb.request.form['password']
+        if 'auth' in syndbb.request.form:
+            password = syndbb.request.form['auth']
+        elif 'password' in syndbb.request.form:
+            password = syndbb.request.form['password']
+        else:
+            return "No password set."
         user = d2_user.query.filter_by(username=username).filter_by(uploadauth=password).first()
         if user:
             uploadfolder = syndbb.app.static_folder + "/data/uploads/" + user.username + "/"
+            if not syndbb.os.path.exists(uploadfolder):
+                syndbb.os.makedirs(uploadfolder)
             if 'file' not in syndbb.request.files:
                 return "No file selected."
             file = syndbb.request.files['file']
