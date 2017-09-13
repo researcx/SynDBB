@@ -1100,6 +1100,18 @@ table, .navbar-static-top{
   border-bottom: 4px dashed red;
 }
 
+.alertnotice{
+  color: red;
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
+  margin: 0 auto;
+  font-size: 20pt;
+  padding: 9px;
+  background: yellow;
+  border-bottom: 1px solid #ddd;
+}
+
 .topbuttons{
   display: inline-block;
   margin-top: -6px;

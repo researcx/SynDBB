@@ -32,15 +32,22 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="control-label col-xs-2">IRC/XMPP Auth Code</label>
+      <label class="control-label col-xs-2">Chat Password</label>
       <div class="col-xs-10">
-        <input type="text" name="ircauth" class="form-control" value="{{user.ircauth}}">
+        {% if user.ircauth %}
+          <input type="password" name="ircauth" class="form-control" value="{{user.ircauth}}" disabled>
+          <div style="margin-top: 7px; margin-bottom: 5px; padding-left: 16px;">
+            <i class="silk-icon icon_pencil" aria-hidden="true"></i> <a href="https://im.d2k5.com/#/settings" style="border-bottom: 1px dotted #000;" target="_blank">Change Password</a>
+          </div>
+        {% else %}
+          <input type="password" name="ircauth" class="form-control" value="{{user.ircauth}}">
+        {% endif %}
       </div>
     </div>
     <div class="form-group">
-      <label class="control-label col-xs-2">Upload Auth Code</label>
+      <label class="control-label col-xs-2">Upload Password</label>
       <div class="col-xs-10">
-        <input type="text" name="uploadauth" class="form-control" value="{{user.uploadauth}}">
+        <input type="password" name="uploadauth" class="form-control" value="{{user.uploadauth}}">
       </div>
     </div>
     <div class="form-group">

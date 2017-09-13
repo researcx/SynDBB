@@ -6,6 +6,7 @@
 
 import syndbb
 from flask import send_from_directory
+from syndbb.models.users import d2_user, checkSession
 import syndbb.models.time
 import syndbb.models.activity
 import syndbb.models.version
@@ -27,6 +28,16 @@ def faviconico():
 def chat():
     return syndbb.render_template('chat.html', title="Chat", subheading=[""])
 
+@syndbb.app.route("/chat/<room>")
+def matrix_chat(room):
+    if 'logged_in' in syndbb.session:
+        userid = checkSession(str(syndbb.session['logged_in']))
+        if userid:
+            d2user = d2_user.query.filter_by(user_id=userid).first()
+            if d2user.token:
+                return syndbb.render_template('chat_matrix.html', title="Chat", room=room, subheading=[""])
+    return syndbb.render_template('chat.html', title="Chat", subheading=[""])
+
 @syndbb.app.route("/terms/")
 def terms():
     return syndbb.render_template('terms.html', title="Terms of Service", subheading=[""])
@@ -37,7 +48,7 @@ def rules():
 
 @syndbb.app.route("/chat-rules/")
 def chat_rules():
-    return syndbb.render_template('chat-rules.html', title="IRC Rules", subheading=[""])
+    return syndbb.render_template('chat-rules.html', title="Chat Rules", subheading=[""])
 
 @syndbb.app.route("/info/")
 def info():

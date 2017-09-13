@@ -4,7 +4,8 @@
 # The full license is included in LICENSE.md, which is distributed as part of this project.
 #
 
-import syndbb
+import syndbb, json, requests
+from operator import itemgetter
 from syndbb.models.get_emote import get_emote
 from syndbb.models.users import d2_user, get_group_style_from_id
 from syndbb.models.time import cdn_path
@@ -40,33 +41,33 @@ def get_post_icons():
     return picon_list
 syndbb.app.jinja_env.globals.update(get_post_icons=get_post_icons)
 
-#Forum icons
-@syndbb.app.template_filter('get_forum_logo')
-@syndbb.cache.memoize(timeout=60)
-def get_forum_logo(short_name):
-    forum_icon = '/images/logos/{}.png'.format(short_name)
-    forum_icon_default = '/images/logos/blank.png'
-    root_path = syndbb.app.static_folder
-
-    if syndbb.os.path.isfile(root_path+forum_icon):
-        return cdn_path() + forum_icon
-    else:
-        return cdn_path() + forum_icon_default
-syndbb.app.jinja_env.globals.update(get_forum_logo=get_forum_logo)
-
-#Forum icons 2
-@syndbb.app.template_filter('get_forum_icon')
-@syndbb.cache.memoize(timeout=60)
-def get_forum_icon(short_name):
-    forum_icon = '/images/forumicons/{}.png'.format(short_name)
-    forum_icon_default = '/images/forumicons/blank.png'
-    root_path = syndbb.app.static_folder
-
-    if syndbb.os.path.isfile(root_path+forum_icon):
-        return cdn_path() + forum_icon
-    else:
-        return cdn_path() + forum_icon_default
-syndbb.app.jinja_env.globals.update(get_forum_icon=get_forum_icon)
+# #Forum icons
+# @syndbb.app.template_filter('get_forum_logo')
+# @syndbb.cache.memoize(timeout=60)
+# def get_forum_logo(short_name):
+#     forum_icon = '/images/logos/{}.png'.format(short_name)
+#     forum_icon_default = '/images/logos/blank.png'
+#     root_path = syndbb.app.static_folder
+#
+#     if syndbb.os.path.isfile(root_path+forum_icon):
+#         return cdn_path() + forum_icon
+#     else:
+#         return cdn_path() + forum_icon_default
+# syndbb.app.jinja_env.globals.update(get_forum_logo=get_forum_logo)
+#
+# #Forum icons 2
+# @syndbb.app.template_filter('get_forum_icon')
+# @syndbb.cache.memoize(timeout=60)
+# def get_forum_icon(short_name):
+#     forum_icon = '/images/forumicons/{}.png'.format(short_name)
+#     forum_icon_default = '/images/forumicons/blank.png'
+#     root_path = syndbb.app.static_folder
+#
+#     if syndbb.os.path.isfile(root_path+forum_icon):
+#         return cdn_path() + forum_icon
+#     else:
+#         return cdn_path() + forum_icon_default
+# syndbb.app.jinja_env.globals.update(get_forum_icon=get_forum_icon)
 
 #Reply IDs for a post
 @syndbb.app.template_filter('replies_to_post')
@@ -109,6 +110,52 @@ def parse_bbcode(text):
         text = text.replace(v, '<img src="'+cdn_path()+'/images/emots/'+k+'" alt="'+k+'" title="'+v+'" class="emoticon" />')
     return text
 syndbb.app.jinja_env.globals.update(parse_bbcode=parse_bbcode)
+
+
+### Matrix Functions ###
+#Get channel info
+@syndbb.app.template_filter('get_channel_list')
+@syndbb.cache.memoize(timeout=180)
+def get_channel_list():
+    channels = []
+    chlist = ""
+    chan = requests.get(syndbb.matrix_api + "client/r0/publicRooms", verify=False)
+    matrix_response = json.loads(chan.text)
+    for item in matrix_response["chunk"]:
+        if 'canonical_alias' in item:
+            channeltopic = ""
+            short_name = syndbb.re.search('(?<=#)(.*)(?=:)', item['canonical_alias']).group(1)
+            forum_exists = d2_forums.query.filter_by(short_name=short_name).first()
+            if forum_exists:
+                forum_icon = '/images/forumicons/{}.png'.format(short_name)
+                forum_icon_default = '/images/forumicons/blank.png'
+                root_path = syndbb.app.static_folder
+                if syndbb.os.path.isfile(root_path+forum_icon):
+                    forum_icon = cdn_path() + forum_icon
+                else:
+                    forum_icon = cdn_path() + forum_icon_default
+                msgs = requests.get(syndbb.matrix_api + "client/r0/rooms/"+item['room_id']+"/messages?from=s345_678_333&dir=b&limit=0&access_token="+syndbb.matrix_api_access_token+"", verify=False)
+                msgs = json.loads(msgs.text)
+                if 'topic' in item:
+                    channeltopic = item['topic']
+                threadcount = d2_activity.query.filter(d2_activity.category == forum_exists.id).count()
+                channels.append({"id": forum_exists.id, "name": item['name'], "description": channeltopic, "alias": short_name, "users": item['num_joined_members'], "icon": forum_icon, "messages": len(msgs["chunk"]), "threads": threadcount})
+    channels.sort(key=itemgetter('id'))
+
+    for forum in channels:
+        chlist += '''<tr>
+            <td class="home-forum home-forum-icon"><a href="/''' + str(forum['alias']) + '''"><img src="'''+ str(forum['icon']) + '''" alt=""/></a></td>
+            <td class="home-forum"><span class="timedisplay small" style="float: right; text-align: right;">''' + str(forum['users']) + ''' members<br/>''' + str(forum['messages']) + ''' messages</span><a href="/''' + str(forum['alias']) + '''"><b>''' + str(forum['name']) + '''</b></a>
+            <br/><span class="small">''' + str(forum['description']) + '''</span>
+            </td>
+            <td class="home-forum home-forum-icon" style="padding-right: 9px !important;">
+                <a href="/chat/''' + str(forum['alias']) + '''" title="Join Chat" style="float:right;">
+                    <i class="silk-icon icon_comment" aria-hidden="true"></i><i class="silk-icon icon_bullet_go" style="margin-top: 2px; margin-left: -10px; position: absolute;" aria-hidden="true"></i>
+                </a>
+            </td>
+          </tr>'''
+    return chlist
+syndbb.app.jinja_env.globals.update(get_channel_list=get_channel_list)
 
 ### MySQL Functions ###
 class d2_forums(syndbb.db.Model):

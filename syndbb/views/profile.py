@@ -7,6 +7,7 @@
 import syndbb, shutil, base64, requests, hashlib, hmac, json
 from flask import send_from_directory
 from syndbb.models.users import d2_user, d2_ip, checkSession
+from syndbb.models.forums import d2_forums
 from syndbb.models.time import unix_time_current, cdn_path
 from werkzeug.utils import secure_filename
 from PIL import Image
@@ -88,7 +89,6 @@ def save_preferences():
     gender = syndbb.request.form['gender']
     occupation = syndbb.request.form['occupation']
     url = syndbb.request.form['url']
-    ircauth = syndbb.request.form['ircauth']
     uploadauth = syndbb.request.form['uploadauth']
     upload_url = syndbb.request.form['upload_url']
     bio = syndbb.request.form['bio']
@@ -113,35 +113,42 @@ def save_preferences():
             user.bio = bio
 
             #Do the Matrix API stuff
-            matrixuser = user.username
-            matrixpass = ircauth
-            authstring = matrixuser+"\x00"+matrixpass+"\x00notadmin"
-            matrix_hmac = hmac.new(syndbb.matrix_api_reg_key.encode(), authstring.encode(), hashlib.sha1).hexdigest()
+            if user.ircauth == None or user.ircauth == "":
+                ircauth = syndbb.request.form['ircauth']
+                matrixuser = user.username
+                matrixpass = ircauth
+                authstring = matrixuser+"\x00"+matrixpass+"\x00notadmin"
+                matrix_hmac = hmac.new(syndbb.matrix_api_reg_key.encode(), authstring.encode(), hashlib.sha1).hexdigest()
 
-            #Matrix User Registration
-            try:
-                udata = {'user': matrixuser, 'password': matrixpass, 'type': 'org.matrix.login.shared_secret', 'mac': matrix_hmac}
-                reg = requests.post(syndbb.matrix_api + "client/api/v1/register", data=json.dumps(udata), verify=False)
-                matrix_response = json.loads(reg.text)
+                #Matrix User Registration
+                try:
+                    udata = {'user': matrixuser, 'password': matrixpass, 'type': 'org.matrix.login.shared_secret', 'mac': matrix_hmac}
+                    reg = requests.post(syndbb.matrix_api + "client/api/v1/register", data=json.dumps(udata), verify=False)
+                    matrix_response = json.loads(reg.text)
 
-                #Remember access token and set display name
-                if 'access_token' in matrix_response:
-                    access_token = matrix_response['access_token']
-                    user.token = access_token
-                    udata = {'displayname': matrixuser}
-                    reg = requests.put(syndbb.matrix_api + "client/r0/profile/%40"+matrixuser+"%3Aim.d2k5.com/displayname?access_token="+user.token, data=json.dumps(udata), verify=False)
-                    syndbb.flash("Chat user created.", "success")
-            except requests.exceptions.RequestException:
-                syndbb.flash('Couldn\'t create a chat user.', 'danger')
+                    #Remember access token, join a channel and set a name
+                    if 'access_token' in matrix_response:
+                        access_token = matrix_response['access_token']
+                        user.token = access_token
 
-            if user.token:
-                udata = {'new_password': matrixpass, 'type': 'm.login.password', 'user': "%40"+matrixuser+"%3Aim.d2k5.com", 'password': user.ircauth}
-                reg = requests.post(syndbb.matrix_api + "client/r0/account/password?access_token="+user.token, data=json.dumps(udata), verify=False)
-                matrix_response = json.loads(reg.text)
-                syndbb.flash(matrix_response)
+                        #Set Display Name
+                        udata = {'displayname': matrixuser}
+                        reg = requests.put(syndbb.matrix_api + "client/r0/profile/%40"+matrixuser+"%3Ahardcats.net/displayname?access_token="+user.token, data=json.dumps(udata), verify=False)
 
-            user.ircauth = ircauth
-            syndbb.cache.delete_memoized(syndbb.models.users.get_all_status_updates)
+                        #Join some channels
+                        chan = requests.get(syndbb.matrix_api + "client/r0/publicRooms", verify=False)
+                        matrix_response = json.loads(chan.text)
+                        for item in matrix_response["chunk"]:
+                            if 'canonical_alias' in item:
+                                short_name = syndbb.re.search('(?<=#)(.*)(?=:)', item['canonical_alias']).group(1)
+                                forum_exists = d2_forums.query.filter_by(short_name=short_name).first()
+                                if forum_exists:
+                                    reg = requests.post(syndbb.matrix_api + "client/r0/join/%23"+short_name+"%3Ahardcats.net?access_token="+user.token, verify=False)
+                        user.ircauth = ircauth
+                        syndbb.flash("Chat user created.", "success")
+                except requests.exceptions.RequestException:
+                    syndbb.flash('Couldn\'t create a chat user.', 'danger')
+
             syndbb.flash('Preferences updated successfully.', 'success')
             syndbb.db.session.commit()
 

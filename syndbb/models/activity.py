@@ -6,7 +6,7 @@
 
 import syndbb
 from syndbb.models.users import d2_user, d2_bans, is_banned, get_group_style_from_id
-from syndbb.models.forums import d2_forums, d2_activity, get_forum_icon
+from syndbb.models.forums import d2_forums, d2_activity
 from syndbb.models.time import display_time, recent_date, human_date, get_ban_expiry, cdn_path
 
 #Functions

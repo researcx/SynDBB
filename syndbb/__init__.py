@@ -37,6 +37,7 @@ znc_password = os.environ.get('ZNC_PASSWORD')
 #Matrix API
 matrix_api = os.environ.get('MATRIX_API')
 matrix_api_reg_key = os.environ.get('MATRIX_API_REG_KEY')
+matrix_api_access_token = os.environ.get('MATRIX_API_ACCESS_TOKEN')
 
 if db == None or cdn == None or secretkey == None or hashkey == None or ircapi == None:
     print("*** No configuration variables defined! Exiting... ***")

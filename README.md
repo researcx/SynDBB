@@ -1,6 +1,6 @@
 ## SynDBB
 
-**SynDBB** is a compilation of all the best parts of bulletin boards, intended for IRC/ZNC integration, which is where the name comes from. (Syndication + IRCd + Bulletin Boards)
+**SynDBB** is a compilation of all the best parts of bulletin boards, intended for chat integration, which is where the name comes from. (Syndication + IRCd + Bulletin Boards)
 
 It is an open-source cross-platform forum software written in Python + Flask. It's primarily intended to be used for the D2K5 website, however users are welcome and encouraged to submit improvements, features, feature requests, fixes and bug reports.
 
@@ -71,10 +71,8 @@ This is where the avatars, file uploads, thumbnails and submitted emoticons will
 * Can request emoticons and channels.
 * Can invite other users.
 
-### ZNC/IRC Integration:
+### Matrix Integration:
 
-Creates a ZNC user with the users' name and the IRC auth key provided in their preferences.
+Creates a Matrix user with the users' name and the chat password provided in their preferences.
 
-Requires https://github.com/faggqt/znc-httpadmin to be installed on the ZNC server and the IRC and ZNC details set properly inside the config file.
-
-You should have a specific ZNC user with admin privileges which only the server's IP has permission to contact.
+Requires the Matrix API details to be set up properly inside the config file.

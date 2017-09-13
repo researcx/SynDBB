@@ -2,28 +2,19 @@
   <div class="row equal" style="max-width: 100%; margin: 0 auto;">
     <div class="cols-nopad col-12 col-sm-9 col-lg-10 main">
       <div class="inner-header">
+        Channels
+      </div>
+      <table class="home-forum-list table table-striped">
+        <tbody>
+          {{get_channel_list()|safe}}
+        </tbody>
+      </table>
+      <div class="inner-header">
         Recent Posts
       </div>
       <table class="home-forum-list recent-post-list table table-striped">
         <tbody>
           {{ get_recent_posts(15)|safe }}
-        </tbody>
-      </table>
-      <div class="inner-header">
-        Channels
-      </div>
-      <table class="home-forum-list table table-striped">
-        <tbody>
-          {% for forum in forums %}
-          <tr>
-            <td class="home-forum home-forum-icon"><a href="/{{ forum.short_name }}"><img src="{{get_forum_icon(forum.short_name)}}" alt=""/></a></td>
-            <td class="home-forum"><a href="/{{ forum.short_name }}"><b><span style="float: right; margin-top: 8px;">#{{ forum.short_name }}</span>{{ forum.name }}</b></a>
-            {% if forum.description %}
-              <br/><span class="small">{{forum.description}}</span>
-            {% endif %}
-            </td>
-          </tr>
-          {% endfor %}
         </tbody>
       </table>
     </div>
