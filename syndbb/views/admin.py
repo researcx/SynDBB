@@ -84,10 +84,10 @@ def get_stats():
             if forum_exists:
                 if forum_exists.short_name == "d2k5":
                     total_users = int(item['num_joined_members'])
-                msgs = requests.get(syndbb.matrix_api + "client/r0/rooms/"+item['room_id']+"/messages?from=s345_678_333&dir=b&limit=0&access_token="+syndbb.matrix_api_access_token+"", verify=False)
-                msgs = json.loads(msgs.text)
-
-                total_lines += len(msgs["chunk"])
+                # msgs = requests.get(syndbb.matrix_api + "client/r0/rooms/"+item['room_id']+"/messages?from=s345_678_333&dir=b&limit=0&access_token="+syndbb.matrix_api_access_token+"", verify=False)
+                # msgs = json.loads(msgs.text)
+                #
+                # total_lines += len(msgs["chunk"])
 
     return {'usercount': usercount, 'postcount': postcount, 'threadcount': threadcount, 'bancount': bancount, 'officialforumcount': officialforumcount, 'unofficialforumcount': unofficialforumcount, 'unapprovedforumcount': unapprovedforumcount, 'irccount': usercount, 'filecount': filecount, 'filesize': filesize, 'disk_percentage': disk_percentage, 'disk_total': disk_total, 'progress_indicator': progress_indicator, 'linecount': (total_lines + linecount)}
 syndbb.app.jinja_env.globals.update(get_stats=get_stats)

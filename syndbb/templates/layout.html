@@ -210,7 +210,7 @@
       </div>
     </nav>
     <div class="container-fluid">
-      {% if not user.ircauth %}
+      {% if user_session.sessionid and not user.ircauth %}
       <div class="alertnotice">Looks like you haven't set up a chat password yet!<br/>Go <a href="/account/preferences">here</a> to do so now! We are so excited!</div>
       {% endif %}
       {% with messages = get_flashed_messages(with_categories=true) %}

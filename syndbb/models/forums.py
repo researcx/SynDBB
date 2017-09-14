@@ -4,7 +4,7 @@
 # The full license is included in LICENSE.md, which is distributed as part of this project.
 #
 
-import syndbb, json, requests
+import syndbb, json, requests, urllib.parse
 from operator import itemgetter
 from syndbb.models.get_emote import get_emote
 from syndbb.models.users import d2_user, get_group_style_from_id
@@ -115,7 +115,7 @@ syndbb.app.jinja_env.globals.update(parse_bbcode=parse_bbcode)
 ### Matrix Functions ###
 #Get channel info
 @syndbb.app.template_filter('get_channel_list')
-@syndbb.cache.memoize(timeout=180)
+#@syndbb.cache.memoize(timeout=180)
 def get_channel_list():
     channels = []
     chlist = ""
@@ -134,18 +134,18 @@ def get_channel_list():
                     forum_icon = cdn_path() + forum_icon
                 else:
                     forum_icon = cdn_path() + forum_icon_default
-                msgs = requests.get(syndbb.matrix_api + "client/r0/rooms/"+item['room_id']+"/messages?from=s345_678_333&dir=b&limit=0&access_token="+syndbb.matrix_api_access_token+"", verify=False)
-                msgs = json.loads(msgs.text)
+                # msgs = requests.get(syndbb.matrix_api + "client/r0/rooms/"+urllib.parse.quote_plus(item['room_id'])+"/messages?from=s345_678_333&dir=b&limit=0&access_token="+syndbb.matrix_api_access_token+"", verify=False)
+                # msgs = json.loads(msgs.text)
                 if 'topic' in item:
                     channeltopic = item['topic']
                 threadcount = d2_activity.query.filter(d2_activity.category == forum_exists.id).count()
-                channels.append({"id": forum_exists.id, "name": item['name'], "description": channeltopic, "alias": short_name, "users": item['num_joined_members'], "icon": forum_icon, "messages": len(msgs["chunk"]), "threads": threadcount})
+                channels.append({"id": forum_exists.id, "name": item['name'], "description": channeltopic, "alias": short_name, "users": item['num_joined_members'], "icon": forum_icon, "messages": 0, "threads": threadcount})
     channels.sort(key=itemgetter('id'))
 
     for forum in channels:
         chlist += '''<tr>
             <td class="home-forum home-forum-icon"><a href="/''' + str(forum['alias']) + '''"><img src="'''+ str(forum['icon']) + '''" alt=""/></a></td>
-            <td class="home-forum"><span class="timedisplay small" style="float: right; text-align: right;">''' + str(forum['users']) + ''' members<br/>''' + str(forum['messages']) + ''' messages</span><a href="/''' + str(forum['alias']) + '''"><b>''' + str(forum['name']) + '''</b></a>
+            <td class="home-forum"><span class="timedisplay small" style="float: right; text-align: right;">''' + str(forum['users']) + ''' members<br/>in chat</span><a href="/''' + str(forum['alias']) + '''"><b>''' + str(forum['name']) + '''</b></a>
             <br/><span class="small">''' + str(forum['description']) + '''</span>
             </td>
             <td class="home-forum home-forum-icon" style="padding-right: 9px !important;">
