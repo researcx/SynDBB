@@ -149,7 +149,7 @@ def get_channel_list():
             <br/><span class="small">''' + str(forum['description']) + '''</span>
             </td>
             <td class="home-forum home-forum-icon" style="padding-right: 9px !important;">
-                <a href="/chat/''' + str(forum['alias']) + '''" title="Join Chat" style="float:right;">
+                <a href="/im/?room=''' + str(forum['alias']) + '''" title="Join Chat" style="float:right;">
                     <i class="silk-icon icon_comment" aria-hidden="true"></i><i class="silk-icon icon_bullet_go" style="margin-top: 2px; margin-left: -10px; position: absolute;" aria-hidden="true"></i>
                 </a>
             </td>

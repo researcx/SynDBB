@@ -55,7 +55,7 @@ def view_forum(category):
         threads = d2_activity.query.filter_by(category=forumcheck.id).order_by(d2_activity.reply_time.desc()).all()
 
         topbuttons = '<a href="/'+forumcheck.short_name+'/grid" title="Grid View" style="float:right;"><i class="silk-icon icon_application_view_tile" aria-hidden="true"></i></a>'
-        topbuttons += '<a href="/chat/'+forumcheck.short_name+'" title="Join Chat" style="float:right;"><i class="silk-icon icon_comment" aria-hidden="true"></i></a>'
+        topbuttons += '<a href="/im/?room='+forumcheck.short_name+'" title="Join Chat" style="float:right;"><i class="silk-icon icon_comment" aria-hidden="true"></i></a>'
         if 'logged_in' in syndbb.session:
             userid = checkSession(str(syndbb.session['logged_in']))
             if userid:
@@ -129,7 +129,7 @@ def view_forum_grid(category):
         threads = d2_activity.query.filter_by(category=forumcheck.id).order_by(d2_activity.reply_time.desc()).all()
 
         topbuttons = '<a href="/'+forumcheck.short_name+'" title="List View" style="float:right;"><i class="silk-icon icon_application_view_list" aria-hidden="true"></i></a>'
-        topbuttons += '<a href="/chat/'+forumcheck.short_name+'" title="Join Chat" style="float:right;"><i class="silk-icon icon_comment" aria-hidden="true"></i></a>'
+        topbuttons += '<a href="/im/?room='+forumcheck.short_name+'" title="Join Chat" style="float:right;"><i class="silk-icon icon_comment" aria-hidden="true"></i></a>'
         if 'logged_in' in syndbb.session:
             userid = checkSession(str(syndbb.session['logged_in']))
             if userid:

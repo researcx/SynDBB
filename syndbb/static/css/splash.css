@@ -94,3 +94,8 @@ img { border: 0; }
 	margin: 0 auto;
 	width: 400px;
 }
+.info{
+	margin-top: 32px;
+	font-size: 11pt;
+	color: #fff;
+}

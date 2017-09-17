@@ -28,15 +28,15 @@ def faviconico():
 def chat():
     return syndbb.render_template('chat.html', title="Chat", subheading=[""])
 
-@syndbb.app.route("/chat/<room>")
-def matrix_chat(room):
-    if 'logged_in' in syndbb.session:
-        userid = checkSession(str(syndbb.session['logged_in']))
-        if userid:
-            d2user = d2_user.query.filter_by(user_id=userid).first()
-            if d2user.token:
-                return syndbb.render_template('chat_matrix.html', title="Chat", room=room, subheading=[""])
-    return syndbb.render_template('chat.html', title="Chat", subheading=[""])
+@syndbb.app.route("/im/")
+def im():
+    hasRoom = syndbb.request.args.get('room', '')
+    return syndbb.render_template('chat_integrated.html', hasRoom=hasRoom)
+
+@syndbb.app.route("/im/header/")
+def im_header():
+    return syndbb.render_template('chat_header.html')
+
 
 @syndbb.app.route("/terms/")
 def terms():
