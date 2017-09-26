@@ -5,7 +5,7 @@
 #
 
 import syndbb
-from syndbb.models.users import d2_user, d2_session, checkSession
+from syndbb.models.users import d2_user, checkSession
 from syndbb.models.paste import d2_paste
 from syndbb.models.time import unix_time_current
 

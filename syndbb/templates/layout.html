@@ -210,9 +210,6 @@
       </div>
     </nav>
     <div class="container-fluid">
-      {% if user_session.sessionid and not user.ircauth %}
-      <div class="alertnotice">Looks like you haven't set up a chat password yet!<br/>Go <a href="/account/preferences">here</a> to do so now! We are so excited!</div>
-      {% endif %}
       {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
           {% for category, message in messages %}
@@ -224,13 +221,7 @@
         {% endif %}
       {% endwith %}
 
-      {% if not user_session.sessionid and request.path != "/request-invite/" and request.path != "/login/" and "/register" not in request.path %}
-
-      <div class="regnotice">You should <a href="/register/">register</a> or <a href="/login/">log in</a> right now! We are so excited!</div>
-
-      {% else %}
       {% block body %}{% endblock %}
-      {% endif %}
 
     </div>
 

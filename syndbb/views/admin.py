@@ -6,7 +6,7 @@
 
 import syndbb, glob, shutil, subprocess, json, requests
 from sys import platform
-from syndbb.models.users import d2_user, d2_bans, d2_ip, d2_session, checkSession, is_banned
+from syndbb.models.users import d2_user, d2_bans, d2_ip, checkSession, is_banned
 from syndbb.models.invites import d2_requests
 from syndbb.models.d2_hash import d2_hash
 from syndbb.models.forums import d2_forums, d2_activity
@@ -333,7 +333,7 @@ def do_drop_session():
         if userid:
             user = d2_user.query.filter_by(user_id=userid).first()
             if user.rank >= 500:
-                check_session = d2_session.query.filter_by(user_id=dropuser).all()
+                check_session = d2_ip.query.filter_by(user_id=dropuser).filter_by(login=1).all()
                 for usession in check_session:
                     syndbb.db.session.delete(usession)
                     syndbb.db.session.commit()

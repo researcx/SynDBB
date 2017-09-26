@@ -10,7 +10,7 @@ from PIL import Image
 from werkzeug.utils import secure_filename
 
 from syndbb.models.get_emote import get_emote, get_submitted_emote
-from syndbb.models.users import d2_user, d2_session, checkSession
+from syndbb.models.users import d2_user, checkSession
 
 @syndbb.app.route("/emoticons/")
 def emoticons():

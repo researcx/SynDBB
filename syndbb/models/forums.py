@@ -115,7 +115,7 @@ syndbb.app.jinja_env.globals.update(parse_bbcode=parse_bbcode)
 ### Matrix Functions ###
 #Get channel info
 @syndbb.app.template_filter('get_channel_list')
-@syndbb.cache.memoize(timeout=180)
+#@syndbb.cache.memoize(timeout=180)
 def get_channel_list():
     channels = []
     chlist = ""
@@ -145,8 +145,13 @@ def get_channel_list():
     for forum in channels:
         chlist += '''<tr>
             <td class="home-forum home-forum-icon"><a href="/''' + str(forum['alias']) + '''"><img src="'''+ str(forum['icon']) + '''" alt=""/></a></td>
-            <td class="home-forum"><span class="timedisplay small" style="float: right; text-align: right;">''' + str(forum['users']) + ''' users<br/>in chat</span><a href="/''' + str(forum['alias']) + '''"><b>''' + str(forum['name']) + '''</b></a>
+            <td class="home-forum"><a href="/''' + str(forum['alias']) + '''"><b>''' + str(forum['name']) + '''</b></a>
             <br/><span class="small">''' + str(forum['description']) + '''</span>
+            </td>
+            <td class="home-forum home-forum-icon" style="padding-right: 9px !important;">
+                <a href="/''' + str(forum['alias']) + '''/new_thread" title="New Thread" style="float:right;">
+                    <i class="silk-icon icon_add" aria-hidden="true"></i>
+                </a>
             </td>
             <td class="home-forum home-forum-icon" style="padding-right: 9px !important;">
                 <a href="/im/?room=''' + str(forum['alias']) + '''" title="Join Chat" style="float:right;">
