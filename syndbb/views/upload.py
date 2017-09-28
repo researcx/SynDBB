@@ -6,7 +6,7 @@
 
 import syndbb, random, string, hashlib, piexif
 from PIL import Image
-from syndbb.models.users import d2_user, d2_session, checkSession
+from syndbb.models.users import d2_user, checkSession
 from syndbb.models.time import cdn_path
 from werkzeug.utils import secure_filename
 

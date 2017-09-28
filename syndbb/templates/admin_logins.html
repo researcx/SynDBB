@@ -1,6 +1,7 @@
 {% extends "layout.html" %} {% block body %}
 <table class="event-list table table-striped table-header">
   <thead>
+      <th>Session ID</th>
       <th>User</th>
       <th>IP</th>
       <th>Time</th>
@@ -11,6 +12,7 @@
   <tbody>
     {% for login in logins %}
     <tr>
+      <td>#{{login.id}}</td>
       <td><a href="/user/{{get_name(login.user_id)}}" class="username {{get_group_style_from_id(login.user_id)}}">{{get_name(login.user_id)}}</a></td>
       <td>{{login.ip}}</td>
       <td>{{time_ago(login.time)}}</td>

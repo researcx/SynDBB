@@ -5,7 +5,8 @@
 #
 
 import syndbb
-from flask import send_from_directory
+from flask import send_from_directory, make_response
+from syndbb.models.users import d2_user, checkSession, is_banned
 import syndbb.models.time
 import syndbb.models.activity
 import syndbb.models.version
@@ -27,6 +28,16 @@ def faviconico():
 def chat():
     return syndbb.render_template('chat.html', title="Chat", subheading=[""])
 
+@syndbb.app.route("/im/")
+def im():
+    hasRoom = syndbb.request.args.get('room', '')
+    return syndbb.render_template('chat_integrated.html', hasRoom=hasRoom)
+
+@syndbb.app.route("/im/header/")
+def im_header():
+    return syndbb.render_template('chat_header.html')
+
+
 @syndbb.app.route("/terms/")
 def terms():
     return syndbb.render_template('terms.html', title="Terms of Service", subheading=[""])
@@ -37,7 +48,7 @@ def rules():
 
 @syndbb.app.route("/chat-rules/")
 def chat_rules():
-    return syndbb.render_template('chat-rules.html', title="IRC Rules", subheading=[""])
+    return syndbb.render_template('chat-rules.html', title="Chat Rules", subheading=[""])
 
 @syndbb.app.route("/info/")
 def info():
@@ -61,3 +72,29 @@ def vidya():
         else:
             syndbb.flash('Room name can only contain letters and numbers.', 'danger')
     return syndbb.render_template('vidya.html', room=room, title=title, subheading=subheading)
+
+@syndbb.app.route("/user-styles/")
+def user_styles():
+    usercss = "a.nick{color: #397FEF !important; font-weight bold !important;}\n"
+    style = ""
+    users = d2_user.query.all()
+    for user in users:
+        if user:
+            if is_banned(user.user_id):
+                style = "color: #FF0000 !important; text-decoration: line-through !important;"
+            if user.rank >= 900:
+                style = "color: #DB0003 !important; font-weight: bold !important;"
+            elif user.rank >= 500:
+                style = "color: #AC15F2 !important; font-weight: bold !important;"
+            elif user.rank >= 100:
+                style = "color: #00BC1F !important; font-weight: bold !important;"
+            elif user.rank >= 50:
+                style = "color: #B56236 !important; font-weight: bold !important;"
+            else:
+                style = "color: #397FEF !important; font-weight bold !important;"
+        else:
+            style = "color: #397FEF !important; font-weight bold !important;"
+        usercss += "a.nick."+user.username+"{"+style+"}\n"
+    response = make_response(usercss)
+    response.headers['Content-Type'] = 'text/css'
+    return response

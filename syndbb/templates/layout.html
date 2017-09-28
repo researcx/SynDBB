@@ -43,84 +43,6 @@
   </body>
 </html>
 {% else %}
-{% if not user_session.sessionid and request.path != "/request-invite/" and "/register" not in request.path%}
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <meta name="description" content="D2K5">
-    <meta name="author" content="https://faggqt.pw/">
-    <meta name="referrer" content="no-referrer">
-
-    <link rel="apple-touch-icon" sizes="180x180" href="{{cdn_path()|safe}}/apple-touch-icon.png">
-    <link rel="icon" type="image/png" href="{{cdn_path()|safe}}/favicon-32x32.png" sizes="32x32">
-    <link rel="icon" type="image/png" href="{{cdn_path()|safe}}/favicon-16x16.png" sizes="16x16">
-    <link rel="manifest" href="{{cdn_path()|safe}}/manifest.json">
-    <link rel="mask-icon" href="{{cdn_path()|safe}}/safari-pinned-tab.svg" color="#000000">
-    <link rel="shortcut icon" href="{{cdn_path()|safe}}/favicon.ico">
-    <meta name="msapplication-config" content="{{cdn_path()|safe}}/browserconfig.xml">
-    <meta name="theme-color" content="#ffffff">
-    <title>D2K5 Network</title>
-    <script src="/static/js/crypt.js"></script>
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{cdn_path()|safe}}{{get_filemtime('/icons/iconAtlas.css')}}" rel="stylesheet">
-    <link href="{{cdn_path()|safe}}{{get_filemtime('/css/splash.css')}}" rel="stylesheet">
-  </head>
-
-  <body class="login">
-    <div style="text-align: center;">
-      <div id="login">
-        <a href="/" class="logo"><img src="/static/images/d2k5_logo.svg" style="-webkit-filter: invert(100%); filter:invert(100%);" alt="Welcome to D2K5" title="Welcome to D2K5" width="500" height="261"/></a>
-        <br/><br/><br/>
-          <div class="tab-content">
-          	<div role="tabpanel" class="tab-pane fade in active text-center" id="home">
-              &nbsp;
-          	</div>
-
-          	<div role="tabpanel" class="tab-pane fade text-center" id="dologin">
-                  <form class="form-horizontal" id="loginform" action="/functions/login" method="POST">
-                      <input type="text" name="username" id="inputUsername" placeholder="Username" tabindex="1" required>
-                      <input type="password" id="inputPassword" placeholder="Password" tabindex="2" required> <button type="submit" class="btn btn-link" tabindex="3"><i class="silk-icon icon_bullet_go splashbtn" aria-hidden="true"></i></button>
-                      <br/>
-                      <input type="hidden" name="password" id="pword">
-                  </form>
-          	</div>
-
-            <div role="tabpanel" class="tab-pane fade text-center" id="doregister">
-                  <form class="form-horizontal" id="inviteform" action="/register/code" method="get">
-                      <input type="text" id="inviteCode" size="30" placeholder="Invite Code" required> <button type="submit" class="btn btn-link"><i class="silk-icon icon_bullet_go splashbtn" aria-hidden="true"></i></button>
-                  </form>
-          	</div>
-
-            <div role="tabpanel" class="tab-pane fade text-center" id="doirc">
-              <span style="float: right;">
-                <b>Username:</b> &lt;your username&gt;<br/>
-                <b>Password:</b> &lt;<a href="#dologin" aria-controls="dologin" role="tab" data-toggle="tab">auth code</a>&gt;
-              </span>
-              <b>Server Addresses:</b> irc.d2k5.com, 5n3llbatdsan32kx.onion<br/>
-              <b>Server Port:</b> 6697 (SSL only)<br/>
-            </div>
-        </div>
-
-          <div class="links" role="tablist">
-          <a href="#dologin" aria-controls="dologin" role="tab" data-toggle="tab">Log In</a> &bull; <a href="#doregister" aria-controls="doregister" role="tab" data-toggle="tab">Register</a> &bull; <a href="#doirc" aria-controls="doirc" role="tab" data-toggle="tab">IRC</a>
-          <br/>
-          <span style="font-size: 12px; font-weight: bold; color: #777;">{{get_stats()['irccount']}} active users &bull; {{get_stats()['threadcount'] + get_stats()['postcount'] + get_stats()['linecount']}} messages sent<br/>
-          {{get_stats()['filecount']}} files uploaded &bull; {{human_size(get_stats()['filesize'])}} of {{human_size(get_stats()['disk_total'])}} disk used</span>
-          </div>
-
-        <br/><br/><span style="color: #fff; font-size: 12px; text-align: center;">D2K5 &copy; 2002 - {{ now.year }} by <a href="https://faggqt.pw" target="_blank" class="copyright">faggqt</a></span>
-      </div>
-    </div>
-    <script src="/static/js/jquery-3.1.1.min.js"></script>
-    <script src="/static/js/bootstrap.min.js"></script>
-    <script src="/static/js/auth/auth_login.js"></script>
-    <script src="/static/js/bootbox.min.js"></script>
-  </body>
-</html>
-{% else %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -215,7 +137,7 @@
         <div id="navbar" class="navbar-collapse collapse">
           <div class="navbar-container">
             <ul class="nav navbar-nav">
-              <li class="dropdown">
+               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="silk-icon icon_application_side_list" aria-hidden="true"></i> Channels <span class="caret"></span></a>
                 <ul class="dropdown-menu channel-list">
                   <li class="forum-list"><a href="#">Official</a></li>
@@ -242,9 +164,11 @@
                 </ul>
               </li>
               <li><a href="{{ url_for('chat') }}"><i class="silk-icon icon_comment" aria-hidden="true"></i> IRC ({{get_stats()['irccount']}} users)</a></li>
-              <li><a href="{{ url_for('events') }}"><i class="silk-icon icon_date" aria-hidden="true"></i> Events</a></li>
+              <!-- <li><a href="{{ url_for('events') }}"><i class="silk-icon icon_date" aria-hidden="true"></i> Events</a></li> -->
               <li><a href="{{ url_for('ban_list') }}"><i class="silk-icon icon_delete" aria-hidden="true"></i> Bans</a></li>
-              <li class="dropdown">
+              <li><a href="{{ url_for('pastebin') }}"><i class="silk-icon icon_paste_plain" aria-hidden="true"></i> Pastebin</a></li>
+              <li><a href="{{ url_for('upload') }}"><i class="silk-icon icon_package_go" aria-hidden="true"></i> Upload</a></li>
+              <!-- <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="silk-icon icon_cup" aria-hidden="true"></i> Services <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                   {% if user_session.sessionid %}
@@ -257,7 +181,7 @@
                   <li><a href="/vidya/">Video Chat</a></li>
                   <li><a href="/synctube/">SyncTube</a></li>
                 </ul>
-              </li>
+              </li> -->
             </ul>
             <ul class="nav navbar-nav navbar-right">
               {% if user_session.sessionid %}
@@ -287,12 +211,18 @@
     </nav>
     <div class="container-fluid">
       {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %} {% for category, message in messages %}
-      <div class="alert alert-{{ category }} alert-dismissible" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        {{ message }}
-      </div>
-      {% endfor %} {% endif %} {% endwith %} {% block body %}{% endblock %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      {% block body %}{% endblock %}
+
     </div>
 
     <footer class="footer">
@@ -315,5 +245,4 @@
     <script src="{{cdn_path()|safe}}{{get_filemtime('/js/includes.js')}}"></script>
   </body>
 </html>
-{% endif %}
 {% endif %}

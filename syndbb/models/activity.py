@@ -6,7 +6,7 @@
 
 import syndbb
 from syndbb.models.users import d2_user, d2_bans, is_banned, get_group_style_from_id
-from syndbb.models.forums import d2_forums, d2_activity, get_forum_icon
+from syndbb.models.forums import d2_forums, d2_activity
 from syndbb.models.time import display_time, recent_date, human_date, get_ban_expiry, cdn_path
 
 #Functions
@@ -60,13 +60,15 @@ def get_recent_posts(limit=10):
                                             <td class="home-forum">
                                             <span class="small align-right">
                                                 <span class="timedisplay">'''+recent_date(post.time)+'''</span><br/>
-                                                by '''+latestreplier+''' <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''#'''+str(post.id)+'''"><img src="'''+cdn_path()+'''/icons/thread_new.png" alt="Recent" style="margin-top: -2px;"/></a>
+                                                by '''+latestreplier+'''
                                             </span>
                                             <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''#'''+str(post.id)+'''"><b>'''+thread.title+'''</b></a>
                                             <span class="small"><br/>
                                             '''+threadcreator+''', <span class="timedisplay">'''+recent_date(thread.time)+'''</span>, <a href="/'''+str(forum.short_name)+'''">'''+forum.name+'''</a>
                                             </span>
-
+                                            <td class="home-forum home-forum-icon" style="padding-right: 9px !important;">
+                                                <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''#'''+str(post.id)+'''"><img src="'''+cdn_path()+'''/icons/thread_new.png" alt="Latest" title="Go to latest post" style="margin-top: -2px;"/></a>
+                                            </td>
                                             </td>
                                         </tr>'''
 
@@ -85,12 +87,15 @@ def get_recent_posts(limit=10):
                                             <td class="home-forum">
                                             <span class="small align-right">
                                                 <span class="timedisplay">'''+recent_date(thread.reply_time)+'''</span><br/>
-                                                by '''+threadcreator+''' <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''"><img src="'''+cdn_path()+'''/icons/thread_new.png" alt="Recent" style="margin-top: -2px;"/></a>
+                                                by '''+threadcreator+'''
                                             </span>
                                             <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''"><b>'''+thread.title+'''</b></a>
                                             <span class="small"><br/>
                                             '''+threadcreator+''', <span class="timedisplay">'''+recent_date(thread.time)+'''</span>, <a href="/'''+str(forum.short_name)+'''">'''+forum.name+'''</a>
                                             </span></td>
+                                            <td class="home-forum home-forum-icon" style="padding-right: 9px !important;">
+                                                <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''"><img src="'''+cdn_path()+'''/icons/thread_new.png" alt="Latest" title="Go to latest post" style="margin-top: -2px;"/></a>
+                                            </td>
                                         </tr>'''
             count += 1
 

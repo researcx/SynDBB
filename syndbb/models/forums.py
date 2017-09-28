@@ -4,7 +4,8 @@
 # The full license is included in LICENSE.md, which is distributed as part of this project.
 #
 
-import syndbb
+import syndbb, json, requests, urllib.parse
+from operator import itemgetter
 from syndbb.models.get_emote import get_emote
 from syndbb.models.users import d2_user, get_group_style_from_id
 from syndbb.models.time import cdn_path
@@ -40,33 +41,33 @@ def get_post_icons():
     return picon_list
 syndbb.app.jinja_env.globals.update(get_post_icons=get_post_icons)
 
-#Forum icons
-@syndbb.app.template_filter('get_forum_logo')
-@syndbb.cache.memoize(timeout=60)
-def get_forum_logo(short_name):
-    forum_icon = '/images/logos/{}.png'.format(short_name)
-    forum_icon_default = '/images/logos/blank.png'
-    root_path = syndbb.app.static_folder
-
-    if syndbb.os.path.isfile(root_path+forum_icon):
-        return cdn_path() + forum_icon
-    else:
-        return cdn_path() + forum_icon_default
-syndbb.app.jinja_env.globals.update(get_forum_logo=get_forum_logo)
-
-#Forum icons 2
-@syndbb.app.template_filter('get_forum_icon')
-@syndbb.cache.memoize(timeout=60)
-def get_forum_icon(short_name):
-    forum_icon = '/images/forumicons/{}.png'.format(short_name)
-    forum_icon_default = '/images/forumicons/blank.png'
-    root_path = syndbb.app.static_folder
-
-    if syndbb.os.path.isfile(root_path+forum_icon):
-        return cdn_path() + forum_icon
-    else:
-        return cdn_path() + forum_icon_default
-syndbb.app.jinja_env.globals.update(get_forum_icon=get_forum_icon)
+# #Forum icons
+# @syndbb.app.template_filter('get_forum_logo')
+# @syndbb.cache.memoize(timeout=60)
+# def get_forum_logo(short_name):
+#     forum_icon = '/images/logos/{}.png'.format(short_name)
+#     forum_icon_default = '/images/logos/blank.png'
+#     root_path = syndbb.app.static_folder
+#
+#     if syndbb.os.path.isfile(root_path+forum_icon):
+#         return cdn_path() + forum_icon
+#     else:
+#         return cdn_path() + forum_icon_default
+# syndbb.app.jinja_env.globals.update(get_forum_logo=get_forum_logo)
+#
+# #Forum icons 2
+# @syndbb.app.template_filter('get_forum_icon')
+# @syndbb.cache.memoize(timeout=60)
+# def get_forum_icon(short_name):
+#     forum_icon = '/images/forumicons/{}.png'.format(short_name)
+#     forum_icon_default = '/images/forumicons/blank.png'
+#     root_path = syndbb.app.static_folder
+#
+#     if syndbb.os.path.isfile(root_path+forum_icon):
+#         return cdn_path() + forum_icon
+#     else:
+#         return cdn_path() + forum_icon_default
+# syndbb.app.jinja_env.globals.update(get_forum_icon=get_forum_icon)
 
 #Reply IDs for a post
 @syndbb.app.template_filter('replies_to_post')
@@ -109,6 +110,37 @@ def parse_bbcode(text):
         text = text.replace(v, '<img src="'+cdn_path()+'/images/emots/'+k+'" alt="'+k+'" title="'+v+'" class="emoticon" />')
     return text
 syndbb.app.jinja_env.globals.update(parse_bbcode=parse_bbcode)
+
+#Get channel info
+@syndbb.app.template_filter('get_channel_list')
+@syndbb.cache.memoize(timeout=180)
+def get_channel_list():
+    channels = []
+    chlist = ""
+    forum_list = d2_forums.query.filter_by(owned_by=0).all()
+    for forum in forum_list:
+        forum_icon = '/images/forumicons/{}.png'.format(forum.short_name)
+        forum_icon_default = '/images/forumicons/blank.png'
+        root_path = syndbb.app.static_folder
+        if syndbb.os.path.isfile(root_path+forum_icon):
+            forum_icon = cdn_path() + forum_icon
+        else:
+            forum_icon = cdn_path() + forum_icon_default
+        channels.append({"id": forum.id, "name": forum.name, "description": forum.description, "alias": forum.short_name, "icon": forum_icon, "messages": 0, "threads": ""})
+    channels.sort(key=itemgetter('id'))
+
+    for forum in channels:
+        chlist += '''<tr>
+            <td class="home-forum home-forum-icon"><a href="/''' + str(forum['alias']) + '''"><img src="'''+ str(forum['icon']) + '''" alt=""/></a></td>
+            <td class="home-forum"><a href="/''' + str(forum['alias']) + '''"><b>''' + str(forum['name']) + '''</b></a>
+            <br/><span class="small">''' + str(forum['description']) + '''</span>
+            </td>
+            <td class="home-forum home-forum-icon small" style="padding-right: 9px !important;">
+                <strong>#''' + str(forum['alias']) + '''</strong>
+            </td>
+          </tr>'''
+    return chlist
+syndbb.app.jinja_env.globals.update(get_channel_list=get_channel_list)
 
 ### MySQL Functions ###
 class d2_forums(syndbb.db.Model):

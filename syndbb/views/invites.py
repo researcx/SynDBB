@@ -29,12 +29,17 @@ def generate_invite():
     userid = checkSession(str(uniqid))
     code = str(syndbb.uuid.uuid4().hex)
     if userid:
-        create_invite = d2_invites(code, userid, 0)
-        syndbb.db.session.add(create_invite)
-        syndbb.db.session.commit()
+        user = d2_user.query.filter_by(user_id=userid).first()
+        if user.rank >= 100:
+            create_invite = d2_invites(code, userid, 0)
+            syndbb.db.session.add(create_invite)
+            syndbb.db.session.commit()
 
-        syndbb.flash('An invite has been generated.', 'success')
-        return syndbb.redirect(syndbb.url_for('my_invites'))
+            syndbb.flash('An invite has been generated.', 'success')
+            return syndbb.redirect(syndbb.url_for('my_invites'))
+        else:
+            syndbb.flash('You don\'t have the permission to do this.', 'danger')
+            return syndbb.redirect(syndbb.url_for('my_invites'))
     else:
         return syndbb.render_template('error_not_logged_in.html', title="Not logged in")
 

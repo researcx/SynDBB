@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="D2-IM">
+    <meta name="author" content="https://faggqt.pw/">
+    <meta name="referrer" content="no-referrer">
+
+  	<link rel="apple-touch-icon" sizes="180x180" href="https://im.d2k5.com/client-icons/apple-touch-icon.png">
+  	<link rel="icon" type="image/png" sizes="32x32" href="https://im.d2k5.com/client-icons/favicon-32x32.png">
+  	<link rel="icon" type="image/png" sizes="16x16" href="https://im.d2k5.com/client-icons/favicon-16x16.png">
+  	<link rel="manifest" href="https://im.d2k5.com/client-icons/manifest.json">
+  	<link rel="mask-icon" href="https://im.d2k5.com/client-icons/safari-pinned-tab.svg" color="#0e5415">
+  	<link rel="shortcut icon" href="https://im.d2k5.com/client-icons/favicon.ico">
+    <link href="{{cdn_path()|safe}}{{get_filemtime('/css/font-awesome.min.css')}}" rel="stylesheet">
+  	<meta name="msapplication-config" content="https://im.d2k5.com/client-icons/browserconfig.xml">
+  	<meta name="theme-color" content="#ffffff">
+    {% if user_session.sessionid %}
+  	<style>
+  		html, body, iframe{
+  			margin: 0;
+  			padding: 0;
+  			height: 100%;
+  			overflow: hidden;
+        background-color: #26272d;
+        color: #6a6473;
+        font-family: Arial, Tahoma, Verdana;
+        font-size: 10px;
+  		}
+
+      .alertnotice{
+        color: red;
+        font-weight: bold;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        margin: 0 auto;
+        font-size: 20pt;
+        padding-top: 15%;
+        background: yellow;
+        border-bottom: 1px solid #ddd;
+      }
+
+      .alertnotice a{
+        color: #000;
+      }
+
+      .header{
+        background-color: #181a1d;
+        border-bottom: 2px solid #15171a;
+        height: 12px;
+        padding: 4px;
+      }
+      .top-avatar {
+          float: right;
+      }
+      .top-left{
+        float: left;
+        margin-left: 4px;
+        margin-top: 1px;
+        font-weight: bold;
+      }
+      .top-right{
+        float: right;
+        margin-right: 4px;
+        margin-top: 1px;
+        font-weight: bold;
+      }
+      .top-avatar-size {
+          width: 16px;
+          height: 16px;
+          margin-top: -8px;
+      }
+      a{
+        color: inherit;
+        text-decoration: none;
+      }
+      a:hover{
+        color: #615c6a;
+      }
+  	</style>
+    {% else %}
+    <script src="/static/js/crypt.js"></script>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{cdn_path()|safe}}{{get_filemtime('/icons/iconAtlas.css')}}" rel="stylesheet">
+    <link href="{{cdn_path()|safe}}{{get_filemtime('/css/splash.css')}}" rel="stylesheet">
+    {% endif %}
+    <title>D2-IM</title>
+  </head>
+  {% if user_session.sessionid %}
+	<body>
+    <div class="header stats_dynamic"> </div>
+    {% if user_session.sessionid and not user.ircauth %}
+    <div class="alertnotice">Looks like you haven't set up a chat password yet!<br/>Go <a href="/account/preferences" target="_blank">here</a> to do so now! We are so excited!
+    <br/><br/>
+    <a href="/im">Click here once you've set up your chat password!</a>
+    </div>
+    {% else %}
+		<iframe src="https://irc.d2k5.com/?nick={{user.username}}&password={{user.username}}/D2K5:{{user.ircauth}}&autojoin=true{% if hasRoom %}&chan={{hasRoom}}{% else %}&chan=d2k5{% endif %}" style="width: 100%; height: calc(100% - 22px); border: 0px; overflow: none;"></iframe>
+    {% endif %}
+	</body>
+  {% else %}
+  <body class="login">
+    <div style="text-align: center;">
+      <div id="login">
+        <a href="/" class="logo"><img src="/static/images/d2k5_logo.svg" style="-webkit-filter: invert(100%); filter:invert(100%);" alt="Welcome to D2K5" title="Welcome to D2K5" width="500" height="261"/></a>
+        <br/><br/><br/>
+        <form class="form-horizontal" id="loginform" action="/functions/login" method="POST">
+            <input type="text" name="username" id="inputUsername" placeholder="Username" tabindex="1" required>
+            <input type="password" id="inputPassword" placeholder="Password" tabindex="2" required> <button type="submit" class="btn btn-link" tabindex="3"><i class="silk-icon icon_bullet_go splashbtn" aria-hidden="true"></i></button>
+            <br/>
+            <input type="hidden" name="password" id="pword">
+        </form>
+      </div>
+    </div>
+  </body>
+  <script src="/static/js/jquery-3.1.1.min.js"></script>
+  <script src="/static/js/auth/auth_chat.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/bootbox.min.js"></script>
+  {% endif %}
+  {% if user_session.sessionid %}
+  <script src="/static/js/jquery-3.1.1.min.js"></script>
+	<script src="/static/js/jquery.updater.js"></script>
+	<script src="/static/js/jquery.periodicalupdater.js"></script>
+
+	<script>
+		$.PeriodicalUpdater('/im/header}', {
+			url: '/im/header',         // URL of ajax request
+			cache: false,     // By default, don't allow caching
+			method: 'GET',    // method; get or post
+			data: '',         // array of values to be passed to the page - e.g. {name: "John", greeting: "hello"}
+			minTimeout: 1000, // starting value for the timeout in milliseconds
+			maxTimeout:10000, // maximum length of time between requests
+			multiplier: 2,    // if set to 2, timerInterval will double each time the response hasn't changed (up to maxTimeout)
+			maxCalls: 0,      // maximum number of calls. 0 = no limit.
+			maxCallsCallback: null, // The callback to execute when we reach our max number of calls
+			autoStop: 0,      // automatically stop requests after this many returns of the same data. 0 = disabled
+			autoStopCallback: null, // The callback to execute when we autoStop
+			cookie: false,    // whether (and how) to store a cookie
+			runatonce: true, // Whether to fire initially or wait
+			verbose: 0        // The level to be logging at: 0 = none; 1 = some; 2 = all
+		}, function(remoteData, success, xhr, handle) {
+			$('.stats_dynamic').html(remoteData);
+		});
+	</script>
+  {% endif %}
+</html>

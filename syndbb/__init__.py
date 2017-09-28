@@ -34,6 +34,7 @@ znc_port = os.environ.get('ZNC_PORT')
 znc_user = os.environ.get('ZNC_USER')
 znc_password = os.environ.get('ZNC_PASSWORD')
 
+
 if db == None or cdn == None or secretkey == None or hashkey == None or ircapi == None:
     print("*** No configuration variables defined! Exiting... ***")
     os.kill(os.getpid(), signal.SIGTERM)

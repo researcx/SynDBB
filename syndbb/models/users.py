@@ -13,7 +13,7 @@ def checkSession(sessionid):
     if syndbb.session:
         sessioncookie = str(syndbb.session['logged_in'])
         if sessioncookie == sessionid:
-            sessioncheck = d2_session.query.filter(d2_session.sessionid == sessionid).first()
+            sessioncheck = d2_ip.query.filter(d2_ip.sessionid == sessionid).filter_by(ip=syndbb.request.remote_addr).first()
             if sessioncheck:
                 bancheck = is_banned(sessioncheck.user_id)
                 if bancheck:
@@ -28,7 +28,7 @@ def checkSession(sessionid):
 @syndbb.app.context_processor
 def inject_user():
     if 'logged_in' in syndbb.session:
-        user_session = d2_session.query.filter_by(sessionid=syndbb.session['logged_in']).first()
+        user_session = d2_ip.query.filter_by(sessionid=syndbb.session['logged_in']).filter_by(ip=syndbb.request.remote_addr).first()
         if user_session:
             user = d2_user.query.filter_by(user_id=user_session.user_id).first()
             if user and user.user_id:
@@ -36,14 +36,10 @@ def inject_user():
                 syndbb.db.session.commit()
 
                 my_ip = syndbb.request.remote_addr
-                ipcheck = d2_ip.query.filter_by(ip=my_ip).filter_by(user_id=user.user_id).filter_by(login=1).first()
+                ipcheck = d2_ip.query.filter_by(ip=my_ip).filter_by(user_id=user.user_id).filter_by(sessionid=user_session.sessionid).first()
                 if ipcheck:
                     ipcheck.time = unix_time_current()
                     ipcheck.page = syndbb.request.path
-                    syndbb.db.session.commit()
-                else:
-                    new_ip = d2_ip(my_ip, user.user_id, unix_time_current(), 1, syndbb.request.path)
-                    syndbb.db.session.add(new_ip)
                     syndbb.db.session.commit()
 
                 bancheck = is_banned(user.user_id)
@@ -196,25 +192,10 @@ syndbb.app.jinja_env.globals.update(get_group_style_from_id=get_group_style_from
 # syndbb.app.jinja_env.globals.update(get_group_style=get_group_style)
 
 ### MySQL Functions ###
-class d2_session(syndbb.db.Model):
-    id = syndbb.db.Column(syndbb.db.Integer, primary_key=True)
-    user_id = syndbb.db.Column(syndbb.db.Integer, unique=False)
-    sessionid = syndbb.db.Column(syndbb.db.String, unique=False)
-    time = syndbb.db.Column(syndbb.db.Integer, unique=False)
-
-    def __init__(self, user_id, sessionid, time):
-        self.user_id = user_id
-        self.sessionid = sessionid
-        self.time = time
-
-    def __repr__(self):
-        return '<Session %r>' % self.sessionid
-
-
 class d2_user(syndbb.db.Model):
     user_id = syndbb.db.Column(syndbb.db.Integer, primary_key=True)
     username = syndbb.db.Column(syndbb.db.String(150), unique=True)
-    email = syndbb.db.Column(syndbb.db.String, unique=False)
+    token = syndbb.db.Column(syndbb.db.String, unique=False)
     title = syndbb.db.Column(syndbb.db.String, unique=False)
     status = syndbb.db.Column(syndbb.db.String, unique=False)
     status_time = syndbb.db.Column(syndbb.db.Integer, unique=False)
@@ -241,9 +222,9 @@ class d2_user(syndbb.db.Model):
     upload_url = syndbb.db.Column(syndbb.db.String, unique=False)
 
 
-    def __init__(self, username, email, title, status, status_time, rank, gender, location, occupation, bio, site, avatar_date, password, post_count, line_count, word_count, profanity_count, karma_positive, karma_negative, points, join_date, last_login, last_activity, ircauth, uploadauth, upload_url):
+    def __init__(self, username, token, title, status, status_time, rank, gender, location, occupation, bio, site, avatar_date, password, post_count, line_count, word_count, profanity_count, karma_positive, karma_negative, points, join_date, last_login, last_activity, ircauth, uploadauth, upload_url):
         self.username = username
-        self.email = email
+        self.token = token
         self.title = title
         self.status = status
         self.status_time = status_time
@@ -305,13 +286,15 @@ class d2_ip(syndbb.db.Model):
     time = syndbb.db.Column(syndbb.db.Integer, unique=False)
     login = syndbb.db.Column(syndbb.db.Integer, unique=False)
     page = syndbb.db.Column(syndbb.db.String, unique=False)
+    sessionid = syndbb.db.Column(syndbb.db.String, unique=False)
 
-    def __init__(self, ip, user_id, time, login, page):
+    def __init__(self, ip, user_id, time, login, page, sessionid):
         self.ip = ip
         self.user_id = user_id
         self.time = time
         self.login = login
         self.page = page
+        self.sessionid = sessionid
 
     def __repr__(self):
         return '<IP %r>' % self.user_id

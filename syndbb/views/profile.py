@@ -4,9 +4,10 @@
 # The full license is included in LICENSE.md, which is distributed as part of this project.
 #
 
-import syndbb, shutil, base64, requests
+import syndbb, shutil, base64, requests, hashlib, hmac, json
 from flask import send_from_directory
 from syndbb.models.users import d2_user, d2_ip, checkSession
+from syndbb.models.forums import d2_forums
 from syndbb.models.time import unix_time_current, cdn_path
 from werkzeug.utils import secure_filename
 from PIL import Image
@@ -158,13 +159,16 @@ def update_status():
     else:
         return "Invalid Request"
 
-@syndbb.app.route("/account/viewAvatar/<userid>")
-def view_avatar(userid):
-    if userid:
-        user = d2_user.query.filter_by(user_id=userid).first()
+@syndbb.app.route("/account/viewAvatar/<username>")
+def view_avatar(username):
+    if username:
+        user = d2_user.query.filter_by(username=username).first()
         if user:
             dynamic_js_footer = ["js/jquery.cropit.js", "js/bootbox.min.js", "js/delete.js"]
             avatar = cdn_path() + "/data/avatars/"+str(user.user_id)+".png?v="+str(user.avatar_date)
+            return syndbb.redirect(avatar)
+        else:
+            avatar = cdn_path() + '/images/default_avatar.png'
             return syndbb.redirect(avatar)
 
 
