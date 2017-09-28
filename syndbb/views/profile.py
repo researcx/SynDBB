@@ -158,18 +158,27 @@ def update_status():
             return "Invalid Session"
     else:
         return "Invalid Request"
+    
+@syndbb.app.route("/account/viewAvatar/")
+def no_avatar():
+    davatar = cdn_path() + '/images/default_avatar.png'
+    return syndbb.redirect(davatar)
 
 @syndbb.app.route("/account/viewAvatar/<username>")
 def view_avatar(username):
+    davatar = cdn_path() + '/images/default_avatar.png'
     if username:
         user = d2_user.query.filter_by(username=username).first()
         if user:
             dynamic_js_footer = ["js/jquery.cropit.js", "js/bootbox.min.js", "js/delete.js"]
-            avatar = cdn_path() + "/data/avatars/"+str(user.user_id)+".png?v="+str(user.avatar_date)
-            return syndbb.redirect(avatar)
+            avatar_path = syndbb.app.static_folder + "/data/avatars/"+str(user.user_id)+".png"
+            uavatar = cdn_path() + "/data/avatars/"+str(user.user_id)+".png?v="+str(user.avatar_date)
+            if syndbb.os.path.isfile(avatar_path):
+                return syndbb.redirect(uavatar)
+            else:
+                return syndbb.redirect(davatar)
         else:
-            avatar = cdn_path() + '/images/default_avatar.png'
-            return syndbb.redirect(avatar)
+            return syndbb.redirect(davatar)
 
 
 @syndbb.app.route("/account/avatar")
