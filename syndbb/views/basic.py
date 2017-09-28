@@ -94,7 +94,7 @@ def user_styles():
                 style = "color: #397FEF !important; font-weight bold !important;"
         else:
             style = "color: #397FEF !important; font-weight bold !important;"
-        usercss += ".nick."+user.username+"{"+style+"}\n"
+        usercss += "."+user.username+"{"+style+"}\n"
     response = make_response(usercss)
     response.headers['Content-Type'] = 'text/css'
     return response
