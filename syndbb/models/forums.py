@@ -111,35 +111,22 @@ def parse_bbcode(text):
     return text
 syndbb.app.jinja_env.globals.update(parse_bbcode=parse_bbcode)
 
-
-### Matrix Functions ###
 #Get channel info
 @syndbb.app.template_filter('get_channel_list')
-#@syndbb.cache.memoize(timeout=180)
+@syndbb.cache.memoize(timeout=180)
 def get_channel_list():
     channels = []
     chlist = ""
-    chan = requests.get(syndbb.matrix_api + "client/r0/publicRooms", verify=False)
-    matrix_response = json.loads(chan.text)
-    for item in matrix_response["chunk"]:
-        if 'canonical_alias' in item:
-            channeltopic = ""
-            short_name = syndbb.re.search('(?<=#)(.*)(?=:)', item['canonical_alias']).group(1)
-            forum_exists = d2_forums.query.filter_by(short_name=short_name).first()
-            if forum_exists:
-                forum_icon = '/images/forumicons/{}.png'.format(short_name)
-                forum_icon_default = '/images/forumicons/blank.png'
-                root_path = syndbb.app.static_folder
-                if syndbb.os.path.isfile(root_path+forum_icon):
-                    forum_icon = cdn_path() + forum_icon
-                else:
-                    forum_icon = cdn_path() + forum_icon_default
-                # msgs = requests.get(syndbb.matrix_api + "client/r0/rooms/"+urllib.parse.quote_plus(item['room_id'])+"/messages?from=s345_678_333&dir=b&limit=0&access_token="+syndbb.matrix_api_access_token+"", verify=False)
-                # msgs = json.loads(msgs.text)
-                if 'topic' in item:
-                    channeltopic = item['topic']
-                threadcount = d2_activity.query.filter(d2_activity.category == forum_exists.id).count()
-                channels.append({"id": forum_exists.id, "name": item['name'], "description": channeltopic, "alias": short_name, "users": item['num_joined_members'], "icon": forum_icon, "messages": 0, "threads": threadcount})
+    forum_list = d2_forums.query.filter_by(owned_by=0).all()
+    for forum in forum_list:
+        forum_icon = '/images/forumicons/{}.png'.format(forum.short_name)
+        forum_icon_default = '/images/forumicons/blank.png'
+        root_path = syndbb.app.static_folder
+        if syndbb.os.path.isfile(root_path+forum_icon):
+            forum_icon = cdn_path() + forum_icon
+        else:
+            forum_icon = cdn_path() + forum_icon_default
+        channels.append({"id": forum.id, "name": forum.name, "description": forum.description, "alias": forum.short_name, "icon": forum_icon, "messages": 0, "threads": ""})
     channels.sort(key=itemgetter('id'))
 
     for forum in channels:
@@ -148,15 +135,8 @@ def get_channel_list():
             <td class="home-forum"><a href="/''' + str(forum['alias']) + '''"><b>''' + str(forum['name']) + '''</b></a>
             <br/><span class="small">''' + str(forum['description']) + '''</span>
             </td>
-            <td class="home-forum home-forum-icon" style="padding-right: 9px !important;">
-                <a href="/''' + str(forum['alias']) + '''/new_thread" title="New Thread" style="float:right;">
-                    <i class="silk-icon icon_add" aria-hidden="true"></i>
-                </a>
-            </td>
-            <td class="home-forum home-forum-icon" style="padding-right: 9px !important;">
-                <a href="/im/?room=''' + str(forum['alias']) + '''" title="Join Chat" style="float:right;">
-                    <i class="silk-icon icon_comment" aria-hidden="true"></i><i class="silk-icon icon_bullet_go" style="margin-top: 2px; margin-left: -10px; position: absolute;" aria-hidden="true"></i>
-                </a>
+            <td class="home-forum home-forum-icon small" style="padding-right: 9px !important;">
+                <strong>#''' + str(forum['alias']) + '''</strong>
             </td>
           </tr>'''
     return chlist

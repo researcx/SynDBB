@@ -63,33 +63,12 @@ def get_stats():
         progress_indicator = "progress-bar-danger"
 
     #IRC User Count
-    # irccount = 0
-    # logfile = "logs/irc_users.log"
-    # if syndbb.os.path.isfile(logfile):
-    #     file = open(logfile, "r")
-    #     irccount = file.read()
-
-
-    #Matrix Implementation (count users and messages sent)
-    total_lines = 0
-    total_users = 0
-    channels = []
-    chlist = ""
-    chan = requests.get(syndbb.matrix_api + "client/r0/publicRooms", verify=False)
-    matrix_response = json.loads(chan.text)
-    for item in matrix_response["chunk"]:
-        if 'canonical_alias' in item:
-            short_name = syndbb.re.search('(?<=#)(.*)(?=:)', item['canonical_alias']).group(1)
-            forum_exists = d2_forums.query.filter_by(short_name=short_name).first()
-            if forum_exists:
-                if forum_exists.short_name == "d2k5":
-                    total_users = int(item['num_joined_members'])
-                # msgs = requests.get(syndbb.matrix_api + "client/r0/rooms/"+item['room_id']+"/messages?from=s345_678_333&dir=b&limit=0&access_token="+syndbb.matrix_api_access_token+"", verify=False)
-                # msgs = json.loads(msgs.text)
-                #
-                # total_lines += len(msgs["chunk"])
-
-    return {'usercount': usercount, 'postcount': postcount, 'threadcount': threadcount, 'bancount': bancount, 'officialforumcount': officialforumcount, 'unofficialforumcount': unofficialforumcount, 'unapprovedforumcount': unapprovedforumcount, 'irccount': usercount, 'filecount': filecount, 'filesize': filesize, 'disk_percentage': disk_percentage, 'disk_total': disk_total, 'progress_indicator': progress_indicator, 'linecount': (total_lines + linecount)}
+    irccount = 0
+    logfile = "logs/irc_users.log"
+    if syndbb.os.path.isfile(logfile):
+        file = open(logfile, "r")
+        irccount = file.read()
+    return {'usercount': usercount, 'postcount': postcount, 'threadcount': threadcount, 'bancount': bancount, 'officialforumcount': officialforumcount, 'unofficialforumcount': unofficialforumcount, 'unapprovedforumcount': unapprovedforumcount, 'irccount': irccount, 'filecount': filecount, 'filesize': filesize, 'disk_percentage': disk_percentage, 'disk_total': disk_total, 'progress_indicator': progress_indicator, 'linecount': linecount}
 syndbb.app.jinja_env.globals.update(get_stats=get_stats)
 
 @syndbb.app.route("/account/admin")

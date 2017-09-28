@@ -137,14 +137,14 @@
         <div id="navbar" class="navbar-collapse collapse">
           <div class="navbar-container">
             <ul class="nav navbar-nav">
-              <li class="dropdown">
+               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="silk-icon icon_application_side_list" aria-hidden="true"></i> Channels <span class="caret"></span></a>
                 <ul class="dropdown-menu channel-list">
                   <li class="forum-list"><a href="#">Official</a></li>
                   {% for forum in forums %}
                   <li>
                     <a href="/{{ forum.short_name }}/">
-                      <!-- <span style="float:right;">#{{ forum.short_name }}</span> -->
+                      <span style="float:right;">#{{ forum.short_name }}</span>
                       {{ forum.name }}
                     </a>
                   </li>
@@ -153,7 +153,7 @@
                   {% for forum in custom_forums %}
                   <li>
                     <a href="/{{ forum.short_name }}/">
-                      <!-- <span style="float:right;">#{{ forum.short_name }}</span> -->
+                      <span style="float:right;">#{{ forum.short_name }}</span>
                       {{ forum.name }}
                     </a>
                   </li>
@@ -163,7 +163,7 @@
                   {% endif %}
                 </ul>
               </li>
-              <li><a href="{{ url_for('chat') }}"><i class="silk-icon icon_comment" aria-hidden="true"></i> Chat</a></li>
+              <li><a href="{{ url_for('chat') }}"><i class="silk-icon icon_comment" aria-hidden="true"></i> IRC ({{get_stats()['irccount']}} users)</a></li>
               <!-- <li><a href="{{ url_for('events') }}"><i class="silk-icon icon_date" aria-hidden="true"></i> Events</a></li> -->
               <li><a href="{{ url_for('ban_list') }}"><i class="silk-icon icon_delete" aria-hidden="true"></i> Bans</a></li>
               <li><a href="{{ url_for('pastebin') }}"><i class="silk-icon icon_paste_plain" aria-hidden="true"></i> Pastebin</a></li>

@@ -89,6 +89,7 @@ def save_preferences():
     gender = syndbb.request.form['gender']
     occupation = syndbb.request.form['occupation']
     url = syndbb.request.form['url']
+    ircauth = syndbb.request.form['ircauth']
     uploadauth = syndbb.request.form['uploadauth']
     upload_url = syndbb.request.form['upload_url']
     bio = syndbb.request.form['bio']
@@ -105,67 +106,33 @@ def save_preferences():
             user.gender = gender
             user.occupation = occupation
             user.site = url
+            user.ircauth = ircauth
             user.uploadauth = uploadauth
             if upload_url in possibleurls:
                 user.upload_url = upload_url
             else:
                 user.upload_url = "i.d2k5.com"
             user.bio = bio
-
-            #Do the Matrix API stuff
-            if user.ircauth == None or user.ircauth == "":
-                ircauth = syndbb.request.form['ircauth']
-                matrixuser = user.username
-                matrixpass = ircauth
-                authstring = matrixuser+"\x00"+matrixpass+"\x00notadmin"
-                matrix_hmac = hmac.new(syndbb.matrix_api_reg_key.encode(), authstring.encode(), hashlib.sha1).hexdigest()
-
-                #Matrix User Registration
-                try:
-                    udata = {'user': matrixuser, 'password': matrixpass, 'type': 'org.matrix.login.shared_secret', 'mac': matrix_hmac}
-                    reg = requests.post(syndbb.matrix_api + "client/api/v1/register", data=json.dumps(udata), verify=False)
-                    matrix_response = json.loads(reg.text)
-
-                    #Remember access token, join a channel and set a name
-                    if 'access_token' in matrix_response:
-                        access_token = matrix_response['access_token']
-                        user.token = access_token
-
-                        #Set Display Name
-                        udata = {'displayname': matrixuser}
-                        reg = requests.put(syndbb.matrix_api + "client/r0/profile/%40"+matrixuser+"%3Ahardcats.net/displayname?access_token="+user.token, data=json.dumps(udata), verify=False)
-
-                        #Join some channels
-                        chan = requests.get(syndbb.matrix_api + "client/r0/publicRooms", verify=False)
-                        matrix_response = json.loads(chan.text)
-                        for item in matrix_response["chunk"]:
-                            if 'canonical_alias' in item:
-                                short_name = syndbb.re.search('(?<=#)(.*)(?=:)', item['canonical_alias']).group(1)
-                                forum_exists = d2_forums.query.filter_by(short_name=short_name).first()
-                                if forum_exists:
-                                    reg = requests.post(syndbb.matrix_api + "client/r0/join/%23"+short_name+"%3Ahardcats.net?access_token="+user.token, verify=False)
-                        user.ircauth = ircauth
-                        syndbb.flash("Chat user created.", "success")
-                except requests.exceptions.RequestException:
-                    syndbb.flash('Couldn\'t create a chat user.', 'danger')
-
-            syndbb.flash('Preferences updated successfully.', 'success')
             syndbb.db.session.commit()
 
-            # try:
-            #     requests.get("https://" + syndbb.znc_address + ":" + syndbb.znc_port + "/mods/global/httpadmin/adduser?username=" + user.username + "&password=" + ircauth, auth=(syndbb.znc_user, syndbb.znc_password), verify=False)
-            # except requests.exceptions.RequestException:
-            #     syndbb.flash('Couldn\'t create an IRC user.', 'danger')
-            #
-            # try:
-            #     requests.get("https://" + syndbb.znc_address + ":" + syndbb.znc_port + "/mods/global/httpadmin/userpassword?username=" + user.username + "&password=" + ircauth, auth=(syndbb.znc_user, syndbb.znc_password), verify=False)
-            # except requests.exceptions.RequestException:
-            #     syndbb.flash('Couldn\'t change IRC password.', 'danger')
-            #
-            # try:
-            #     requests.get("https://" + syndbb.znc_address + ":" + syndbb.znc_port + "/mods/global/httpadmin/addnetwork?username=" + user.username + "&net_name=" + syndbb.irc_network_name + "&net_addr=" + syndbb.irc_network_address + "&net_port=" + syndbb.irc_network_port, auth=(syndbb.znc_user, syndbb.znc_password), verify=False)
-            # except requests.exceptions.RequestException:
-            #     syndbb.flash('Couldn\'t assign an IRC network.', 'danger')
+
+            syndbb.cache.delete_memoized(syndbb.models.users.get_all_status_updates)
+            syndbb.flash('Preferences updated successfully.', 'success')
+
+            try:
+                requests.get("https://" + syndbb.znc_address + ":" + syndbb.znc_port + "/mods/global/httpadmin/adduser?username=" + user.username + "&password=" + ircauth, auth=(syndbb.znc_user, syndbb.znc_password), verify=False)
+            except requests.exceptions.RequestException:
+                syndbb.flash('Couldn\'t create an IRC user.', 'danger')
+
+            try:
+                requests.get("https://" + syndbb.znc_address + ":" + syndbb.znc_port + "/mods/global/httpadmin/userpassword?username=" + user.username + "&password=" + ircauth, auth=(syndbb.znc_user, syndbb.znc_password), verify=False)
+            except requests.exceptions.RequestException:
+                syndbb.flash('Couldn\'t change IRC password.', 'danger')
+
+            try:
+                requests.get("https://" + syndbb.znc_address + ":" + syndbb.znc_port + "/mods/global/httpadmin/addnetwork?username=" + user.username + "&net_name=" + syndbb.irc_network_name + "&net_addr=" + syndbb.irc_network_address + "&net_port=" + syndbb.irc_network_port, auth=(syndbb.znc_user, syndbb.znc_password), verify=False)
+            except requests.exceptions.RequestException:
+                syndbb.flash('Couldn\'t assign an IRC network.', 'danger')
 
             return syndbb.redirect(syndbb.url_for('preferences'))
         else:
@@ -192,13 +159,16 @@ def update_status():
     else:
         return "Invalid Request"
 
-@syndbb.app.route("/account/viewAvatar/<userid>")
-def view_avatar(userid):
-    if userid:
-        user = d2_user.query.filter_by(user_id=userid).first()
+@syndbb.app.route("/account/viewAvatar/<username>")
+def view_avatar(username):
+    if username:
+        user = d2_user.query.filter_by(username=username).first()
         if user:
             dynamic_js_footer = ["js/jquery.cropit.js", "js/bootbox.min.js", "js/delete.js"]
             avatar = cdn_path() + "/data/avatars/"+str(user.user_id)+".png?v="+str(user.avatar_date)
+            return syndbb.redirect(avatar)
+        else:
+            avatar = cdn_path() + '/images/default_avatar.png'
             return syndbb.redirect(avatar)
 
 

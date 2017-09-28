@@ -96,7 +96,7 @@
     <a href="/im">Click here once you've set up your chat password!</a>
     </div>
     {% else %}
-		<iframe src="https://im.d2k5.com/{% if hasRoom %}?#/room/#{{hasRoom}}:hardcats.net{% endif %}" style="width: 100%; height: calc(100% - 22px); border: 0px; overflow: none;"></iframe>
+		<iframe src="https://irc.d2k5.com/?nick={{user.username}}&password={{user.username}}/D2K5:{{user.ircauth}}&autojoin=true{% if hasRoom %}&chan={{hasRoom}}{% else %}&chan=d2k5{% endif %}" style="width: 100%; height: calc(100% - 22px); border: 0px; overflow: none;"></iframe>
     {% endif %}
 	</body>
   {% else %}
@@ -110,8 +110,6 @@
             <input type="password" id="inputPassword" placeholder="Password" tabindex="2" required> <button type="submit" class="btn btn-link" tabindex="3"><i class="silk-icon icon_bullet_go splashbtn" aria-hidden="true"></i></button>
             <br/>
             <input type="hidden" name="password" id="pword">
-            <div class="info">After logging in to D2K5, you will be prompted to log into your <strong>chat account</strong>.<br/>
-            Use your <strong>chat password</strong> for that, not your D2K5 password.</div>
         </form>
       </div>
     </div>
