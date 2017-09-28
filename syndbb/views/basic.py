@@ -75,7 +75,7 @@ def vidya():
 
 @syndbb.app.route("/user-styles/")
 def user_styles():
-    usercss = "a.nick{color: #397FEF !important; font-weight bold !important;}\n"
+    usercss = ".nick{color: #397FEF !important; font-weight bold !important;}\n"
     style = ""
     users = d2_user.query.all()
     for user in users:
@@ -94,7 +94,7 @@ def user_styles():
                 style = "color: #397FEF !important; font-weight bold !important;"
         else:
             style = "color: #397FEF !important; font-weight bold !important;"
-        usercss += "a.nick."+user.username+"{"+style+"}\n"
+        usercss += ".nick."+user.username+"{"+style+"}\n"
     response = make_response(usercss)
     response.headers['Content-Type'] = 'text/css'
     return response
