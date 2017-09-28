@@ -80,8 +80,6 @@ def user_styles():
     users = d2_user.query.all()
     for user in users:
         if user:
-            if is_banned(user.user_id):
-                style = "color: #FF0000 !important; text-decoration: line-through !important;"
             if user.rank >= 900:
                 style = "color: #DB0003 !important; font-weight: bold !important;"
             elif user.rank >= 500:
@@ -92,6 +90,8 @@ def user_styles():
                 style = "color: #B56236 !important; font-weight: bold !important;"
             else:
                 style = "color: #397FEF !important; font-weight bold !important;"
+            if is_banned(user.user_id):
+                style = "color: #FF0000 !important; text-decoration: line-through !important;"
         else:
             style = "color: #397FEF !important; font-weight bold !important;"
         usercss += "."+user.username+"{"+style+"}\n"
