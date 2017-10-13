@@ -100,8 +100,9 @@ def save_preferences():
         if userid:
 
             user = d2_user.query.filter_by(user_id=userid).first()
-            user.status = status
-            user.status_time = unix_time_current()
+            if status is not user.status:
+                user.status = status
+                user.status_time = unix_time_current()
             user.location = location
             user.gender = gender
             user.occupation = occupation
@@ -119,20 +120,21 @@ def save_preferences():
             syndbb.cache.delete_memoized(syndbb.models.users.get_all_status_updates)
             syndbb.flash('Preferences updated successfully.', 'success')
 
-            try:
-                requests.get("https://" + syndbb.znc_address + ":" + syndbb.znc_port + "/mods/global/httpadmin/adduser?username=" + user.username + "&password=" + ircauth, auth=(syndbb.znc_user, syndbb.znc_password), verify=False)
-            except requests.exceptions.RequestException:
-                syndbb.flash('Couldn\'t create an IRC user.', 'danger')
+            if ircauth is not user.ircauth:
+                try:
+                    requests.get("https://" + syndbb.znc_address + ":" + syndbb.znc_port + "/mods/global/httpadmin/adduser?username=" + user.username + "&password=" + ircauth, auth=(syndbb.znc_user, syndbb.znc_password), verify=False, timeout=5)
+                except requests.exceptions.RequestException:
+                    syndbb.flash('Couldn\'t create an IRC user.', 'danger')
 
-            try:
-                requests.get("https://" + syndbb.znc_address + ":" + syndbb.znc_port + "/mods/global/httpadmin/userpassword?username=" + user.username + "&password=" + ircauth, auth=(syndbb.znc_user, syndbb.znc_password), verify=False)
-            except requests.exceptions.RequestException:
-                syndbb.flash('Couldn\'t change IRC password.', 'danger')
+                try:
+                    requests.get("https://" + syndbb.znc_address + ":" + syndbb.znc_port + "/mods/global/httpadmin/userpassword?username=" + user.username + "&password=" + ircauth, auth=(syndbb.znc_user, syndbb.znc_password), verify=False, timeout=5)
+                except requests.exceptions.RequestException:
+                    syndbb.flash('Couldn\'t change IRC password.', 'danger')
 
-            try:
-                requests.get("https://" + syndbb.znc_address + ":" + syndbb.znc_port + "/mods/global/httpadmin/addnetwork?username=" + user.username + "&net_name=" + syndbb.irc_network_name + "&net_addr=" + syndbb.irc_network_address + "&net_port=" + syndbb.irc_network_port, auth=(syndbb.znc_user, syndbb.znc_password), verify=False)
-            except requests.exceptions.RequestException:
-                syndbb.flash('Couldn\'t assign an IRC network.', 'danger')
+                try:
+                    requests.get("https://" + syndbb.znc_address + ":" + syndbb.znc_port + "/mods/global/httpadmin/addnetwork?username=" + user.username + "&net_name=" + syndbb.irc_network_name + "&net_addr=" + syndbb.irc_network_address + "&net_port=" + syndbb.irc_network_port, auth=(syndbb.znc_user, syndbb.znc_password), verify=False, timeout=5)
+                except requests.exceptions.RequestException:
+                    syndbb.flash('Couldn\'t assign an IRC network.', 'danger')
 
             return syndbb.redirect(syndbb.url_for('preferences'))
         else:

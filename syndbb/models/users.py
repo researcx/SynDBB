@@ -114,8 +114,6 @@ syndbb.app.jinja_env.globals.update(get_name=get_name)
 def get_user_title(user_id):
     user = d2_user.query.filter_by(user_id=user_id).first()
     if user:
-        if is_banned(user.user_id):
-            return "Banned"
         if user.rank >= 900:
             return "Administrator"
         elif user.rank >= 500:
@@ -134,6 +132,20 @@ syndbb.app.jinja_env.globals.update(get_user_title=get_user_title)
 @syndbb.app.template_filter('is_banned')
 def is_banned(id):
     user = d2_user.query.filter_by(user_id=id).first()
+    
+    bans = d2_bans.query.all()
+    
+    
+    if user and user.rank <= 500:
+        bans = d2_bans.query.order_by(d2_bans.time.desc()).all()
+        for ban in bans:
+            if (ban.length is 0) or (int(ban.expires) >= unix_time_current()):
+                if ban.banned_id == user.user_id:
+                    ips = d2_ip.query.filter_by(user_id=ban.banned_id).all()
+                    for ipad in ips:
+                        if syndbb.request.remote_addr == ipad.ip:
+                            return {'ban': ban, 'banduration': "NEVER"}
+
     if user and user.rank >= 500:
         return 0
     else:
@@ -282,19 +294,23 @@ def __repr__(self):
 class d2_ip(syndbb.db.Model):
     id = syndbb.db.Column(syndbb.db.Integer, primary_key=True)
     ip = syndbb.db.Column(syndbb.db.String, unique=False)
+    useragent = syndbb.db.Column(syndbb.db.String, unique=False)
     user_id = syndbb.db.Column(syndbb.db.Integer, unique=False)
     time = syndbb.db.Column(syndbb.db.Integer, unique=False)
     login = syndbb.db.Column(syndbb.db.Integer, unique=False)
     page = syndbb.db.Column(syndbb.db.String, unique=False)
     sessionid = syndbb.db.Column(syndbb.db.String, unique=False)
+    iphash = syndbb.db.Column(syndbb.db.String, unique=False)
 
-    def __init__(self, ip, user_id, time, login, page, sessionid):
+    def __init__(self, ip, useragent, user_id, time, login, page, sessionid, iphash):
         self.ip = ip
+        self.useragent = useragent
         self.user_id = user_id
         self.time = time
         self.login = login
         self.page = page
         self.sessionid = sessionid
+        self.iphash = iphash
 
     def __repr__(self):
         return '<IP %r>' % self.user_id

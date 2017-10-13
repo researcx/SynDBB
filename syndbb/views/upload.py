@@ -8,11 +8,13 @@ import syndbb, random, string, hashlib, piexif
 from PIL import Image
 from syndbb.models.users import d2_user, checkSession
 from syndbb.models.time import cdn_path
+from syndbb.models.d2_hash import d2_hash
 from werkzeug.utils import secure_filename
 
 @syndbb.app.route("/upload/")
 def upload():
-    dynamic_js_footer = ["js/bootstrap-filestyle.min.js", "js/bootbox.min.js", "js/delete.js", "js/lazyload.transpiled.min.js"]
+    dynamic_css_header = ["js/datatables.min.css"]
+    dynamic_js_footer = ["js/datatables.min.js", "js/bootstrap-filestyle.min.js", "js/bootbox.min.js", "js/delete.js", "js/lazyload.transpiled.min.js"]
     if 'logged_in' in syndbb.session:
         userid = checkSession(str(syndbb.session['logged_in']))
         if userid:
@@ -38,7 +40,7 @@ def upload():
                 uploadurl = cdn_path() + "/data/uploads/"
             else:
                 uploadurl = "https://" + uploadurl + "/"
-
+              
             file_list = []
             for fn in syndbb.os.listdir(uploadfolder):
                 filepath = uploadfolder + "/" + fn
@@ -48,7 +50,7 @@ def upload():
                     extension = syndbb.os.path.splitext(fn)[1].lower()
                     hashname = hashlib.sha256(fn.encode()).hexdigest()
                     if extension in image_types:
-                        type_icon = '<img src="#" data-original="'+cdn_path()+'/data/uploads/.thumbnails/'+ hashname +'.png" alt="'+ fn +'" class="uploadimg"></a>'
+                        type_icon = '<img src="'+cdn_path()+'/data/uploads/.thumbnails/'+ hashname +'.png" alt="'+ fn +'" class="uploadimg"></a>'
                         thumbpath = thumbfolder + hashname + ".png"
                         if not syndbb.os.path.isfile(thumbpath):
                             im = Image.open(filepath)
@@ -59,7 +61,7 @@ def upload():
                     elif extension in video_types:
                         type_icon = '<i class="fsilk-icon icon_film" aria-hidden="true"></i>'
                     elif extension in text_types:
-                        type_icon = '<i class="silk-icon icon_page_white_test" aria-hidden="true"></i>'
+                        type_icon = '<i class="silk-icon icon_page_white_text" aria-hidden="true"></i>'
                     elif extension in archive_types:
                         type_icon = '<i class="silk-icon icon_compress" aria-hidden="true"></i>'
                     else:
@@ -67,13 +69,70 @@ def upload():
 
                     file_list.append([filetime, filesize, fn, type_icon])
             file_list.sort(reverse=True)
-
-            return syndbb.render_template('upload.html', uploadurl=uploadurl, filecount=len(file_list), file_list=file_list, total_size=total_size, dynamic_js_footer=dynamic_js_footer, title="Upload", subheading=[""])
+            
+            return syndbb.render_template('upload.html', uploadurl=uploadurl, filecount=len(file_list), file_list=file_list, total_size=total_size, dynamic_js_footer=dynamic_js_footer, dynamic_css_header=dynamic_css_header, title="Upload", subheading=[""])
         else:
             return syndbb.render_template('error_not_logged_in.html', title="Upload", subheading=[""])
     else:
         return syndbb.render_template('error_not_logged_in.html', title="Upload", subheading=[""])
 
+@syndbb.app.route("/upload/anonymous")
+def uploadanon():
+    dynamic_css_header = ["js/datatables.min.css"]
+    dynamic_js_footer = ["js/datatables.min.js", "js/bootstrap-filestyle.min.js", "js/bootbox.min.js", "js/delete.js", "js/lazyload.transpiled.min.js"]
+    if 'logged_in' in syndbb.session:
+        userid = checkSession(str(syndbb.session['logged_in']))
+        if userid:
+            user = d2_user.query.filter_by(user_id=userid).first()
+            uname = d2_hash(user.username + user.password)[:10]
+            uploadfolder = syndbb.app.static_folder + "/data/uploads/" + uname + "/"
+            if not syndbb.os.path.exists(uploadfolder):
+                syndbb.os.makedirs(uploadfolder)
+
+            image_types = [".jpg", ".jpeg", ".jpe", ".gif", ".png", ".bmp"]
+            audio_types = [".mp3",".ogg",".wav"]
+            video_types = [".webm",".mp4",".avi",".mpg",".mpeg"]
+            text_types = [".txt",".pdf",".doc"]
+            archive_types = [".zip",".rar",".7z",".tar",".gz"]
+
+            total_size = sum(syndbb.os.path.getsize(uploadfolder+f) for f in syndbb.os.listdir(uploadfolder) if syndbb.os.path.isfile(uploadfolder+f))
+
+            uploadurl = user.upload_url
+            if uploadurl == "local":
+                uploadurl = cdn_path() + "/data/uploads/"
+            else:
+                uploadurl = "https://" + uploadurl + "/"
+              
+            file_list = []
+            for fn in syndbb.os.listdir(uploadfolder):
+                filepath = uploadfolder + "/" + fn
+                if syndbb.os.path.isfile(filepath):
+                    filetime = int(syndbb.os.stat(filepath).st_mtime)
+                    filesize = syndbb.os.path.getsize(filepath)
+                    extension = syndbb.os.path.splitext(fn)[1].lower()
+                    hashname = hashlib.sha256(fn.encode()).hexdigest()
+                    if extension in image_types:
+                        type_icon = '<i class="silk-icon icon_picture" aria-hidden="true"></i>'
+                    elif extension in audio_types:
+                        type_icon = '<i class="silk-icon icon_music" aria-hidden="true"></i>'
+                    elif extension in video_types:
+                        type_icon = '<i class="silk-icon icon_film" aria-hidden="true"></i>'
+                    elif extension in text_types:
+                        type_icon = '<i class="silk-icon icon_page_white_text" aria-hidden="true"></i>'
+                    elif extension in archive_types:
+                        type_icon = '<i class="silk-icon icon_compress" aria-hidden="true"></i>'
+                    else:
+                        type_icon = '<i class="silk-icon icon_page_white" aria-hidden="true"></i>'
+
+                    file_list.append([filetime, filesize, fn, type_icon])
+            file_list.sort(reverse=True)
+            
+            return syndbb.render_template('upload_anon.html', uploadurl=uploadurl, uname=uname, filecount=len(file_list), file_list=file_list, total_size=total_size, dynamic_js_footer=dynamic_js_footer, dynamic_css_header=dynamic_css_header, title="Upload &bull; Anonymous", subheading=[""])
+        else:
+            return syndbb.render_template('error_not_logged_in.html', title="Upload &bull; Anonymous", subheading=[""])
+    else:
+        return syndbb.render_template('error_not_logged_in.html', title="Upload", subheading=[""])
+      
 @syndbb.app.route("/upload/album/")
 def upload_album():
     uname = syndbb.request.args.get('u', '')
@@ -122,7 +181,7 @@ def upload_gallery():
 
             uploadurl = user.upload_url
             if uploadurl == "local":
-                uploadurl = cdn_path + "/data/uploads/"
+                uploadurl = str(cdn_path) + "/data/uploads/" 
             else:
                 uploadurl = "https://" + uploadurl + "/"
 
@@ -209,9 +268,25 @@ def upload_file():
         if 'logged_in' in syndbb.session:
             userid = checkSession(str(syndbb.session['logged_in']))
             uploader = syndbb.request.form['uploader']
+            
+            if 'anonymous' in syndbb.request.form:
+                anonymous = 1
+            else:
+                anonymous = 0
+                
+            if 'timedelete' in syndbb.request.form:
+                timedelete = 1
+            else:
+                timedelete = 0
+            
             if userid:
                 user = d2_user.query.filter_by(user_id=userid).first()
-                uploadfolder = syndbb.app.static_folder + "/data/uploads/" + user.username + "/"
+                if anonymous:
+                  uploadfolder = syndbb.app.static_folder + "/data/uploads/" + d2_hash(user.username + user.password)[:10] + "/"
+                else:
+                  uploadfolder = syndbb.app.static_folder + "/data/uploads/" + user.username + "/"
+                if not syndbb.os.path.exists(uploadfolder):
+                  syndbb.os.makedirs(uploadfolder)
                 if 'file' not in syndbb.request.files:
                     syndbb.flash('No file selected.', 'danger')
                     return syndbb.redirect(syndbb.url_for(uploader))

@@ -57,3 +57,13 @@ function set_theme(theme) {
   }
   document.getElementById('themeselector').href=themepath;
 }
+
+  $(document).ready(function() {
+    $('#uploads').DataTable( {
+        "dom": '<"top"p<"clear">>rt<"bottom"p<"clear">>',
+        "ordering": false,
+        "info":     false,
+        "stateSave": true,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+    } );
+  } );

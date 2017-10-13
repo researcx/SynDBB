@@ -3,6 +3,7 @@
   <thead>
       <th>Session ID</th>
       <th>IP</th>
+      <th>UserAgent</th>
       <th>Time</th>
       <th>Date</th>
       <th>Type</th>
@@ -10,17 +11,18 @@
   <tbody>
     {% for login in logins %}
     <tr>
-      <td>#{{login.id}}</td>
-      <td>{{login.ip}}</td>
-      <td>{{time_ago(login.time)}}</td>
-      <td>{{human_date(login.time)}}</td>
-      {% if login.login == 0 %}
-      <td>Failed login attempt</td>
-      {% elif login.login == 1 %}
-      <td>Logged in</td>
-      {% elif login.login == 2 %}
-      <td>Successful login</td>
-      {% endif %}
+        <td>#{{login.iphash}}</td>
+        <td>{{login.ip}}</td>
+        <td>{{login.useragent}}</td>
+        <td>{{time_ago(login.time)}}</td>
+        <td>{{human_date(login.time)}}</td>
+        {% if login.login == 0 %}
+        <td>Failed login attempt</td>
+        {% elif login.login == 1 %}
+        <td>Logged in</td>
+        {% elif login.login == 2 %}
+        <td>Successful login</td>
+        {% endif %}
     </tr>
     {% endfor %}
   </tbody>

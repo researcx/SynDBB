@@ -1,12 +1,25 @@
 {% extends "layout.html" %}{% block body %}
 <div class="thread-title"><span style="float: right;">{{human_size(total_size)}}</span>{{filecount}} files</div>
-<div class="upload-title"><a href="/upload/gallery" title="Gallery View" style="float:right;"><i class="fa fa-picture-o" aria-hidden="true"></i></a></div>
+<div class="upload-title">
+  <a href="/upload/gallery" title="Gallery View" style="float:right;"><i class="fa fa-picture-o" aria-hidden="true"></i></a>
+  <a href="/upload/anonymous" title="Anonymous Uploads" style="float:right; margin-right: 12px;"><i class="fa fa-user-circle" aria-hidden="true"></i></a>
+</div>
 <div class="panel panel-default">
   <div class="panel-body">
     <form id="uploadform" action="/functions/upload" method="post" enctype="multipart/form-data">
       <div class="form-group">
         <input id="file" name="file" class="filestyle" onchange="this.form.submit()" tabindex="-1" type="file">
         <input type="hidden" name="uploader" value="upload">
+        <div class="bbcode-anon" style="margin-bottom: -100px;">
+          <label class="checkbox-inline">
+            <input type="checkbox" id="anonymous" name="anonymous" value="1"><span class="text">Upload anonymously</span><br/>
+          </label>
+<!--
+          <label class="checkbox-inline">
+            <input type="checkbox" id="timedelete" name="timedelete" value="1"><span class="text">Delete in 24 hours</span>
+          </label>
+-->
+        </div>
       </div>
     </form>
     <div id="uploadLoader" style="display: none; text-align: center;">
@@ -14,7 +27,16 @@
       <span class="sr-only">Loading...</span>
     </div>
   </div>
-  <table class="file-list table table-striped">
+  <table class="file-list table table-striped" id="uploads">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Filename</th>
+            <th>Size</th>
+            <th>Date</th>
+            <th>Options</th>
+        </tr>
+    </thead>
     <tbody>
       {% for file in file_list %}
       <tr>

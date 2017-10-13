@@ -19,7 +19,7 @@ def unique_items(L):
 
 @syndbb.app.template_filter('get_recent_posts')
 @syndbb.cache.memoize(timeout=60)
-def get_recent_posts(limit=10):
+def get_recent_posts(limit=20):
     activity = []
     activity_sorted = []
     activity_item = ""
@@ -68,7 +68,6 @@ def get_recent_posts(limit=10):
                                             </span>
                                             <td class="home-forum home-forum-icon" style="padding-right: 9px !important;">
                                                 <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''#'''+str(post.id)+'''"><img src="'''+cdn_path()+'''/icons/thread_new.png" alt="Latest" title="Go to latest post" style="margin-top: -2px;"/></a>
-                                            </td>
                                             </td>
                                         </tr>'''
 

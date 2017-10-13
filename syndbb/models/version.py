@@ -37,3 +37,7 @@ def inject_version():
         git_version = "r0"
 
     return { 'syndbb_version': syndbb.pkg_resources.get_distribution('syndbb').version, 'syndbb_hash': git_shash, 'syndbb_full_hash': git_fhash, 'python_version': syndbb.platform.python_version(), 'flask_version': syndbb.pkg_resources.get_distribution('flask').version }
+
+@syndbb.app.context_processor
+def inject_debug():
+    return dict(debug=syndbb.app.debug)

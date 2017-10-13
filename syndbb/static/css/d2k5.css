@@ -758,6 +758,14 @@ a:hover, p a:active, p a:focus {
   top: 5px;
 }
 
+.extra-info-right {
+  text-align: right;
+  font-size: 13px;
+  position: absolute;
+  right: 80px;
+  top: 8px;
+}
+
 .top-avatar-size {
   width: 60px;
   height: 60px;
@@ -1176,4 +1184,17 @@ table, .navbar-static-top{
 }
 .karma.neutral{
 	color: grey; font-weight: bold;
+}
+.sidebar-forums{
+    padding: 8px 10px;
+}
+
+.sidebar-forum{
+    padding: 1px 4px;
+    font-size: 12px;
+    margin-bottom: 2px;
+}
+
+.cols-sidebar{
+
 }

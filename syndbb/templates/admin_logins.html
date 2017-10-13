@@ -4,6 +4,7 @@
       <th>Session ID</th>
       <th>User</th>
       <th>IP</th>
+      <th>UserAgent</th>
       <th>Time</th>
       <th>Date</th>
       <th>Type</th>
@@ -12,19 +13,20 @@
   <tbody>
     {% for login in logins %}
     <tr>
-      <td>#{{login.id}}</td>
-      <td><a href="/user/{{get_name(login.user_id)}}" class="username {{get_group_style_from_id(login.user_id)}}">{{get_name(login.user_id)}}</a></td>
-      <td>{{login.ip}}</td>
-      <td>{{time_ago(login.time)}}</td>
-      <td>{{human_date(login.time)}}</td>
-      {% if login.login == 0 %}
-      <td>Failed login attempt</td>
-      {% elif login.login == 1 %}
-      <td>Logged in</td>
-      {% elif login.login == 2 %}
-      <td>Successful login</td>
-      {% endif %}
-      <td>{{login.page}}</td>
+        <td>#{{login.iphash}}</td>
+        <td><a href="/user/{{get_name(login.user_id)}}" class="username {{get_group_style_from_id(login.user_id)}}">{{get_name(login.user_id)}}</a></td>
+        <td>{{login.ip}}</td>
+        <td>{{login.useragent}}</td>
+        <td>{{time_ago(login.time)}}</td>
+        <td>{{human_date(login.time)}}</td>
+        {% if login.login == 0 %}
+        <td>Failed login attempt</td>
+        {% elif login.login == 1 %}
+        <td>Logged in</td>
+        {% elif login.login == 2 %}
+        <td>Successful login</td>
+        {% endif %}
+        <td>{{login.page}}</td>
     </tr>
     {% endfor %}
   </tbody>

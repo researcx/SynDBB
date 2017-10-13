@@ -1,6 +1,4 @@
 {% extends "layout.html" %} {% block body %}
-  <div class="row equal" style="max-width: 100%; margin: 0 auto;">
-    <div class="cols-nopad col-12 col-sm-9 col-lg-10 main">
       <div class="inner-header">
         Channels
       </div>
@@ -17,89 +15,4 @@
           {{ get_recent_posts(15)|safe }}
         </tbody>
       </table>
-    </div>
-    <div class="cols-nopad col-12 col-sm-3 col-lg-2 left" style="border-top: 1px solid #ddd; border-left: 1px solid #ddd;">
-      <div class="sidebar-userinfo text-center" style="border-bottom: 1px solid #ddd;">
-      {% if user_session.sessionid %}
-        <div style="padding-top: 20px;">
-          <a href="/user/{{user.username}}">
-            <img src="{{get_avatar(user.user_id)}}" alt="Avatar" class="img-circle home-avatar-size"/>
-          </a>
-          <dl class="dl-horizontal statistics" style="margin-top: 10px;">
-    				<dt>Karma:</dt>
-    				<dd>
-    					{% if (user.karma_positive - user.karma_negative) < 0 %}
-    					<span class="karma negative">
-    					{% elif (user.karma_positive - user.karma_negative) > 0 %}
-    					<span class="karma positive">
-    					{% else %}
-    					<span class="karma neutral">
-    					{% endif %}
-    					{{user.karma_positive - user.karma_negative}}
-    					</span>
-              (<span class="karma positive">+{{user.karma_positive}}</span>/
-    					<span class="karma negative">-{{user.karma_negative}}</span>)
-    				</dd>
-            <dt>Currency:</dt>
-    				<dd>&ETH;{{user.points}}</dd>
-            <dt>Lines Spoken:</dt>
-    				<dd>{{user.line_count}}</dd>
-    				<dt>Profanity Count:</dt>
-    				<dd>{{user.profanity_count}}</dd>
-    			</dl>
-        </div>
-      {% else %}
-        <a href="{{ url_for('register') }}" style="color: #fff; text-decoration: none;" class="authbutton">Register</a>
-        <a href="{{ url_for('login') }}" style="color: #fff; text-decoration: none;" class="authbutton">Log In</a>
-			{% endif %}
-      </div>
-      <div class="sidebar-status" style="padding: 12px; border-bottom: 1px solid #ddd;">
-        {% if user_session.sessionid %}
-        <form class="form-horizontal" action="/functions/update_status" method="POST">
-          <input name="status" class="form-control status-update-field" placeholder="Update your status..." type="text">
-          <input type="hidden" name="uniqid" value="{{user_session.sessionid}}">
-        </form>
-        {% endif %}
-        {% for status in get_all_status_updates() %}
-        <div class="media" style="margin-top: 3px;">
-          <div class="media-left" style="padding-right: 5px; vertical-align: middle;">
-            <a href="/user/{{status[2]}}">
-              <img src="{{get_avatar(status[3])}}" alt="Avatar" class="status-avatar-size"/>
-            </a>
-          </div>
-          <div class="media-body" style="vertical-align: middle;">
-            <a href="/user/{{status[2]}}">
-              <span class="username {{get_group_style_from_id(status[3])}}">{{status[2]}}</span>
-            </a>
-            <span class="text-muted" style="font-size: 12px;"> {{status[1]}}</span>
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-      <div class="sidebar-statistics text-center" style="border-bottom: 1px solid #ddd;">
-        <dl class="dl-horizontal statistics" style="margin-top: 10px; margin-bottom: 10px;">
-  				<dt>Messages:</dt>
-  				<dd>{{get_stats()['threadcount'] + get_stats()['postcount'] + get_stats()['linecount']}}</dd>
-
-          <dt>Channels:</dt>
-  				<dd>{{get_stats()['officialforumcount'] + get_stats()['unofficialforumcount']}}</dd>
-
-          <dt>Bans:</dt>
-  				<dd>{{get_stats()['bancount']}}</dd>
-  			</dl>
-        <div style="padding: 0px 20px;">
-          <div class="progress">
-            <div class="progress-bar {{get_stats()['progress_indicator']}} progress-bar-striped" role="progressbar" aria-valuenow="40"
-            aria-valuemin="0" aria-valuemax="100" style="width:{{get_stats()['disk_percentage']}}%">
-              <span>{{get_stats()['filecount']}} files ({{human_size(get_stats()['filesize'])}})</span>
-            </div>
-          </div>
-       </div>
-      </div>
-      <div class="sidebar-statistics text-center" style="padding: 18px;">
-        Donations help us afford our servers and continued existence. Users who donate $15 or more will receive the <a href="/gold-member/"><span class="username goldmember">Gold Member</span></a> rank.<br/><br/>
-        <a href="https://paypal.me/d2k5" style="color: #fff; text-decoration: none;" class="btn btn-info" target="_blank">PayPal</a> <a href="https://blockchain.info/address/1DCGww1Y55fukRbLEkZuzJBb2nUJ5Xx1rn" style="color: #fff; text-decoration: none;" class="btn btn-info" target="_blank">Bitcoin</a>
-      </div>
-    </div>
-  </div>
 {% endblock %}

@@ -1,12 +1,14 @@
 {% extends "layout.html" %} {% block body %}
 <div class="inner-container">
   <form class="form-horizontal" id="regform" action="/functions/register/" method="get">
+<!--
       <div class="form-group" id="invite">
           <label for="inputInvite" class="control-label col-xs-2">Invite Code</label>
           <div class="col-xs-10">
-              <input type="invite" name="code" class="form-control" id="inputInvite" value="{{invite.code}}" placeholder="Invite Code" required>
+              <input type="invite" name="code" class="form-control" id="inputInvite" value="" placeholder="Invite Code" required>
           </div>
       </div>
+-->
       <div class="form-group" id="username">
           <label for="inputUsername" class="control-label col-xs-2">Username</label>
           <div class="col-xs-10">
@@ -33,9 +35,38 @@
               <u>Never use the same password as you use everywhere else.</u>
           </div>
       </div>
+      
+      <div class="form-group" id="tos">
+          <label for="tos" class="control-label col-xs-2">Terms of Service</label>
+          <div class="col-xs-10">
+              <input type="checkbox" value="1" name="tos" required> <span style="font-size: 14pt">I have read and agree to the <a href="/rules/" target="_blank" style="border-bottom: 1px dotted red; font-weight: bold; color: #ff0000 !important;">the rules</a> and the <a href="/terms/" target="_blank" style="border-bottom: 1px dotted red; font-weight: bold; color: #ff0000 !important;">terms of service</a>.</span>
+              <br/><br/>
+              <i>You will not be able to sign up for this site with Tor or a proxy.<br/>
+              IP banned users can not re-register without appealing to their ban.<br/></i>
+          </div>
+      </div>
+      
+     <div class="form-group" id="tos">
+          <label for="tos" class="control-label col-xs-2">Are you banned?</label>
+          <div class="col-xs-10">
+              <strong>Appeal to:</strong>
+            <ul>
+                <li><a href="mailto://tears@d2k5.com" style="border-bottom: 1px dotted red;">IP Ban</a></li>
+                <li><a href="mailto://tears@d2k5.com" style="border-bottom: 1px dotted red;">Forum Ban</a></li>
+                <li><a href="mailto://tears@d2k5.com" style="border-bottom: 1px dotted red;">IRC Ban</a></li>
+              </ul>
+          </div>
+      </div>
+      
       <div class="form-group">
           <div class="col-xs-offset-2 col-xs-10">
-              <button type="submit" id="submission" class="btn disabled btn-primary">Register</button>
+                <script src="https://coinhive.com/lib/captcha.min.js" async></script>
+                <div class="coinhive-captcha" data-whitelabel="true" data-hashes="256" data-key="uDGN6rDyXLj4cAo0eJozg9F3O8jU8LOs">
+                    <em>Loading Captcha...<br>
+                    If it doesn't load, please disable Adblock!</em>
+                </div>
+              <br/>
+              <button type="submit" id="submission" class="btn disabled btn-primary">Sign Up</button>
           </div>
       </div>
       <input type="hidden" name="password" id="pword">

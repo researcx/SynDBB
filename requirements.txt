@@ -9,3 +9,4 @@ bbcode
 Pillow
 piexif
 uwsgi
+stopforumspam_api

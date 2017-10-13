@@ -63,7 +63,7 @@
     <meta name="msapplication-config" content="{{cdn_path()|safe}}/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
 
-    <title>{% if title %} {{ title|striptags }} &bull; {% endif %}D2K5</title>
+    <title>{% if title %} {{ title|striptags }} &bull; {% endif %}D2K5 {% if debug %}(debug){% endif %}</title>
 
     <link href="{{cdn_path()|safe}}{{get_filemtime('/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{cdn_path()|safe}}{{get_filemtime('/css/ie10-viewport-bug-workaround.css')}}" rel="stylesheet">
@@ -84,6 +84,8 @@
   </head>
 
   <body>
+  <div class="row equal" style="max-width: 100%; margin: 0 auto;">
+    <div class="cols-nopad col-12 col-sm-9 col-lg-10 main">
     <nav class="navbar navbar-default navbar-static-top">
       <div class="container-fluid">
         {% if subheading %}
@@ -112,13 +114,6 @@
             </div>
           {% endif %}
         </span>
-        {% if user_session.sessionid %}
-        <div class="top-avatar">
-          <a href="/user/{{user.username}}">
-                <img src="{{get_avatar(user.user_id)}}" alt="Avatar" class="img-circle top-avatar-size">
-              </a>
-        </div>
-        {% endif %}
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                 <span class="sr-only">Toggle navigation</span>
@@ -138,7 +133,7 @@
           <div class="navbar-container">
             <ul class="nav navbar-nav">
                <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="silk-icon icon_application_side_list" aria-hidden="true"></i> Channels <span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-th-list" aria-hidden="true"></i> Channels <span class="caret"></span></a>
                 <ul class="dropdown-menu channel-list">
                   <li class="forum-list"><a href="#">Official</a></li>
                   {% for forum in forums %}
@@ -163,12 +158,12 @@
                   {% endif %}
                 </ul>
               </li>
-              <li><a href="{{ url_for('chat') }}"><i class="silk-icon icon_comment" aria-hidden="true"></i> IRC ({{get_stats()['irccount']}} users)</a></li>
-              <!-- <li><a href="{{ url_for('events') }}"><i class="silk-icon icon_date" aria-hidden="true"></i> Events</a></li> -->
-              <li><a href="{{ url_for('ban_list') }}"><i class="silk-icon icon_delete" aria-hidden="true"></i> Bans</a></li>
-              <li><a href="{{ url_for('pastebin') }}"><i class="silk-icon icon_paste_plain" aria-hidden="true"></i> Pastebin</a></li>
-              <li><a href="{{ url_for('upload') }}"><i class="silk-icon icon_package_go" aria-hidden="true"></i> Upload</a></li>
-              <!-- <li class="dropdown">
+              <li><a href="{{ url_for('chat') }}"><i class="fa fa-comments" aria-hidden="true"></i> Chat ({{get_stats()['irccount']}})</a></li>
+              <li><a href="{{ url_for('ban_list') }}"><i class="fa fa-ban" aria-hidden="true"></i> Ban List</a></li>
+<!--
+              <li><a href="{{ url_for('events') }}"><i class="silk-icon icon_date" aria-hidden="true"></i> Events</a></li>
+              
+              <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="silk-icon icon_cup" aria-hidden="true"></i> Services <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                   {% if user_session.sessionid %}
@@ -181,18 +176,24 @@
                   <li><a href="/vidya/">Video Chat</a></li>
                   <li><a href="/synctube/">SyncTube</a></li>
                 </ul>
-              </li> -->
+              </li>
+-->
             </ul>
             <ul class="nav navbar-nav navbar-right">
               {% if user_session.sessionid %}
               <!--<li><a href="{{ url_for('ban_list') }}"><i class="silk-icon icon_error" aria-hidden="true"></i> Alerts (0)</a></li>-->
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="silk-icon icon_user_gray" aria-hidden="true"></i> {{user.username}} <span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-circle-o" aria-hidden="true"></i> {{user.username}} <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                  <li><a href="{{ url_for('preferences') }}">User Preferences</a></li>
+                  <li><a href="{{ url_for('info') }}">Donate</a></li>
+                  <li class="forum-list">&nbsp;</li>
+                  <li><a href="{{ url_for('pastebin') }}">My Pastes</a></li>
+                  <li><a href="{{ url_for('upload') }}">My Files</a></li>
+                  <li class="forum-list">&nbsp;</li>
+                  <li><a href="{{ url_for('preferences') }}">Change Profile</a></li>
                   <li><a href="{{ url_for('change_avatar') }}">Change Avatar</a></li>
                   <li><a href="{{ url_for('change_password') }}">Change Password</a></li>
-                  <li><a href="{{ url_for('my_invites') }}">Invite Codes</a></li>
+                  <li class="forum-list">&nbsp;</li>
                   {% if user.rank >= 500 %}
                   <li><a href="{{ url_for('siteadmin') }}">Administrative Tools</a></li>
                   {% endif %}
@@ -201,13 +202,13 @@
                 </ul>
               </li>
               {% else %}
-              <li><a href="{{ url_for('login') }}"><i class="silk-icon icon_key" aria-hidden="true"></i> Log In</a></li>
-              <li><a href="{{ url_for('register') }}"><i class="silk-icon icon_lock" aria-hidden="true"></i> Register</a></li>
+              <li><a href="{{ url_for('login') }}"><i class="fa fa-icon fa-key" aria-hidden="true"></i> Log In</a></li>
+              <li><a href="{{ url_for('register') }}"><i class="fa fa-icon fa-lock" aria-hidden="true"></i> Register</a></li>
               {% endif %}
             </ul>
           </div>
         </div>
-      </div>
+        </div>
     </nav>
     <div class="container-fluid">
       {% with messages = get_flashed_messages(with_categories=true) %}
@@ -222,16 +223,140 @@
       {% endwith %}
 
       {% block body %}{% endblock %}
-
     </div>
+    </div>
+    <div class="cols-sidebar cols-nopad col-12 col-sm-3 col-lg-2 left" style="border-top: 1px solid #ddd; border-left: 1px solid #ddd;">
+      <div class="sidebar-userinfo text-center" style="border-bottom: 1px solid #ddd;">
+      {% if user_session.sessionid %}
+        <div style="padding-top: 10px;">
+           <a href="/user/{{user.username}}">
+            <img src="{{get_avatar(user.user_id)}}" alt="Avatar" class="home-avatar-size"/>
+          </a>
+            
+            <a href="{{ url_for('upload') }}" style="color: #fff; text-decoration: none;" class="authbutton">My Files</a>
+            <a href="{{ url_for('pastebin') }}" style="color: #fff; margin-top: -10px; text-decoration: none;" class="authbutton">My Pastes</a>
+            
+    <dl class="dl-horizontal statistics" style="margin-top: 10px;">
+            <dt>Karma:</dt>
+            <dd>
+                {% if (user.karma_positive - user.karma_negative) < 0 %}
+                <span class="karma negative">
+                {% elif (user.karma_positive - user.karma_negative) > 0 %}
+                <span class="karma positive">
+                {% else %}
+                <span class="karma neutral">
+                {% endif %}
+                {{user.karma_positive - user.karma_negative}}
+                </span>
+      (<span class="karma positive">+{{user.karma_positive}}</span>/
+                <span class="karma negative">-{{user.karma_negative}}</span>)
+            </dd>
+    <dt>Currency:</dt>
+            <dd>&ETH;{{user.points}}</dd>
+    <dt>Lines Spoken:</dt>
+            <dd>{{user.line_count}}</dd>
+            <dt>Profanity Count:</dt>
+            <dd>{{user.profanity_count}}</dd>
+        </dl>
+        </div>
+      {% else %}
+      <div style="padding-top: 10px;">
+            <img src="/static/images/default_avatar.png" alt="Avatar" class="home-avatar-size"/>
+          </div>
+        <a href="/im/" style="color: #fff; text-decoration: none;" class="authbutton">IRC ({{get_stats()['irccount']}})</a>
+        <a href="{{ url_for('register') }}" style="color: #fff; text-decoration: none;" class="authbutton">Register</a>
+        <a href="{{ url_for('login') }}" style="color: #fff; margin-top: -10px; text-decoration: none;" class="authbutton">Log In</a>
+			{% endif %}
+      </div>
+      <div class="sidebar-status" style="padding: 12px; border-bottom: 1px solid #ddd;">
+        {% if user_session.sessionid %}
+        <form class="form-horizontal" action="/functions/update_status" method="POST">
+          <input name="status" class="form-control status-update-field" placeholder="Update your status..." type="text">
+          <input type="hidden" name="uniqid" value="{{user_session.sessionid}}">
+        </form>
+        {% endif %}
+        {% for status in get_all_status_updates() %}
+        <div class="media" style="margin-top: 3px;">
+          <div class="media-left" style="padding-right: 5px; vertical-align: middle;">
+            <a href="/user/{{status[2]}}">
+              <img src="{{get_avatar(status[3])}}" alt="Avatar" class="status-avatar-size"/>
+            </a>
+          </div>
+          <div class="media-body" style="vertical-align: middle;">
+            <a href="/user/{{status[2]}}">
+              <span class="username {{get_group_style_from_id(status[3])}}">{{status[2]}}</span>
+            </a>
+            <span class="text-muted" style="font-size: 12px;"> {{status[1]}}</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+        
+    <div class="sidebar-forums" style="border-bottom: 1px solid #ddd;">
+      {% for forum in forums %}
+      <div class="sidebar-forum">
+        <a href="/{{ forum.short_name }}/new_thread">
+            <span style="float: right;">
+                <i class="silk-icon icon_note_add" aria-hidden="true"></i>
+            </span>
+        </a>
+        <a href="/{{ forum.short_name }}/">
+          <i class="silk-icon icon_bullet_black" aria-hidden="true"></i>
+          {{ forum.name }}
+        </a>
+      </div>
+      {% endfor %}
+      {% for forum in custom_forums %}
+      <div class="sidebar-forum">
+        <a href="/{{ forum.short_name }}/new_thread">
+            <span style="float: right;">
+                <i class="silk-icon icon_note_add" aria-hidden="true"></i>
+            </span>
+        </a>
+        <a href="/{{ forum.short_name }}/">
+          <i class="silk-icon icon_bullet_black" aria-hidden="true"></i>
+          {{ forum.name }}
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="sidebar-statistics text-center" style="border-bottom: 1px solid #ddd;">
+          
+        <dl class="dl-horizontal statistics" style="margin-top: 10px; margin-bottom: 10px;">
+  				<dt>Messages:</dt>
+  				<dd>{{get_stats()['threadcount'] + get_stats()['postcount'] + get_stats()['linecount']}}</dd>
 
+          <dt>Channels:</dt>
+  				<dd>{{get_stats()['officialforumcount'] + get_stats()['unofficialforumcount']}}</dd>
+
+          <dt>Bans:</dt>
+  				<dd>{{get_stats()['bancount']}}</dd>
+  			</dl>
+        <div style="padding: 0px 20px;">
+          <div class="progress">
+            <div class="progress-bar {{get_stats()['progress_indicator']}} progress-bar-striped" role="progressbar" aria-valuenow="40"
+            aria-valuemin="0" aria-valuemax="100" style="width:{{get_stats()['disk_percentage']}}%">
+              <span>{{get_stats()['filecount']}} files ({{human_size(get_stats()['filesize'])}})</span>
+            </div>
+          </div>
+       </div>
+      </div>
+        
+      <div class="sidebar-donate text-center" style="padding: 18px;">
+        <strong>Donations help us afford our servers and our continued existence.</strong><br/>
+        <a href="https://paypal.me/d2k5" target="_blank" style="background-color: steelblue; color: #fff; text-decoration: none;" class="authbutton">PayPal</a>
+        <a href="https://blockchain.info/address/1DCGww1Y55fukRbLEkZuzJBb2nUJ5Xx1rn" target="_blank"  style="background-color: limegreen; color: #fff; text-decoration: none;" class="authbutton">Bitcoin</a>
+        <a href="https://hatreon.net/d2k5" target="_blank"  style="background-color: black; color: #fff; text-decoration: none;" class="authbutton">Hatreon</a>
+      </div>
+    </div>
+    </div>
     <footer class="footer">
       <div class="container-fluid">
         <p class="text-muted footer-notice" style="font-style: italic; float:right; text-align: right;">
           All trademarks and copyrights on this page are owned by their respective parties.<br/> Images and files uploaded are the responsibility of the user. Comments are owned by the user.<br/> If you continue to use this site, you are consenting to our
           use of cookies.</p>
           <p class="text-muted">
-            <a href="{{ url_for('terms') }}">D2K5 &copy; 2002 - {{ now.year }}</a> - <a href="https://github.com/D2K5/SynDBB" target="_blank">Powered by SynDBB {{ syndbb_version }} ({{ syndbb_hash }})</a><br/>
+            <a href="{{ url_for('info') }}">D2K5 &copy; 2002 - {{ now.year }}</a> - <a href="https://github.com/D2K5/SynDBB" target="_blank">Powered by SynDBB {{ syndbb_version }} ({{ syndbb_hash }})</a><br/>
             Theme: &nbsp;<a href="#" onclick="set_theme('white');">White</a> &bull; <a href="#" onclick="set_theme('invert');">Dark</a> &bull; <a href="#" onclick="set_theme('oify');">OIFY</a><br/>
             <i>Page generation took {{ g.request_time() }} seconds. &bull; All times are <abbr title="Greenwich Mean Time">GMT</abbr>.</i>
           </p>
