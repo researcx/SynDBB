@@ -77,7 +77,7 @@ def upload():
         return syndbb.render_template('error_not_logged_in.html', title="Upload", subheading=[""])
 
 @syndbb.app.route("/upload/anonymous")
-def uploadanon():
+def upload_anon():
     dynamic_css_header = ["js/datatables.min.css"]
     dynamic_js_footer = ["js/datatables.min.js", "js/bootstrap-filestyle.min.js", "js/bootbox.min.js", "js/delete.js", "js/lazyload.transpiled.min.js"]
     if 'logged_in' in syndbb.session:
@@ -320,6 +320,9 @@ def upload_file_external():
             return "No password set."
         user = d2_user.query.filter_by(username=username).filter_by(uploadauth=password).first()
         if user:
+            bancheck = is_banned(user.user_id)
+            if bancheck:
+                return "This user or IP address is banned."
             uploadfolder = syndbb.app.static_folder + "/data/uploads/" + user.username + "/"
             if not syndbb.os.path.exists(uploadfolder):
                 syndbb.os.makedirs(uploadfolder)
@@ -357,7 +360,10 @@ def delete_file():
         userid = checkSession(str(uniqid))
         if userid:
             user = d2_user.query.filter_by(user_id=userid).first()
-            uploaded_file = syndbb.app.static_folder + "/data/uploads/" + user.username + "/" + ufile
+            if uploader == "upload_anon":
+                uploaded_file = syndbb.app.static_folder + "/data/uploads/" + d2_hash(user.username + user.password)[:10] + "/" + ufile
+            else:
+                uploaded_file = syndbb.app.static_folder + "/data/uploads/" + user.username + "/" + ufile
             if syndbb.os.path.isfile(uploaded_file):
                 syndbb.os.system("shred -u "+uploaded_file)
                 syndbb.flash('File deleted successfully.', 'success')

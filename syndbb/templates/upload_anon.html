@@ -6,10 +6,10 @@
     <form id="uploadform" action="/functions/upload" method="post" enctype="multipart/form-data">
       <div class="form-group">
         <input id="file" name="file" class="filestyle" onchange="this.form.submit()" tabindex="-1" type="file">
-        <input type="hidden" name="uploader" value="upload">
+        <input type="hidden" name="uploader" value="upload_anon">
         <div class="bbcode-anon" style="margin-bottom: -100px;">
           <label class="checkbox-inline">
-            <input type="checkbox" id="anonymous" name="anonymous" value="1"><span class="text">Upload anonymously</span><br/>
+            <input type="checkbox" id="anonymous" name="anonymous" checked value="1"><span class="text">Upload anonymously</span><br/>
           </label>
 <!--
           <label class="checkbox-inline">

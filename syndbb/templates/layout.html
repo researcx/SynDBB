@@ -228,7 +228,7 @@
     <div class="cols-sidebar cols-nopad col-12 col-sm-3 col-lg-2 left" style="border-top: 1px solid #ddd; border-left: 1px solid #ddd;">
       <div class="sidebar-userinfo text-center" style="border-bottom: 1px solid #ddd;">
       {% if user_session.sessionid %}
-        <div style="padding-top: 10px;">
+        <div style="padding-left: 8px; padding-right: 8px; padding-top: 10px;">
            <a href="/user/{{user.username}}">
             <img src="{{get_avatar(user.user_id)}}" alt="Avatar" class="home-avatar-size"/>
           </a>
@@ -260,7 +260,7 @@
         </dl>
         </div>
       {% else %}
-      <div style="padding-top: 10px;">
+      <div style="padding-left: 8px; padding-right: 8px; padding-top: 10px;">
             <img src="/static/images/default_avatar.png" alt="Avatar" class="home-avatar-size"/>
           </div>
         <a href="/im/" style="color: #fff; text-decoration: none;" class="authbutton">IRC ({{get_stats()['irccount']}})</a>
@@ -345,8 +345,6 @@
       <div class="sidebar-donate text-center" style="padding: 18px;">
         <strong>Donations help us afford our servers and our continued existence.</strong><br/>
         <a href="https://paypal.me/d2k5" target="_blank" style="background-color: steelblue; color: #fff; text-decoration: none;" class="authbutton">PayPal</a>
-        <a href="https://blockchain.info/address/1DCGww1Y55fukRbLEkZuzJBb2nUJ5Xx1rn" target="_blank"  style="background-color: limegreen; color: #fff; text-decoration: none;" class="authbutton">Bitcoin</a>
-        <a href="https://hatreon.net/d2k5" target="_blank"  style="background-color: black; color: #fff; text-decoration: none;" class="authbutton">Hatreon</a>
       </div>
     </div>
     </div>

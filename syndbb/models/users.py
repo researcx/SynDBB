@@ -133,9 +133,6 @@ syndbb.app.jinja_env.globals.update(get_user_title=get_user_title)
 def is_banned(id):
     user = d2_user.query.filter_by(user_id=id).first()
     
-    bans = d2_bans.query.all()
-    
-    
     if user and user.rank <= 500:
         bans = d2_bans.query.order_by(d2_bans.time.desc()).all()
         for ban in bans:
@@ -145,7 +142,7 @@ def is_banned(id):
                     for ipad in ips:
                         if syndbb.request.remote_addr == ipad.ip:
                             return {'ban': ban, 'banduration': "NEVER"}
-
+                        
     if user and user.rank >= 500:
         return 0
     else:

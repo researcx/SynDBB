@@ -43,9 +43,9 @@ def generate_invite():
     else:
         return syndbb.render_template('error_not_logged_in.html', title="Not logged in")
 
-@syndbb.app.route("/request-invite/")
-def request_invite():
-    return syndbb.render_template('request_invite.html', title="Request Invite")
+#@syndbb.app.route("/request-invite/")
+#def request_invite():
+#    return syndbb.render_template('request_invite.html', title="Request Invite")
 
 @syndbb.app.route("/functions/request_invite/", methods=['GET', 'POST'])
 def do_request_invite():

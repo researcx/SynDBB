@@ -1195,6 +1195,6 @@ table, .navbar-static-top{
     margin-bottom: 2px;
 }
 
-.cols-sidebar{
-
+div.dataTables_wrapper div.dataTables_paginate ul.pagination{
+    margin-right: 20px;
 }
