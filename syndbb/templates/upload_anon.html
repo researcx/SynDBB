@@ -11,6 +11,10 @@
           <label class="checkbox-inline">
             <input type="checkbox" id="anonymous" name="anonymous" checked value="1"><span class="text">Upload anonymously</span><br/>
           </label>
+            <br/><br/>
+                <b>Your filenames will look like:</b> {{uploadurl}}{{uname}}/&lt;filename&gt; (<a href="/account/preferences" title="User Preferences" style="border-bottom: 1px dotted black;">change</a>)<br/>
+                Thumbnails are not rendered for anonymous files.<br/>
+                Deleted files are <a href="https://en.wikipedia.org/wiki/Shred_(Unix)"target="_blank" class="link-dotted">securely wiped using "shred"</a>.<br/><br/><br/>
 <!--
           <label class="checkbox-inline">
             <input type="checkbox" id="timedelete" name="timedelete" value="1"><span class="text">Delete in 24 hours</span>

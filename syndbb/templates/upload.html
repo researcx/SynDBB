@@ -2,7 +2,6 @@
 <div class="thread-title"><span style="float: right;">{{human_size(total_size)}}</span>{{filecount}} files</div>
 <div class="upload-title">
   <a href="/upload/gallery" title="Gallery View" style="float:right;"><i class="fa fa-picture-o" aria-hidden="true"></i></a>
-  <a href="/upload/anonymous" title="Anonymous Uploads" style="float:right; margin-right: 12px;"><i class="fa fa-user-circle" aria-hidden="true"></i></a>
 </div>
 <div class="panel panel-default">
   <div class="panel-body">
@@ -12,7 +11,7 @@
         <input type="hidden" name="uploader" value="upload">
         <div class="bbcode-anon" style="margin-bottom: -100px;">
           <label class="checkbox-inline">
-            <input type="checkbox" id="anonymous" name="anonymous" value="1"><span class="text">Upload anonymously</span><br/>
+            <a href="/upload/anonymous" title="Anonymous Uploads" style="border-bottom: 1px dotted black; float:right; margin-right: 12px;">Upload Anonymously</a><br/>
           </label>
 <!--
           <label class="checkbox-inline">
