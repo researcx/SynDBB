@@ -320,9 +320,9 @@ def upload_file_external():
             return "No password set."
         user = d2_user.query.filter_by(username=username).filter_by(uploadauth=password).first()
         if user:
-            bancheck = is_banned(user.user_id)
-            if bancheck:
-                return "This user or IP address is banned."
+#            bancheck = is_banned(user.user_id)
+#            if bancheck:
+#                return "This user or IP address is banned."
             uploadfolder = syndbb.app.static_folder + "/data/uploads/" + user.username + "/"
             if not syndbb.os.path.exists(uploadfolder):
                 syndbb.os.makedirs(uploadfolder)
