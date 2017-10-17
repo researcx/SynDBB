@@ -260,6 +260,37 @@ def upload_simple():
             return syndbb.render_template('error_not_logged_in.html', title="Upload", subheading=[""])
     else:
         return syndbb.render_template('error_not_logged_in.html', title="Upload", subheading=[""])
+    
+@syndbb.app.route("/upload/view")
+def upload_viewer():
+    dynamic_js_footer = ["js/bootstrap-filestyle.min.js", "js/bootbox.min.js", "js/delete.js", "js/lazyload.transpiled.min.js"]
+    ufile = syndbb.request.args.get('file', '')
+    uploadfolder = syndbb.app.static_folder + "/data/uploads/"
+
+    if ufile:
+        image_types = [".jpg", ".jpeg", ".jpe", ".gif", ".png", ".bmp"]
+        audio_types = [".mp3",".ogg",".wav"]
+        video_types = [".webm",".mp4",".avi",".mpg",".mpeg"]
+        text_types = [".txt",".pdf",".doc"]
+        archive_types = [".zip",".rar",".7z",".tar",".gz"]
+
+        uploadurl = cdn_path() + "/data/uploads/"
+
+        file_list = []
+        filepath = uploadfolder + "/" + ufile
+        if syndbb.os.path.isfile(filepath):
+            type_icon = ''
+            filetime = int(syndbb.os.stat(filepath).st_mtime)
+            filesize = syndbb.os.path.getsize(filepath)
+            extension = syndbb.os.path.splitext(ufile)[1].lower()
+            hashname = hashlib.sha256(ufile.encode()).hexdigest()
+            if extension in image_types:
+                type_icon = '<img src="'+ uploadurl + ufile +'" alt="'+ ufile +'" class="bbcode-image"\>'
+            file_list.append([filetime, filesize, ufile, type_icon])
+        return syndbb.render_template('upload_viewer.html', uploadurl=uploadurl, file_list=file_list, dynamic_js_footer=dynamic_js_footer, title=ufile, subheading=["Upload &bull; Viewing File"])
+    else:
+        return syndbb.render_template('upload_viewer.html', dynamic_js_footer=dynamic_js_footer, title="Upload", subheading=[""])
+
 
 @syndbb.app.route('/functions/upload', methods=['GET', 'POST'])
 def upload_file():
@@ -305,7 +336,13 @@ def upload_file():
                         return "/upload/simple/?file=" + newname
                     else:
                         syndbb.flash('File uploaded successfully.', 'success')
-                        return syndbb.redirect(syndbb.url_for(uploader))
+                        
+                        if anonymous:
+                            fpath = d2_hash(user.username + user.password)[:10] + "/" + newname
+                        else:
+                            fpath = user.username + "/" + newname
+
+                        return syndbb.redirect('/upload/view?file='+fpath)
 
 @syndbb.app.route('/functions/upload/external', methods=['GET', 'POST'])
 def upload_file_external():
