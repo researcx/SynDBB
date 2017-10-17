@@ -60,7 +60,7 @@ function set_theme(theme) {
 
   $(document).ready(function() {
     $('#uploads').DataTable( {
-        "dom": '<"top"p<"clear">>rt<"bottom"p<"clear">>',
+        "dom": '<"top"p<"clear">>rt<"bottom"pf<"clear">>',
         "ordering": false,
         "info":     false,
         "stateSave": true,
