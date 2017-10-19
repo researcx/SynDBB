@@ -12,7 +12,7 @@
 					</a>
 					{% else %}
 						<a href="/account/avatar">
-							<img src="{{get_avatar(profile.user_id)}}" alt="Avatar" class="img-circle profile-avatar-size"/>
+							<img src="{{get_avatar(profile.user_id)}}" alt="Avatar" class="profile-avatar-size"/>
 						</a>
 					{% endif %}
 				{% else %}
@@ -22,13 +22,13 @@
 						</a>
 					{% else %}
 						<a id="profileAvatar" href="{{get_avatar_source(profile.user_id)}}">
-							<img src="{{get_avatar(profile.user_id)}}" alt="Avatar" class="img-circle profile-avatar-size"/>
+							<img src="{{get_avatar(profile.user_id)}}" alt="Avatar" class="profile-avatar-size"/>
 						</a>
 					{% endif %}
 				{% endif %}
 			{% else %}
 			<a href="/user/{{profile.username}}">
-				<img src="{{get_avatar(profile.user_id)}}" alt="Avatar" class="img-circle profile-avatar-inline"/>
+				<img src="{{get_avatar(profile.user_id)}}" alt="Avatar" class="profile-avatar-inline"/>
 			</a>
 			{% endif %}
 			{% if not isInline %}

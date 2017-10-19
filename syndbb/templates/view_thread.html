@@ -47,7 +47,11 @@
         </div>
         {% if thread.anonymous == 0 %}
         <a href="/user/{{thread.user.username}}" class="profile-inline">
+          {% if thread.user.rank >= 50 %}
+          <img src="{{get_avatar_source(thread.user_id)}}" title="{{thread.user.username}}" alt="Avatar" class="thread-avatar-size gm_avatar">
+          {% else %}
           <img src="{{get_avatar(thread.user_id)}}" title="{{thread.user.username}}" alt="Avatar" class="thread-avatar-size">
+          {% endif %}
         </a>
         <div class="user-regdate text-muted">{{recent_date(thread.user.join_date)}}</div>
         {% else %}

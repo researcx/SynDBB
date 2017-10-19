@@ -28,17 +28,44 @@ def has_no_empty_params(rule):
     return len(defaults) >= len(arguments)
 
 
-# Post Feed
-# /feed/posts/xml
-@syndbb.app.route("/feed/posts/xml")
+# Forum List
+# /feed/channels
+@syndbb.app.route("/feed/channels")
 @syndbb.cache.memoize(timeout=60)
-def feed_posts_xml():
+def feed_channels_xml():
     activity = []
     activity_item = ""
     count = 0
-    limit = 10
+    limit = 512
 
-    posts = d2_activity.query.filter(d2_activity.replyto != 0).order_by(d2_activity.time.desc()).limit(limit).all()
+    forums = d2_forums.query.filter(d2_forums.approved == 1).all()
+    for forum in forums:
+        if count < limit:
+            activity_item += '''<item>
+                                    <id>'''+str(forum.id)+'''</id>
+                                    <channel>'''+forum.short_name+'''</channel>
+                                    <name>'''+forum.name+'''</name>
+                                    <description>'''+forum.description+'''</description>
+                                </item>'''
+            count += 1
+
+    template = syndbb.render_template('post_feed.xml', posts=activity_item)
+    response = make_response(template)
+    response.headers['Content-Type'] = 'application/xml'
+    return response
+
+# Post Feed
+# /feed/posts/xml
+@syndbb.app.route("/feed/posts/xml/<sforum>")
+@syndbb.cache.memoize(timeout=60)
+def feed_posts_xml(sforum):
+    activity = []
+    activity_item = ""
+    count = 0
+    limit = 40
+
+    sforum = d2_forums.query.filter(d2_forums.short_name == sforum).first()
+    posts = d2_activity.query.filter(d2_activity.replyto != 0).filter(d2_activity.category == sforum.id).order_by(d2_activity.time.desc()).limit(limit).all()
 
     for post in posts:
         activity.append([post.time, "post", post.id])
@@ -73,15 +100,16 @@ def feed_posts_xml():
 
 # Thread Feed
 # /feed/threads/xml
-@syndbb.app.route("/feed/threads/xml")
+@syndbb.app.route("/feed/threads/xml/<sforum>")
 @syndbb.cache.memoize(timeout=60)
-def feed_threads_xml():
+def feed_threads_xml(sforum):
     activity = []
     activity_item = ""
     count = 0
-    limit = 10
-
-    threads = d2_activity.query.filter(d2_activity.category != 0).order_by(d2_activity.reply_time.desc()).limit(limit).all()
+    limit = 40
+    
+    sforum = d2_forums.query.filter(d2_forums.short_name == sforum).first()
+    threads = d2_activity.query.filter(d2_activity.category != 0).filter(d2_activity.category == sforum.id).order_by(d2_activity.reply_time.desc()).limit(limit).all()
 
     for thread in threads:
         activity.append([thread.time, "thread", thread.id])

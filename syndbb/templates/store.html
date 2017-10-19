@@ -1,0 +1,29 @@
+{% extends "layout.html" %} {% block body %}
+  <table class="file-list table table-striped">
+    <tbody>
+      <tr>
+        <td class="file-thumbnail"><i class="silk-icon icon_package_green" aria-hidden="true"></i></td>
+        <td class="file-name">Gold Membership</td>
+        <td class="file-name text-muted">You get a golden name and an animated/large avatar.</td>
+        <td class="file-name">
+            <a href="{{ url_for('store') }}" style="color: #fff !important; text-decoration: none; padding-left: 16px; padding-right: 16px;" class="authbutton">
+                <span style="float:right;">$15</span>
+                <span style="float:left;">Buy</span>
+            </a>
+        </td>
+      </tr>
+      <tr>
+        <td class="file-thumbnail"><i class="silk-icon icon_database_add" aria-hidden="true"></i></td>
+        <td class="file-name">+ 5 GB Storage</td>
+        <td class="file-name text-muted">Adds an extra 5 GB of storage to your upload account.</td>
+        <td class="file-name">
+            <a href="{{ url_for('store') }}" style="color: #fff !important; text-decoration: none; padding-left: 16px; padding-right: 16px;" class="authbutton">
+                <span style="float:right;">&ETH;1000 &nbsp; ${{1000/1000}}</span>
+                <span style="float:left;">Buy</span>
+            </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+<div class="regnotice">The shop system is currently a work in progress!</div>
+{% endblock %}

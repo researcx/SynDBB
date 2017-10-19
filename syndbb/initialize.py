@@ -19,9 +19,10 @@ import syndbb.views.auth
 import syndbb.views.invites
 import syndbb.views.profile
 
-# Forums, upload, pastebin
+# Forums, upload, pastebin, store
 import syndbb.views.forums
 import syndbb.views.events
+import syndbb.views.store
 import syndbb.views.upload
 import syndbb.views.pastebin
 import syndbb.views.quotedb

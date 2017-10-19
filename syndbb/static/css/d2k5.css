@@ -1066,12 +1066,6 @@ blockquote {
   margin-bottom: 4px;
 }
 
-.cropit-preview, .cropit-preview-image-container {
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  border-radius: 50%;
-}
-
 div.panel.panel-default.category-list {
   margin-bottom: 5px !important;
 }
@@ -1197,4 +1191,11 @@ table, .navbar-static-top{
 
 div.dataTables_wrapper div.dataTables_paginate ul.pagination{
     margin-right: 20px;
+}
+
+.gm_avatar{
+    background-position: center center;
+    background-repeat: no-repeat;
+    max-height: 290px !important;
+    height: auto !important;
 }

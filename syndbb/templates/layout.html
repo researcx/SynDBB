@@ -229,35 +229,22 @@
       <div class="sidebar-userinfo text-center" style="border-bottom: 1px solid #ddd;">
       {% if user_session.sessionid %}
         <div style="padding-left: 8px; padding-right: 8px; padding-top: 10px;">
-           <a href="/user/{{user.username}}">
-            <img src="{{get_avatar(user.user_id)}}" alt="Avatar" class="home-avatar-size"/>
-          </a>
+            <a href="/user/{{user.username}}">
+                <img src="{{get_avatar(user.user_id)}}" alt="Avatar" class="home-avatar-size"/>
+            </a>
             
-            <a href="{{ url_for('upload') }}" style="color: #fff; text-decoration: none;" class="authbutton">My Files</a>
-            <a href="{{ url_for('pastebin') }}" style="color: #fff; margin-top: -10px; text-decoration: none;" class="authbutton">My Pastes</a>
-            
-    <dl class="dl-horizontal statistics" style="margin-top: 10px;">
-            <dt>Karma:</dt>
-            <dd>
-                {% if (user.karma_positive - user.karma_negative) < 0 %}
-                <span class="karma negative">
-                {% elif (user.karma_positive - user.karma_negative) > 0 %}
-                <span class="karma positive">
-                {% else %}
-                <span class="karma neutral">
-                {% endif %}
-                {{user.karma_positive - user.karma_negative}}
-                </span>
-      (<span class="karma positive">+{{user.karma_positive}}</span>/
-                <span class="karma negative">-{{user.karma_negative}}</span>)
-            </dd>
-    <dt>Currency:</dt>
-            <dd>&ETH;{{user.points}}</dd>
-    <dt>Lines Spoken:</dt>
-            <dd>{{user.line_count}}</dd>
-            <dt>Profanity Count:</dt>
-            <dd>{{user.profanity_count}}</dd>
-        </dl>
+            <a href="{{ url_for('upload') }}" style="color: #fff; text-decoration: none; padding-left: 16px; padding-right: 16px;" class="authbutton">
+                <span style="float:right;">{{human_size(user_stats(user.user_id)['filesize'])}}</span>
+                <span style="float:left;">My Files</span>
+            </a>
+            <a href="{{ url_for('pastebin') }}" style="color: #fff; text-decoration: none; margin-top: -8px; padding-left: 16px; padding-right: 16px;" class="authbutton">
+                <span style="float:right;">{{user_stats(user.user_id)['pastecount']}}</span>
+                <span style="float:left;">My Pastes</span>
+            </a>
+            <a href="{{ url_for('store') }}" style="color: #fff; text-decoration: none; padding-left: 16px; padding-right: 16px;" class="authbutton">
+                <span style="float:right;">&ETH;{{user.points}}</span>
+                <span style="float:left;">Store</span>
+            </a>
         </div>
       {% else %}
       <div style="padding-left: 8px; padding-right: 8px; padding-top: 10px;">

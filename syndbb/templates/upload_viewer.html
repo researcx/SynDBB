@@ -34,6 +34,8 @@
             <input value="[url={{uploadurl}}{{file[2]}}]File: {{file[2]}} (Size: {{human_size(file[1])}})[/url]" type="text">
             <input value="[img]{{uploadurl}}{{file[2]}}[/img]" type="text">
             <input value="[t]{{uploadurl}}{{file[2]}}[/t]" type="text">
+            <input value="&lt;a href=&quot;{{uploadurl}}{{file[2]}}&quot; target=&quot;_blank&quot;&gt;File: {{file[2]}} (Size: {{human_size(file[1])}})&lt;/a&gt;">
+            <input value="&lt;img src=&quot;{{uploadurl}}{{file[2]}}&quot; title=&quot;File: {{file[2]}} (Size: {{human_size(file[1])}})&quot; alt=&quot;{{file[2]}}&quot;/&gt;" type="text">
           </div>
           <table class="file-list table table-striped">
             <tbody>
@@ -46,7 +48,7 @@
           </table>
         <br/>
             <center>
-                <a href="{{uploadurl}}{{file[2]}}" target="_blank">{{file[3]|safe}}</a>
+                <img src="{{uploadurl}}{{file[2]}}" title="File: {{file[2]}} (Size: {{human_size(file[1])}})" alt="{{file[2]}}"/>
             </center>
         
         <br/>

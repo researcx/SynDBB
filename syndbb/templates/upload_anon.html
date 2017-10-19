@@ -9,12 +9,13 @@
         <input type="hidden" name="uploader" value="upload_anon">
         <div class="bbcode-anon" style="margin-bottom: -100px;">
           <label class="checkbox-inline">
-            <input type="checkbox" id="anonymous" name="anonymous" checked value="1"><span class="text">Upload anonymously</span><br/>
+            <input type="checkbox" id="anonymous" name="anonymous" checked value="1"><span class="text">Upload anonymously</span><a href="/account/preferences" title="Preferences" style="border-bottom: 1px dotted black; float:right; margin-left: 12px;">Change displayed URL</a><br/>
           </label>
             <br/><br/>
                 <b>Upload URL:</b> {{uploadurl}}{{uname}}/&lt;filename&gt; (<a href="/account/preferences" title="User Preferences" style="border-bottom: 1px dotted black;">change</a>)<br/>
                 Thumbnails are not rendered for anonymous files.<br/>
-                Deleted files are <a href="https://en.wikipedia.org/wiki/Shred_(Unix)"target="_blank" class="link-dotted">securely wiped using "shred"</a>. This also applies for anything else deleted on this site.<br/><br/><br/>
+                Deleted files are <a href="https://en.wikipedia.org/wiki/Shred_(Unix)"target="_blank" class="link-dotted">securely wiped using "shred"</a>. This also applies for anything else deleted on this site.<br/>
+                All exif data is removed from images automatically.<br/><br/><br/>
 <!--
           <label class="checkbox-inline">
             <input type="checkbox" id="timedelete" name="timedelete" value="1"><span class="text">Delete in 24 hours</span>

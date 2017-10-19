@@ -9,9 +9,44 @@ from sys import platform
 from syndbb.models.users import d2_user, d2_bans, d2_ip, checkSession, is_banned
 from syndbb.models.invites import d2_requests
 from syndbb.models.d2_hash import d2_hash
+from syndbb.models.paste import d2_paste
 from syndbb.models.forums import d2_forums, d2_activity
 from syndbb.models.quotedb import d2_quotes
 from syndbb.models.time import unix_time_current
+
+@syndbb.cache.memoize(timeout=180)
+def user_stats(user):
+    user = d2_user.query.filter(d2_user.user_id == user).first()
+    if user:
+        #Upload Statistics
+        datafolder = syndbb.app.static_folder + "/data/uploads/" + user.username
+        filecount = sum([len(files) for r, d, files in syndbb.os.walk(datafolder)])
+        filesize = 0
+        for dirpath, dirnames, filenames in syndbb.os.walk(datafolder):
+            for f in filenames:
+                fp = syndbb.os.path.join(dirpath, f)
+                filesize += syndbb.os.path.getsize(fp)
+
+        #Totals
+        disk_total = 5368709120
+        disk_percentage = filesize/disk_total*100
+        disk_percentage = "%.0f" % disk_percentage
+
+        #Progress Indicator
+        if int(disk_percentage) <= 50:
+            progress_indicator = "progress-bar-success"
+        if int(disk_percentage) >= 50:
+            progress_indicator = "progress-bar-info"
+        if int(disk_percentage) >= 70:
+            progress_indicator = "progress-bar-warning"
+        if int(disk_percentage) >= 90:
+            progress_indicator = "progress-bar-danger"
+            
+        #Paste Count
+        pastecount = d2_paste.query.filter(d2_paste.user_id == user.user_id).count()
+
+        return {'filecount': filecount, 'filesize': filesize, 'disk_percentage': disk_percentage, 'disk_total': disk_total, 'progress_indicator': progress_indicator, 'pastecount': pastecount}
+syndbb.app.jinja_env.globals.update(user_stats=user_stats)
 
 @syndbb.cache.memoize(timeout=360)
 def get_stats():
