@@ -47,10 +47,9 @@
             </tbody>
           </table>
         <br/>
-            <center>
-                <img src="{{uploadurl}}{{file[2]}}" title="File: {{file[2]}} (Size: {{human_size(file[1])}})" alt="{{file[2]}}"/>
-            </center>
-        
+            <div style="text-align: center; width: 100%; font-size: 128pt;">
+                <a href="{{uploadurl}}{{file[2]}}" target="_blank">{{file[3]|safe}}</a>
+            </div>
         <br/>
         {% endfor %}
     </tbody>

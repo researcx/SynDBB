@@ -11,8 +11,10 @@ from syndbb.models.time import cdn_path
 from syndbb.models.d2_hash import d2_hash
 from werkzeug.utils import secure_filename
 
-@syndbb.app.route("/upload/")
-def upload():
+@syndbb.app.route("/upload/<limit>")
+def upload(limit):
+    if not limit:
+        limit = 1000000
     dynamic_css_header = ["js/datatables.min.css"]
     dynamic_js_footer = ["js/datatables.min.js", "js/bootstrap-filestyle.min.js", "js/bootbox.min.js", "js/delete.js", "js/lazyload.transpiled.min.js"]
     if 'logged_in' in syndbb.session:
@@ -57,15 +59,15 @@ def upload():
                             im.thumbnail((150,150))
                             im.save(thumbpath, "PNG")
                     elif extension in audio_types:
-                        type_icon = '<i class="silk-icon icon_music" aria-hidden="true"></i>'
+                        type_icon = '<i class="fa fa-file-audio-o" aria-hidden="true"></i>'
                     elif extension in video_types:
-                        type_icon = '<i class="fsilk-icon icon_film" aria-hidden="true"></i>'
+                        type_icon = '<i class="ffa fa-file-video-o" aria-hidden="true"></i>'
                     elif extension in text_types:
-                        type_icon = '<i class="silk-icon icon_page_white_text" aria-hidden="true"></i>'
+                        type_icon = '<i class="fa fa-file-text-o" aria-hidden="true"></i>'
                     elif extension in archive_types:
-                        type_icon = '<i class="silk-icon icon_compress" aria-hidden="true"></i>'
+                        type_icon = '<i class="fa fa-file-archive-o" aria-hidden="true"></i>'
                     else:
-                        type_icon = '<i class="silk-icon icon_page_white" aria-hidden="true"></i>'
+                        type_icon = '<i class="fa fa-file-o" aria-hidden="true"></i>'
 
                     file_list.append([filetime, filesize, fn, type_icon])
             file_list.sort(reverse=True)
@@ -114,15 +116,15 @@ def upload_anon():
                     if extension in image_types:
                         type_icon = '<i class="silk-icon icon_picture" aria-hidden="true"></i>'
                     elif extension in audio_types:
-                        type_icon = '<i class="silk-icon icon_music" aria-hidden="true"></i>'
+                        type_icon = '<i class="fa fa-file-audio-o" aria-hidden="true"></i>'
                     elif extension in video_types:
-                        type_icon = '<i class="silk-icon icon_film" aria-hidden="true"></i>'
+                        type_icon = '<i class="fa fa-file-video-o" aria-hidden="true"></i>'
                     elif extension in text_types:
-                        type_icon = '<i class="silk-icon icon_page_white_text" aria-hidden="true"></i>'
+                        type_icon = '<i class="fa fa-file-text-o" aria-hidden="true"></i>'
                     elif extension in archive_types:
-                        type_icon = '<i class="silk-icon icon_compress" aria-hidden="true"></i>'
+                        type_icon = '<i class="fa fa-file-archive-o" aria-hidden="true"></i>'
                     else:
-                        type_icon = '<i class="silk-icon icon_page_white" aria-hidden="true"></i>'
+                        type_icon = '<i class="fa fa-file-o" aria-hidden="true"></i>'
 
                     file_list.append([filetime, filesize, fn, type_icon])
             file_list.sort(reverse=True)
@@ -286,6 +288,17 @@ def upload_viewer():
             hashname = hashlib.sha256(ufile.encode()).hexdigest()
             if extension in image_types:
                 type_icon = '<img src="'+ uploadurl + ufile +'" alt="'+ ufile +'" class="bbcode-image"\>'
+            elif extension in audio_types:
+                type_icon = '<i class="fa fa-file-audio-o" aria-hidden="true"></i><div style="margin-top: -0.8em;"><audio controls><source src="'+ uploadurl + ufile +'" type="audio/mpeg"></audio></div>'
+            elif extension in video_types:
+                type_icon = '<video width="720" height="480" controls><source src="'+ uploadurl + ufile +'" type="video/mp4"></video>'
+            elif extension in text_types:
+                type_icon = '<i class="fa fa-file-text-o" aria-hidden="true"></i>'
+            elif extension in archive_types:
+                type_icon = '<i class="fa fa-file-archive-o" aria-hidden="true"></i>'
+            else:
+                type_icon = '<i class="fa fa-file-o" aria-hidden="true"></i>'
+                
             file_list.append([filetime, filesize, ufile, type_icon])
         return syndbb.render_template('upload_viewer.html', uploadurl=uploadurl, file_list=file_list, dynamic_js_footer=dynamic_js_footer, title=ufile, subheading=["Upload &bull; Viewing File"])
     else:
