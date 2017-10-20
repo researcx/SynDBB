@@ -11,10 +11,8 @@ from syndbb.models.time import cdn_path
 from syndbb.models.d2_hash import d2_hash
 from werkzeug.utils import secure_filename
 
-@syndbb.app.route("/upload/<limit>")
-def upload(limit):
-    if not limit:
-        limit = 1000000
+@syndbb.app.route("/upload/")
+def upload():
     dynamic_css_header = ["js/datatables.min.css"]
     dynamic_js_footer = ["js/datatables.min.js", "js/bootstrap-filestyle.min.js", "js/bootbox.min.js", "js/delete.js", "js/lazyload.transpiled.min.js"]
     if 'logged_in' in syndbb.session:
