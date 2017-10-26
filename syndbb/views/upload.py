@@ -285,7 +285,7 @@ def upload_viewer():
             extension = syndbb.os.path.splitext(ufile)[1].lower()
             hashname = hashlib.sha256(ufile.encode()).hexdigest()
             if extension in image_types:
-                type_icon = '<img src="'+ uploadurl + ufile +'" alt="'+ ufile +'" class="bbcode-image"\>'
+                type_icon = '<img src="'+ uploadurl + ufile +'" alt="'+ ufile +'" class="bbcode-image img-thumb"\>'
             elif extension in audio_types:
                 type_icon = '<i class="fa fa-file-audio-o" aria-hidden="true"></i><div style="margin-top: -0.8em;"><audio controls><source src="'+ uploadurl + ufile +'" type="audio/mpeg"></audio></div>'
             elif extension in video_types:
