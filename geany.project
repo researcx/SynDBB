@@ -28,7 +28,12 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=0
+current_page=4
+FILE_NAME_0=53;Python;0;EUTF-8;1;1;1;%2Fhome%2Fkeira%2FDevelopment%2FSparks%2Fserver.py;0;4
+FILE_NAME_1=212;JSON;0;EUTF-8;1;1;1;%2Fhome%2Fkeira%2FDevelopment%2FSparks%2Fdata%2Fbot.json;0;4
+FILE_NAME_2=20;Python;0;EUTF-8;1;1;1;%2Fhome%2Fkeira%2FDevelopment%2FSparks%2Ffunctions%2Fd2_autojoin.py;0;4
+FILE_NAME_3=186;Python;0;EUTF-8;1;1;1;%2Fhome%2Fkeira%2FDevelopment%2FSparks%2Ffunctions%2Fd2_userinfo.py;0;4
+FILE_NAME_4=0;Python;0;EUTF-8;1;1;1;%2Fhome%2Fkeira%2FDevelopment%2FSparks%2Ffunctions%2Fd2_feed.py;0;4
 
 [VTE]
 last_dir=/home/keira/.conky

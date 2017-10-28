@@ -113,7 +113,7 @@ syndbb.app.jinja_env.globals.update(parse_bbcode=parse_bbcode)
 
 #Get channel info
 @syndbb.app.template_filter('get_channel_list')
-@syndbb.cache.memoize(timeout=1)
+@syndbb.cache.memoize(timeout=360)
 def get_channel_list():
     channels = []
     chlist = ""

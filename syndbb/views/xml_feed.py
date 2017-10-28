@@ -57,7 +57,7 @@ def feed_channels_xml():
 # Post Feed
 # /feed/posts/xml
 @syndbb.app.route("/feed/posts/xml/<sforum>")
-@syndbb.cache.memoize(timeout=60)
+@syndbb.cache.memoize(timeout=2)
 def feed_posts_xml(sforum):
     activity = []
     activity_item = ""
@@ -65,7 +65,7 @@ def feed_posts_xml(sforum):
     limit = 40
 
     sforum = d2_forums.query.filter(d2_forums.short_name == sforum).first()
-    posts = d2_activity.query.filter(d2_activity.replyto != 0).filter(d2_activity.category == sforum.id).order_by(d2_activity.time.desc()).limit(limit).all()
+    posts = d2_activity.query.filter(d2_activity.replyto != 0).order_by(d2_activity.time.desc()).limit(limit).all()
 
     for post in posts:
         activity.append([post.time, "post", post.id])
@@ -78,20 +78,21 @@ def feed_posts_xml(sforum):
                 post = d2_activity.query.filter(d2_activity.id == item[2]).first()
                 thread = d2_activity.query.filter(d2_activity.id == post.replyto).first()
                 forum = d2_forums.query.filter(d2_forums.id == thread.category).first()
+                
+                if thread.category == sforum.id:
+                    if post and thread and forum:
+                        if post.anonymous == 0:
+                            latestreplier = post.user.username
+                        else:
+                            latestreplier = 'Anonymous'
 
-                if post and thread and forum:
-                    if post.anonymous == 0:
-                        latestreplier = post.user.username
-                    else:
-                        latestreplier = 'Anonymous'
-
-                    activity_item += '''<item>
-                                    		<guid>'''+str(post.id)+'''</guid>
-                                    		<title>'''+latestreplier+''' replied to "'''+html_escape(thread.title)+'''" in '''+html_escape(forum.name)+'''</title>
-                                    		<link>https://d2k5.com/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''#'''+str(post.id)+'''</link>
-                                    		<pubDate>'''+human_date(post.time)+'''</pubDate>
-                                    	</item>'''
-            count += 1
+                        activity_item += '''<item>
+                                                <guid>'''+str(post.id)+'''</guid>
+                                                <title>'''+latestreplier+''' replied to "'''+html_escape(thread.title)+'''" in '''+html_escape(forum.name)+'''</title>
+                                                <link>https://d2k5.com/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''#'''+str(post.id)+'''</link>
+                                                <pubDate>'''+human_date(post.time)+'''</pubDate>
+                                            </item>'''
+                    count += 1
 
     template = syndbb.render_template('post_feed.xml', posts=activity_item)
     response = make_response(template)

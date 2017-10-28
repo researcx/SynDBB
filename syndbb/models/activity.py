@@ -60,15 +60,12 @@ def get_recent_posts(limit=20):
                                             <td class="home-forum">
                                             <span class="small align-right">
                                                 <span class="timedisplay">'''+recent_date(post.time)+'''</span><br/>
-                                                by '''+latestreplier+'''
+                                                by '''+latestreplier+''' <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''#'''+str(post.id)+'''"><img src="'''+cdn_path()+'''/icons/thread_new.png" style="margin-top: -2px;"/></a>
                                             </span>
                                             <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''#'''+str(post.id)+'''"><b>'''+thread.title+'''</b></a>
                                             <span class="small"><br/>
                                             '''+threadcreator+''', <span class="timedisplay">'''+recent_date(thread.time)+'''</span>, <a href="/'''+str(forum.short_name)+'''">'''+forum.name+'''</a>
                                             </span>
-                                            <td class="home-forum home-forum-icon" style="padding-right: 9px !important;">
-                                                <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''#'''+str(post.id)+'''"><img src="'''+cdn_path()+'''/icons/thread_new.png" alt="Latest" title="Go to latest post" style="margin-top: -2px;"/></a>
-                                            </td>
                                         </tr>'''
 
             if item[1] == "thread":
@@ -86,15 +83,12 @@ def get_recent_posts(limit=20):
                                             <td class="home-forum">
                                             <span class="small align-right">
                                                 <span class="timedisplay">'''+recent_date(thread.reply_time)+'''</span><br/>
-                                                by '''+threadcreator+'''
+                                                by '''+threadcreator+''' <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''"><img src="'''+cdn_path()+'''/icons/thread_new.png" style="margin-top: -2px;"/></a>
                                             </span>
                                             <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''"><b>'''+thread.title+'''</b></a>
                                             <span class="small"><br/>
                                             '''+threadcreator+''', <span class="timedisplay">'''+recent_date(thread.time)+'''</span>, <a href="/'''+str(forum.short_name)+'''">'''+forum.name+'''</a>
                                             </span></td>
-                                            <td class="home-forum home-forum-icon" style="padding-right: 9px !important;">
-                                                <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''"><img src="'''+cdn_path()+'''/icons/thread_new.png" alt="Latest" title="Go to latest post" style="margin-top: -2px;"/></a>
-                                            </td>
                                         </tr>'''
             count += 1
 
