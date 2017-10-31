@@ -150,9 +150,9 @@
         <a href="/user/{{reply.user.username}}" class="profile-inline">
           {% if reply.user.rank >= 50 %}
              {% if get_avatar_source(post.user.user_id) %}
-                <img src="{{get_avatar_source(post.user_id)}}" title="{{post.user.username}}" alt="Avatar" class="thread-avatar-size gm_avatar">
+                <img src="{{get_avatar_source(reply.user_id)}}" title="{{reply.user.username}}" alt="Avatar" class="thread-avatar-size gm_avatar">
             {% else %}
-                <img src="{{get_avatar(post.user_id)}}" title="{{post.user.username}}" alt="Avatar" class="thread-avatar-size">
+                <img src="{{get_avatar(reply.user_id)}}" title="{{reply.user.username}}" alt="Avatar" class="thread-avatar-size">
             {% endif %}
           {% else %}
           <img src="{{get_avatar(reply.user_id)}}" title="{{reply.user.username}}" alt="Avatar" class="thread-avatar-size">
