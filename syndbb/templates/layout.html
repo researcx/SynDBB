@@ -250,7 +250,6 @@
       <div style="padding-left: 8px; padding-right: 8px; padding-top: 10px;">
             <img src="/static/images/default_avatar.png" alt="Avatar" class="home-avatar-size"/>
           </div>
-        <a href="/im/" style="color: #fff; text-decoration: none;" class="authbutton">IRC ({{get_stats()['irccount']}})</a>
         <a href="{{ url_for('register') }}" style="color: #fff; text-decoration: none;" class="authbutton">Register</a>
         <a href="{{ url_for('login') }}" style="color: #fff; margin-top: -10px; text-decoration: none;" class="authbutton">Log In</a>
 			{% endif %}
@@ -278,7 +277,7 @@
         </div>
         {% endfor %}
       </div>
-        
+    {% if request.path != "/" %}
     <div class="sidebar-forums" style="border-bottom: 1px solid #ddd;">
       {% for forum in forums %}
       <div class="sidebar-forum">
@@ -307,6 +306,7 @@
       </div>
       {% endfor %}
     </div>
+    {% endif %}
     <div class="sidebar-statistics text-center" style="border-bottom: 1px solid #ddd;">
           
         <dl class="dl-horizontal statistics" style="margin-top: 10px; margin-bottom: 10px;">

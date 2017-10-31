@@ -4,7 +4,7 @@
     <span class="media-left text-center">
           <img src="{{get_avatar(user.user_id)}}" alt="Avatar" class="pull-left profile-avatar-size"><br/>
           {% if user.avatar_date %}
-            <a href="/functions/remove_avatar?uniqid={{user_session.sessionid}}" title="Remove Avatar" class="text-muted deletebutton"><i class="silk-icon icon_delete" aria-hidden="true"></i></a>
+            <a href="/functions/remove_avatar?uniqid={{user_session.sessionid}}" title="Remove Avatar" class="text-muted deletebutton"><i class="fa fa-times" aria-hidden="true"></i></a>
           {% endif %}
       </span>
     <div class="media-body" style="padding: 8px;">
@@ -38,8 +38,8 @@
         <div class="avatar_details">
           <span class="avatar_date">{{human_date(prevavatar[1])}}</span>
           <span style="float:right;">
-              <a href="/functions/set_avatar/?file={{prevavatar[0]}}&uniqid={{user_session.sessionid}}" title="Set as avatar" class="text-muted"><i class="silk-icon icon_add" aria-hidden="true"></i></a>
-              <a href="/functions/remove_avatar?file={{prevavatar[0]}}&uniqid={{user_session.sessionid}}" title="Delete Avatar" class="text-muted deletebutton"><i class="silk-icon icon_delete" aria-hidden="true"></i></a>
+              <a href="/functions/set_avatar/?file={{prevavatar[0]}}&uniqid={{user_session.sessionid}}" title="Set as avatar" class="text-muted"><i class="fa fa-check" aria-hidden="true"></i></a>
+              <a href="/functions/remove_avatar?file={{prevavatar[0]}}&uniqid={{user_session.sessionid}}" title="Delete Avatar" class="text-muted deletebutton"><i class="fa fa-times" aria-hidden="true"></i></a>
             </span>
         </div>
       </div>

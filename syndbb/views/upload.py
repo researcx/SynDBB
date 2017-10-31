@@ -273,9 +273,28 @@ def upload_viewer():
         video_types = [".webm",".mp4",".avi",".mpg",".mpeg"]
         text_types = [".txt",".pdf",".doc"]
         archive_types = [".zip",".rar",".7z",".tar",".gz"]
-
+        
         uploadurl = cdn_path() + "/data/uploads/"
+        
+        uploaduser = ufile.split('/')[0]
+        uploadfile = ufile.split('/')[1]
 
+        if uploaduser:
+            user = d2_user.query.filter_by(username=uploaduser).first()
+        else:
+            if 'logged_in' in syndbb.session:
+                userid = checkSession(str(syndbb.session['logged_in']))
+                user = d2_user.query.filter_by(user_id=userid).first()
+            
+        if 'logged_in' in syndbb.session:
+            uploadurl = user.upload_url
+            if uploadurl == "local":
+                uploadurl = cdn_path() + "/data/uploads/"
+            else:
+                uploadurl = "https://" + uploadurl + "/"
+        else:
+            uploadurl = cdn_path() + "/data/uploads/"
+                    
         file_list = []
         filepath = uploadfolder + "/" + ufile
         if syndbb.os.path.isfile(filepath):
