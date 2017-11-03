@@ -1199,3 +1199,7 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination{
     max-height: 290px !important;
     height: auto !important;
 }
+
+.bbcode-textarea{
+    height: 400px;
+}
