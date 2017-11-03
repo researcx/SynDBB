@@ -85,7 +85,7 @@
 
   <body>
   <div class="row equal" style="max-width: 100%; margin: 0 auto;">
-    <div class="cols-nopad col-12 col-sm-9 col-lg-10 main">
+    <div class="site-content">
     <nav class="navbar navbar-default navbar-static-top">
       <div class="container-fluid">
         {% if subheading %}
@@ -225,7 +225,7 @@
       {% block body %}{% endblock %}
     </div>
     </div>
-    <div class="cols-sidebar cols-nopad col-12 col-sm-3 col-lg-2 left" style="border-top: 1px solid #ddd; border-left: 1px solid #ddd;">
+    <div class="site-sidebar" style="border-top: 1px solid #ddd; border-left: 1px solid #ddd;">
       <div class="sidebar-userinfo text-center" style="border-bottom: 1px solid #ddd;">
       {% if user_session.sessionid %}
         <div style="padding-left: 8px; padding-right: 8px; padding-top: 10px;">

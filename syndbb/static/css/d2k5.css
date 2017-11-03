@@ -35,6 +35,18 @@
   }
 }
 
+.site-content {
+  width: calc(100% - 220px);
+  height: 100%;
+  float: left;
+}
+
+.site-sidebar{
+  width: 220px;
+  height: 100%;
+  float: left;
+}
+
 @media (max-width: 767px) {
   .top-avatar, .extra-info-right, .footer-notice{
     display: none;
@@ -50,6 +62,15 @@
     top: 0px !important;
     width: 100% !important;
   }
+    .site-content {
+        width: 100% !important;
+        float: none !important;
+    }
+
+    .site-sidebar{
+        width: 100% !important;
+        float: none !important;
+    }
   li:hover, li:active, li:focus{
     background: #d9d9d9;
   }
