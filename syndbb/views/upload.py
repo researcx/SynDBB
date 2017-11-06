@@ -127,9 +127,9 @@ def upload_anon():
                     file_list.append([filetime, filesize, fn, type_icon])
             file_list.sort(reverse=True)
             
-            return syndbb.render_template('upload_anon.html', uploadurl=uploadurl, uname=uname, filecount=len(file_list), file_list=file_list, total_size=total_size, dynamic_js_footer=dynamic_js_footer, dynamic_css_header=dynamic_css_header, title="Upload &bull; Anonymous", subheading=[""])
+            return syndbb.render_template('upload_anon.html', uploadurl=uploadurl, uname=uname, filecount=len(file_list), file_list=file_list, total_size=total_size, dynamic_js_footer=dynamic_js_footer, dynamic_css_header=dynamic_css_header, title="Anonymous", subheading=['<a href="/upload/">Upload</a>'])
         else:
-            return syndbb.render_template('error_not_logged_in.html', title="Upload &bull; Anonymous", subheading=[""])
+            return syndbb.render_template('error_not_logged_in.html', title="Anonymous", subheading=['<a href="/upload/">Upload</a>'])
     else:
         return syndbb.render_template('error_not_logged_in.html', title="Upload", subheading=[""])
       
@@ -278,20 +278,21 @@ def upload_viewer():
         
         uploaduser = ufile.split('/')[0]
         uploadfile = ufile.split('/')[1]
-
-        if uploaduser:
-            user = d2_user.query.filter_by(username=uploaduser).first()
-        else:
+        
+        user = d2_user.query.filter_by(username=uploaduser).first()
+        
+        if user:
             if 'logged_in' in syndbb.session:
                 userid = checkSession(str(syndbb.session['logged_in']))
                 user = d2_user.query.filter_by(user_id=userid).first()
-            
-        if 'logged_in' in syndbb.session:
-            uploadurl = user.upload_url
-            if uploadurl == "local":
-                uploadurl = cdn_path() + "/data/uploads/"
+
+                uploadurl = user.upload_url
+                if uploadurl == "local":
+                    uploadurl = cdn_path() + "/data/uploads/"
+                else:
+                    uploadurl = "https://" + uploadurl + "/"
             else:
-                uploadurl = "https://" + uploadurl + "/"
+                uploadurl = cdn_path() + "/data/uploads/"
         else:
             uploadurl = cdn_path() + "/data/uploads/"
                     
@@ -317,9 +318,9 @@ def upload_viewer():
                 type_icon = '<i class="fa fa-file-o" aria-hidden="true"></i>'
                 
             file_list.append([filetime, filesize, ufile, type_icon])
-        return syndbb.render_template('upload_viewer.html', uploadurl=uploadurl, file_list=file_list, dynamic_js_footer=dynamic_js_footer, title=ufile, subheading=["Upload &bull; Viewing File"])
+        return syndbb.render_template('upload_viewer.html', uploadurl=uploadurl, file_list=file_list, dynamic_js_footer=dynamic_js_footer, title=ufile, subheading=["Upload"])
     else:
-        return syndbb.render_template('upload_viewer.html', dynamic_js_footer=dynamic_js_footer, title="Upload", subheading=[""])
+        return syndbb.render_template('upload_viewer.html', dynamic_js_footer=dynamic_js_footer, title="View File", subheading=["Upload"])
 
 
 @syndbb.app.route('/functions/upload', methods=['GET', 'POST'])
