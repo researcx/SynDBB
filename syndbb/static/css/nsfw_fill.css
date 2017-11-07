@@ -1,6 +1,6 @@
 body,html{
   background: yellow url("../images/nsfwb.png");
 }
-.container-fluid, nav, footer{
+.site-sidebar, .container-fluid, nav, footer{
   display: none;
 }
