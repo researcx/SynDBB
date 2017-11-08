@@ -43,8 +43,8 @@ def view_forum(category):
     dynamic_css_header = []
     if forumcheck:
         dynamic_js_footer = ["js/inline.js", "js/bootbox.min.js"]
-        # if forumcheck.short_name == "yiff":
-        #     dynamic_css_header.append("css/oify.css")
+        if forumcheck.short_name == "yiff":
+            dynamic_css_header.append("css/oify.css")
         if (forumcheck.nsfw) and ('nsfwAllow' not in syndbb.request.cookies):
             dynamic_js_footer.append("js/nsfwprompt.js")
             dynamic_css_header.append("css/nsfw_fill.css")
@@ -116,8 +116,8 @@ def view_forum_grid(category):
     dynamic_js_footer = []
     dynamic_css_header = []
     if forumcheck:
-        # if forumcheck.short_name == "yiff":
-        #     dynamic_css_header.append("css/oify.css")
+        if forumcheck.short_name == "yiff":
+            dynamic_css_header.append("css/oify.css")
         if (forumcheck.nsfw) and ('nsfwAllow' not in syndbb.request.cookies):
             dynamic_js_footer.append("js/nsfwprompt.js")
             dynamic_css_header.append("css/nsfw_fill.css")
@@ -208,8 +208,8 @@ def view_forum_create(category):
             if forumcheck:
                 dynamic_css_header = ["css/bbcode_editor.css", "css/dropdown.css"]
                 dynamic_js_footer = ["js/jquery.dd.min.js", "js/jquery.rangyinputs.js", "js/bbcode_editor_forums.js", "js/threads.js", "js/inline.js", "js/bootbox.min.js"]
-                # if forumcheck.short_name == "yiff":
-                #     dynamic_css_header.append("css/oify.css")
+                if forumcheck.short_name == "yiff":
+                    dynamic_css_header.append("css/oify.css")
 
                 subheading = []
                 subheading.append('<a href="/'+forumcheck.short_name+'">'+forumcheck.name+'</a>')
@@ -235,8 +235,8 @@ def view_thread(category, thread):
             topbuttons = '<a href="/'+forumcheck.short_name+'/'+thread+'/gallery" title="Gallery View" style="float:right;"><i class="silk-icon icon_application_view_tile" aria-hidden="true"></i></a>'
             dynamic_css_header = ["css/bbcode_editor.css"]
             dynamic_js_footer = ["js/bootstrap-filestyle.min.js", "js/jquery.rangyinputs.js", "js/bbcode_editor_forums.js", "js/posts.js", "js/post_ratings.js", "js/bootbox.min.js", "js/delete.js", "js/inline.js"]
-            # if forumcheck.short_name == "yiff":
-            #     dynamic_css_header.append("css/oify.css")
+            if forumcheck.short_name == "yiff":
+                dynamic_css_header.append("css/oify.css")
             if (forumcheck.nsfw) and ('nsfwAllow' not in syndbb.request.cookies):
                 dynamic_js_footer.append("js/nsfwprompt.js")
                 dynamic_css_header.append("css/nsfw_fill.css")
@@ -267,8 +267,8 @@ def view_thread_gallery(category, thread):
             topbuttons = '<a href="/'+forumcheck.short_name+'/'+thread+'" title="List View" style="float:right;"><i class="silk-icon icon_application_view_list" aria-hidden="true"></i></a>'
             dynamic_css_header = ["css/bbcode_editor.css"]
             dynamic_js_footer = ["js/jquery.rangyinputs.js", "js/bbcode_editor_forums.js", "js/posts.js", "js/bootbox.min.js", "js/delete.js", "js/inline.js"]
-            # if forumcheck.short_name == "yiff":
-            #     dynamic_css_header.append("css/oify.css")
+            if forumcheck.short_name == "yiff":
+                dynamic_css_header.append("css/oify.css")
             if (forumcheck.nsfw) and ('nsfwAllow' not in syndbb.request.cookies):
                 dynamic_js_footer.append("js/nsfwprompt.js")
                 dynamic_css_header.append("css/nsfw_fill.css")
