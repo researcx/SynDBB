@@ -121,6 +121,14 @@ def save_preferences():
             syndbb.flash('Preferences updated successfully.', 'success')
 
             if ircauth is not user.ircauth:
+#                try:
+#                    udata = {'username': user.username, 'password': ircauth}
+#                    reqheader = {'Accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': syndbb.xmpp_key}
+#                    req = requests.get("https://" + syndbb.xmpp_address + ":" + syndbb.xmpp_port + "/plugins/restapi/v1/users", data=json.dumps(udata), headers=reqheader, verify=False, timeout=5)
+#                    print(req.request.headers)
+#                except requests.exceptions.RequestException:
+#                    syndbb.flash('Couldn\'t create an XMPP user.', 'danger')
+                
                 try:
                     requests.get("https://" + syndbb.znc_address + ":" + syndbb.znc_port + "/mods/global/httpadmin/adduser?username=" + user.username + "&password=" + ircauth, auth=(syndbb.znc_user, syndbb.znc_password), verify=False, timeout=5)
                 except requests.exceptions.RequestException:
@@ -175,6 +183,23 @@ def view_avatar(username):
             dynamic_js_footer = ["js/jquery.cropit.js", "js/bootbox.min.js", "js/delete.js"]
             avatar_path = syndbb.app.static_folder + "/data/avatars/"+str(user.user_id)+".png"
             uavatar = cdn_path() + "/data/avatars/"+str(user.user_id)+".png?v="+str(user.avatar_date)
+            if syndbb.os.path.isfile(avatar_path):
+                return syndbb.redirect(uavatar)
+            else:
+                return syndbb.redirect(davatar)
+        else:
+            return syndbb.redirect(davatar)
+        
+
+@syndbb.app.route("/account/viewAvatar/<username>/source")
+def view_avatar_source(username):
+    davatar = cdn_path() + '/images/default_avatar.png'
+    if username:
+        user = d2_user.query.filter_by(username=username).first()
+        if user:
+            dynamic_js_footer = ["js/jquery.cropit.js", "js/bootbox.min.js", "js/delete.js"]
+            avatar_path = syndbb.app.static_folder + "/data/avatars/"+str(user.user_id)+"-src.png"
+            uavatar = cdn_path() + "/data/avatars/"+str(user.user_id)+"-src.png?v="+str(user.avatar_date)
             if syndbb.os.path.isfile(avatar_path):
                 return syndbb.redirect(uavatar)
             else:
