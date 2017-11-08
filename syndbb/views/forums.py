@@ -39,6 +39,7 @@ def all_pages():
 def view_forum(category):
     forumcheck = d2_forums.query.filter_by(short_name=category).first()
     forumlogo = ""
+    dynamic_js_footer = []
     dynamic_css_header = []
     if forumcheck:
         dynamic_js_footer = ["js/inline.js", "js/bootbox.min.js"]
@@ -113,6 +114,7 @@ def view_forum_grid(category):
     forumcheck = d2_forums.query.filter_by(short_name=category).first()
     forumlogo = ""
     dynamic_js_footer = []
+    dynamic_css_header = []
     if forumcheck:
         # if forumcheck.short_name == "yiff":
         #     dynamic_css_header.append("css/oify.css")
