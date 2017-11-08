@@ -160,7 +160,7 @@ def get_channel_list():
                 </span>
             </td>
             
-            <td class="home-forum home-forum-threads" title="Messages">
+            <td class="home-forum home-forum-threads" title="Messages" style="padding-right: 9px !important;">
                 <span style="float: right;">
                    ''' + str(forum['messages']) + '''
                 </span>

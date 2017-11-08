@@ -647,6 +647,7 @@ a:hover, p a:active, p a:focus {
 }
 
 .home-forum-options{
+    width: 61px;
     vertical-align: middle;
     text-align: center;
 }
