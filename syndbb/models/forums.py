@@ -113,12 +113,14 @@ syndbb.app.jinja_env.globals.update(parse_bbcode=parse_bbcode)
 
 #Get channel info
 @syndbb.app.template_filter('get_channel_list')
-@syndbb.cache.memoize(timeout=360)
+#@syndbb.cache.memoize(timeout=360)
 def get_channel_list():
     channels = []
     chlist = ""
     forum_list = d2_forums.query.filter_by(owned_by=0).all()
     for forum in forum_list:
+        threadcount = 0
+        messagecount = 0
         forum_icon = '/images/forumicons/{}.png'.format(forum.short_name)
         forum_icon_default = '/images/forumicons/blank.png'
         root_path = syndbb.app.static_folder
@@ -126,16 +128,45 @@ def get_channel_list():
             forum_icon = cdn_path() + forum_icon
         else:
             forum_icon = cdn_path() + forum_icon_default
-        channels.append({"id": forum.id, "name": forum.name, "description": forum.description, "alias": forum.short_name, "icon": forum_icon, "messages": 0, "threads": ""})
+        threadcount = d2_activity.query.filter(d2_activity.category == forum.id).count()
+        threadlist = d2_activity.query.filter(d2_activity.category == forum.id).all()
+        
+        for thread in threadlist:
+            messagecount += d2_activity.query.filter(d2_activity.replyto == thread.id).count()
+            
+        messagecount = threadcount + messagecount
+            
+        channels.append({"id": forum.id, "name": forum.name, "description": forum.description, "alias": forum.short_name, "anon": forum.anon, "auth": forum.auth, "owned_by": forum.owned_by, "nsfw": forum.nsfw, "alias": forum.short_name, "icon": forum_icon, "messages": messagecount})
     channels.sort(key=itemgetter('id'))
 
     for forum in channels:
+        modes = ""
+        
+        if forum['auth'] == 1:
+            modes += '<i title="Authorization required." class="fa fa-lock" aria-hidden="true"></i> '
+        if forum['anon'] == 1:
+            modes += ' <i title="Anonymous posting allowed." class="fa fa-eye-slash" aria-hidden="true"></i> '
+        if forum['nsfw'] == 1:
+            modes += '<i title="Not safe for work. [18+]" class="fa fa-ban" aria-hidden="true"></i>'
+        
         chlist += '''<tr>
             <td class="home-forum home-forum-icon"><a href="/''' + str(forum['alias']) + '''"><img src="'''+ str(forum['icon']) + '''" alt=""/></a></td>
             <td class="home-forum"><a href="/''' + str(forum['alias']) + '''"><b>''' + str(forum['name']) + '''</b></a>
             <br/><span class="small">''' + str(forum['description']) + '''</span>
             </td>
-            <td class="home-forum home-forum-icon small" style="padding-right: 9px !important;">
+            <td class="home-forum home-forum-modes" style="padding-right: 9px !important;">
+                <span style="float: right;">
+                   <span class="text-muted">''' + modes + '''</span>
+                </span>
+            </td>
+            
+            <td class="home-forum home-forum-threads" title="Messages">
+                <span style="float: right;">
+                   ''' + str(forum['messages']) + '''
+                </span>
+            </td>
+
+            <td class="home-forum home-forum-icon small" title="Create A New Thread" style="padding-right: 9px !important;">
                <a href="/''' + str(forum['alias']) + '''/new_thread">
                     <span style="float: right;">
                         <i class="silk-icon icon_note_add" aria-hidden="true"></i>

@@ -622,6 +622,30 @@ a:hover, p a:active, p a:focus {
   margin-left: 6px;
 }
 
+.home-forum-threads{
+    width: 1%;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 12px;
+}
+
+.home-forum-threads span{
+    margin-top: 6px;
+    padding: 2px 8px;
+    background: #eee;
+    border: 1px solid #efefef;
+}
+
+.home-forum-modes{
+    vertical-align: middle;
+    text-align: center;
+}
+
+.home-forum-modes i{
+  margin-top: 8px;
+  opacity: 0.6;
+}
+
 .file-list>tbody>tr>td {
   vertical-align: middle;
 }
