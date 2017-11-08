@@ -202,22 +202,29 @@ def view_forum_grid(category):
 def view_forum_create(category):
     forumcheck = d2_forums.query.filter_by(short_name=category).first()
     forumlogo = ""
-    if forumcheck:
-        dynamic_css_header = ["css/bbcode_editor.css", "css/dropdown.css"]
-        dynamic_js_footer = ["js/jquery.dd.min.js", "js/jquery.rangyinputs.js", "js/bbcode_editor_forums.js", "js/threads.js", "js/inline.js", "js/bootbox.min.js"]
-        # if forumcheck.short_name == "yiff":
-        #     dynamic_css_header.append("css/oify.css")
+    if 'logged_in' in syndbb.session:
+        userid = checkSession(str(syndbb.session['logged_in']))
+        if userid:
+            if forumcheck:
+                dynamic_css_header = ["css/bbcode_editor.css", "css/dropdown.css"]
+                dynamic_js_footer = ["js/jquery.dd.min.js", "js/jquery.rangyinputs.js", "js/bbcode_editor_forums.js", "js/threads.js", "js/inline.js", "js/bootbox.min.js"]
+                # if forumcheck.short_name == "yiff":
+                #     dynamic_css_header.append("css/oify.css")
 
-        subheading = []
-        subheading.append('<a href="/'+forumcheck.short_name+'">'+forumcheck.name+'</a>')
+                subheading = []
+                subheading.append('<a href="/'+forumcheck.short_name+'">'+forumcheck.name+'</a>')
 
-        logo_file = syndbb.app.static_folder + "/images/logos/" + forumcheck.short_name + ".png"
-        if syndbb.os.path.isfile(logo_file):
-            forumlogo = '<img src="'+cdn_path()+'/images/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
+                logo_file = syndbb.app.static_folder + "/images/logos/" + forumcheck.short_name + ".png"
+                if syndbb.os.path.isfile(logo_file):
+                    forumlogo = '<img src="'+cdn_path()+'/images/logos/' + forumcheck.short_name + '.png" alt="D2K5" class="sitelogo mask">'
 
-        return syndbb.render_template('new_thread.html', forum=forumcheck, forumlogo=forumlogo, dynamic_css_header=dynamic_css_header, dynamic_js_footer=dynamic_js_footer, title="New Thread", subheading=subheading)
+                return syndbb.render_template('new_thread.html', forum=forumcheck, forumlogo=forumlogo, dynamic_css_header=dynamic_css_header, dynamic_js_footer=dynamic_js_footer, title="New Thread", subheading=subheading)
+            else:
+                return syndbb.render_template('invalid.html', title="No page found")
+        else:
+            return syndbb.render_template('error_not_logged_in.html', title="Not logged in")
     else:
-        return syndbb.render_template('invalid.html', title="No page found")
+        return syndbb.render_template('error_not_logged_in.html', title="Not logged in")
 
 @syndbb.app.route("/<category>/<thread>")
 def view_thread(category, thread):

@@ -646,6 +646,17 @@ a:hover, p a:active, p a:focus {
   opacity: 0.6;
 }
 
+.home-forum-options{
+    vertical-align: middle;
+    text-align: center;
+}
+
+.home-forum-options i{
+    margin-top: 8px;
+    margin-right: 6px;
+}
+
+
 .file-list>tbody>tr>td {
   vertical-align: middle;
 }

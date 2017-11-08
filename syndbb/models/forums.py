@@ -113,7 +113,7 @@ syndbb.app.jinja_env.globals.update(parse_bbcode=parse_bbcode)
 
 #Get channel info
 @syndbb.app.template_filter('get_channel_list')
-@syndbb.cache.memoize(timeout=360)
+#@syndbb.cache.memoize(timeout=360)
 def get_channel_list():
     channels = []
     chlist = ""
@@ -166,11 +166,12 @@ def get_channel_list():
                 </span>
             </td>
 
-            <td class="home-forum home-forum-icon small" title="Create A New Thread" style="padding-right: 9px !important;">
-               <a href="/''' + str(forum['alias']) + '''/new_thread">
-                    <span style="float: right;">
-                        <i class="silk-icon icon_note_add" aria-hidden="true"></i>
-                    </span>
+            <td class="home-forum small home-forum-options" style="padding-right: 9px !important;">
+                <a href="/''' + str(forum['alias']) + '''/grid" title="Grid/Catalog View">
+                    <i class="silk-icon icon_application_view_tile" aria-hidden="true"></i>
+                </a>
+                <a href="/''' + str(forum['alias']) + '''/new_thread" title="Create A New Thread">
+                    <i class="silk-icon icon_add" aria-hidden="true"></i>
                 </a>
             </td>
           </tr>'''
