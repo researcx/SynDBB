@@ -1266,13 +1266,20 @@ legend{
 }
 
 .embeddedvideo{
-  background: #efefef;
-  border: 1px dashed #d5d5d5;
-  padding: 4px;
-  text-align: center;
-  width: 500px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  cursor: pointer;
+    background: #efefef;
+    border: 1px dashed #d5d5d5;
+    padding: 4px;
+    text-align: center;
+    width: 780px;
+    max-height: 495px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+iframe#ytplayer{
+    width: 768px;
+    height: 432px;
 }

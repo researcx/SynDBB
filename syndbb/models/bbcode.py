@@ -45,11 +45,9 @@ def youtubelink(tag_name, value, options, parent, context):
     if youtube and youtube[0]:
         return '''
                 <div class="embeddedvideo">
-                    <fieldset class="majorpoints" onclick="majorpointsexpand($(this).find('legend').innerHTML)">
+                    <fieldset class="majorpoints" onclick="majorpoints($(this).find('legend').innerHTML)">
                     <legend class="majorpointslegend">YouTube Video</legend>
-                    <div class="hider" style="display:none" >
-                        <iframe id="ytplayer" type="text/html" src="//www.youtube.com/embed/'''+youtube[0]+'''" frameborder="0" style="width: 480px; height: 270px;" allowfullscreen></iframe>
-                    </div>
+                    <iframe class="hider" style="display:none;" id="ytplayer" type="text/html" data-src="//www.youtube.com/embed/'''+youtube[0]+'''" frameborder="0" style="width: 480px; height: 270px;" allowfullscreen></iframe>
                 </div>'''
     else:
         return "[Invalid video ID]"

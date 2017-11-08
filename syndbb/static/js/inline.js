@@ -53,4 +53,10 @@ function inlineReply(link) {
 
 $('.majorpoints').click(function(){
     $(this).find('.hider').toggle();
+    
+    // Find the iframes within our newly-visible element
+    $(this).find("iframe").prop("src", function(){
+        // Set their src attribute to the value of data-src
+        return $(this).data("src");
+    });
 });
