@@ -43,7 +43,14 @@ def youtubelink(tag_name, value, options, parent, context):
     pattern = r'(?:https?:\/\/)?(?:[0-9A-Z-]+\.)?(?:youtube|youtu|youtube-nocookie)\.(?:com|be)\/(?:watch\?v=|watch\?.+&v=|embed\/|v\/|.+\?v=)?([^&=\n%\?]{11})'
     youtube = re.findall(pattern, value, re.IGNORECASE)
     if youtube and youtube[0]:
-        return '<iframe id="ytplayer" type="text/html" src="//www.youtube.com/embed/'+youtube[0]+'" frameborder="0" style="width: 480px; height: 270px;" allowfullscreen></iframe>'
+        return '''
+                <div class="embeddedvideo">
+                    <fieldset class="majorpoints" onclick="majorpointsexpand($(this).find('legend').innerHTML)">
+                    <legend class="majorpointslegend">YouTube Video</legend>
+                    <div class="hider" style="display:none" >
+                        <iframe id="ytplayer" type="text/html" src="//www.youtube.com/embed/'''+youtube[0]+'''" frameborder="0" style="width: 480px; height: 270px;" allowfullscreen></iframe>
+                    </div>
+                </div>'''
     else:
         return "[Invalid video ID]"
 parser.add_formatter('youtube', youtubelink, replace_links=False, strip=True, swallow_trailing_newline=False)

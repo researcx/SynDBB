@@ -50,3 +50,7 @@ function inlineReply(link) {
 	        }
    });
 }
+
+$('.majorpoints').click(function(){
+    $(this).find('.hider').toggle();
+});

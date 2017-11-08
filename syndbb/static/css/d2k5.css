@@ -1260,3 +1260,19 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination{
 .bbcode-textarea{
     height: 400px;
 }
+
+legend{
+    border-bottom: 1px dashed #d5d5d5;
+}
+
+.embeddedvideo{
+  background: #efefef;
+  border: 1px dashed #d5d5d5;
+  padding: 4px;
+  text-align: center;
+  width: 500px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+}
