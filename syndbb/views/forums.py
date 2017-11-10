@@ -161,7 +161,7 @@ def view_forum_grid(category):
                 hashname = hashlib.sha256(firstimg.encode()).hexdigest()
                 thumbpath = thumbfolder + hashname + ".png"
                 if not syndbb.os.path.isfile(thumbpath):
-                    threadimg = requests.get(firstimg)
+                    threadimg = requests.get(firstimg, verify=False, timeout=5)
                     im = Image.open(BytesIO(threadimg.content))
                     im = ImageOps.fit(im, (150, 150),  Image.ANTIALIAS)
                     im.save(thumbpath, "PNG")
@@ -172,7 +172,7 @@ def view_forum_grid(category):
                 hashname = hashlib.sha256(firstimg.encode()).hexdigest()
                 thumbpath = thumbfolder + hashname + ".png"
                 if not syndbb.os.path.isfile(thumbpath):
-                    threadimg = requests.get(firstimg)
+                    threadimg = requests.get(firstimg, verify=False, timeout=5)
                     im = Image.open(BytesIO(threadimg.content))
                     im = ImageOps.fit(im, (150, 150),  Image.ANTIALIAS)
                     im.save(thumbpath, "PNG")
