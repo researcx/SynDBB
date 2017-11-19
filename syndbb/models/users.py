@@ -58,7 +58,7 @@ def inject_user():
 @syndbb.cache.memoize(timeout=60)
 def get_all_status_updates():
     statuses = []
-    users = d2_user.query.filter(d2_user.status != "").order_by(d2_user.status_time.desc()).limit(20).all()
+    users = d2_user.query.filter(d2_user.status != "").order_by(d2_user.status_time.desc()).limit(7).all()
     for user in users:
         statuses.append([user.status_time, user.status, user.username, user.user_id])
     statuses.sort(reverse=True)

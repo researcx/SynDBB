@@ -185,8 +185,16 @@ def get_theme():
             themepath = '<link id="themeselector" href="' + cdn_path() + get_filemtime('/css/invert.css') + '" rel="stylesheet">'
 
         if theme == "oify":
-            themepath = '<link id="themeselector" href="' + cdn_path() + get_filemtime('/css/oify.css') + '" rel="stylesheet">'
+            themepath = '''<link id="themeselector" href="''' + cdn_path() + get_filemtime('/css/oify.css') + '''" rel="stylesheet">
+            
+            <audio style="display: none;" id="yiffmusic" controls autoplay loop>
+              <source src="https://i.hardcats.net/faggqt/Tfrsem9DT2.mp3" type="audio/mpeg">
+            </audio>
 
+            <script>
+                var audio = document.getElementById("yiffmusic");
+                audio.volume = 0.5;
+            </script>'''
         return themepath
     else:
         return themepath

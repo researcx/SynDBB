@@ -55,7 +55,7 @@ function set_theme(theme) {
   if (theme == "oify"){
   themepath = "/static/css/oify.css";
   }
-  document.getElementById('themeselector').href=themepath;
+  window.location.reload();
 }
 
   $(document).ready(function() {
