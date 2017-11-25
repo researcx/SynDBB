@@ -10,144 +10,142 @@ from syndbb.models.users import d2_user, checkSession
 from syndbb.models.time import cdn_path
 from syndbb.models.d2_hash import d2_hash
 from werkzeug.utils import secure_filename
+from flask_paginate import Pagination
+
+@syndbb.cache.memoize(timeout=60)
+def get_user_files(userid, anon=0, gallery=0, album=0):
+    user = d2_user.query.filter_by(user_id=userid).first()
+    
+    if anon:
+        uname = d2_hash(user.username + user.password)[:10]
+    else:
+        uname = user.username
+    
+    uploadfolder = syndbb.app.static_folder + "/data/uploads/" + uname + "/"
+    thumbfolder = syndbb.app.static_folder + "/data/uploads/.thumbnails/"
+
+    if not syndbb.os.path.exists(uploadfolder):
+        syndbb.os.makedirs(uploadfolder)
+    if not syndbb.os.path.exists(thumbfolder):
+        syndbb.os.makedirs(thumbfolder)
+
+    image_types = [".jpg", ".jpeg", ".jpe", ".gif", ".png", ".bmp"]
+    audio_types = [".mp3",".ogg",".wav"]
+    video_types = [".webm",".mp4",".avi",".mpg",".mpeg"]
+    text_types = [".txt",".pdf",".doc"]
+    archive_types = [".zip",".rar",".7z",".tar",".gz"]
+
+    total_size = sum(syndbb.os.path.getsize(uploadfolder+f) for f in syndbb.os.listdir(uploadfolder) if syndbb.os.path.isfile(uploadfolder+f))
+
+    uploadurl = user.upload_url
+    if uploadurl == "local":
+        uploadurl = cdn_path() + "/data/uploads/"
+    else:
+        uploadurl = "https://" + uploadurl + "/"
+
+    file_list = []
+    for fn in syndbb.os.listdir(uploadfolder):
+        filepath = uploadfolder + "/" + fn
+        if syndbb.os.path.isfile(filepath):
+            filetime = int(syndbb.os.stat(filepath).st_mtime)
+            filesize = syndbb.os.path.getsize(filepath)
+            extension = syndbb.os.path.splitext(fn)[1].lower()
+            hashname = hashlib.sha256(fn.encode()).hexdigest()
+            if extension in image_types:
+                if anon:
+                    type_icon = '<i class="silk-icon icon_picture" aria-hidden="true"></i>'
+                else:           
+                    type_icon = '<img src="'+cdn_path()+'/data/uploads/.thumbnails/'+ hashname +'.png" alt="'+ fn +'" class="uploadimg"></a>'
+                    thumbpath = thumbfolder + hashname + ".png"
+                    if not syndbb.os.path.isfile(thumbpath):
+                        im = Image.open(filepath)
+                        im.thumbnail((150,150))
+                        im.save(thumbpath, "PNG")
+            elif extension in audio_types:
+                type_icon = '<i class="fa fa-file-audio-o" aria-hidden="true"></i>'
+            elif extension in video_types:
+                type_icon = '<i class="ffa fa-file-video-o" aria-hidden="true"></i>'
+            elif extension in text_types:
+                type_icon = '<i class="fa fa-file-text-o" aria-hidden="true"></i>'
+            elif extension in archive_types:
+                type_icon = '<i class="fa fa-file-archive-o" aria-hidden="true"></i>'
+            else:
+                type_icon = '<i class="fa fa-file-o" aria-hidden="true"></i>'
+
+            file_list.append([filetime, filesize, fn, type_icon])
+            
+    file_list.sort(reverse=True)
+    
+    return {'file_list': file_list, 'uploadurl': uploadurl, 'file_count': len(file_list), 'total_size': total_size, 'user_name': uname}
+            
 
 @syndbb.app.route("/upload/")
 def upload():
     page = syndbb.request.args.get('page', type=int, default=1)
-    per_page = 25
-    
+    per_page = syndbb.request.args.get('amount', type=int, default=25)
     dynamic_css_header = ["js/datatables.min.css"]
     dynamic_js_footer = ["js/bootstrap-filestyle.min.js", "js/bootbox.min.js", "js/delete.js", "js/lazyload.transpiled.min.js"]
     if 'logged_in' in syndbb.session:
         userid = checkSession(str(syndbb.session['logged_in']))
         if userid:
-            user = d2_user.query.filter_by(user_id=userid).first()
-            uploadfolder = syndbb.app.static_folder + "/data/uploads/" + user.username + "/"
-            thumbfolder = syndbb.app.static_folder + "/data/uploads/.thumbnails/"
-
-            if not syndbb.os.path.exists(uploadfolder):
-                syndbb.os.makedirs(uploadfolder)
-            if not syndbb.os.path.exists(thumbfolder):
-                syndbb.os.makedirs(thumbfolder)
-
-            image_types = [".jpg", ".jpeg", ".jpe", ".gif", ".png", ".bmp"]
-            audio_types = [".mp3",".ogg",".wav"]
-            video_types = [".webm",".mp4",".avi",".mpg",".mpeg"]
-            text_types = [".txt",".pdf",".doc"]
-            archive_types = [".zip",".rar",".7z",".tar",".gz"]
-
-            total_size = sum(syndbb.os.path.getsize(uploadfolder+f) for f in syndbb.os.listdir(uploadfolder) if syndbb.os.path.isfile(uploadfolder+f))
-
-            uploadurl = user.upload_url
-            if uploadurl == "local":
-                uploadurl = cdn_path() + "/data/uploads/"
-            else:
-                uploadurl = "https://" + uploadurl + "/"
-              
-            file_list = []
-            for fn in syndbb.os.listdir(uploadfolder):
-                filepath = uploadfolder + "/" + fn
-                if syndbb.os.path.isfile(filepath):
-                    filetime = int(syndbb.os.stat(filepath).st_mtime)
-                    filesize = syndbb.os.path.getsize(filepath)
-                    extension = syndbb.os.path.splitext(fn)[1].lower()
-                    hashname = hashlib.sha256(fn.encode()).hexdigest()
-                    if extension in image_types:
-                        type_icon = '<img src="'+cdn_path()+'/data/uploads/.thumbnails/'+ hashname +'.png" alt="'+ fn +'" class="uploadimg"></a>'
-                        thumbpath = thumbfolder + hashname + ".png"
-                        if not syndbb.os.path.isfile(thumbpath):
-                            im = Image.open(filepath)
-                            im.thumbnail((150,150))
-                            im.save(thumbpath, "PNG")
-                    elif extension in audio_types:
-                        type_icon = '<i class="fa fa-file-audio-o" aria-hidden="true"></i>'
-                    elif extension in video_types:
-                        type_icon = '<i class="ffa fa-file-video-o" aria-hidden="true"></i>'
-                    elif extension in text_types:
-                        type_icon = '<i class="fa fa-file-text-o" aria-hidden="true"></i>'
-                    elif extension in archive_types:
-                        type_icon = '<i class="fa fa-file-archive-o" aria-hidden="true"></i>'
-                    else:
-                        type_icon = '<i class="fa fa-file-o" aria-hidden="true"></i>'
-
-                    file_list.append([filetime, filesize, fn, type_icon])
-            
-            file_list.sort(reverse=True)
+            cached_list = get_user_files(userid)
+            file_list = cached_list['file_list']
             
             page_count = math.ceil(len(file_list)/per_page)
-            
+            pagination = Pagination(page=page, per_page=per_page, css_framework='bootstrap3', total=len(file_list))
+
+            amount_options = ["25", "50", "100", "500", "1000", "1500", "2000"]
+
+            countselector = ''
+            for amount in amount_options:
+                if str(per_page) == amount:
+                    countselector += '<option value="'+amount+'" selected>'+amount+'</option>'
+                else:
+                    countselector += '<option value="'+amount+'">'+amount+'</option>'
+
             start_index = (page*per_page) - per_page
             end_index = start_index + per_page
             if end_index > len(file_list):
                 end_index = len(file_list)
             file_list = file_list[start_index:end_index]
             
-            pagination = '<ul class="pagination">'
-            for cpage in range(page_count):
-                if (cpage + 1) == page:
-                    pagination += '<li class="active"><a href="?page='+str(cpage + 1)+'">'+str(cpage + 1)+'</a></li>'
-                else:
-                    pagination += '<li><a href="?page='+str(cpage + 1)+'">'+str(cpage + 1)+'</a></li>'
-            pagination += '</ul>'
-            
-            return syndbb.render_template('upload.html', uploadurl=uploadurl, filecount=len(file_list), file_list=file_list, pagination=pagination, total_size=total_size, dynamic_js_footer=dynamic_js_footer, dynamic_css_header=dynamic_css_header, title="Upload", subheading=[""])
+            return syndbb.render_template('upload.html', uploadurl=cached_list['uploadurl'], filecount=cached_list['file_count'], file_list=file_list, pagination=pagination, countselector=countselector, uploader_name=cached_list['user_name'], total_size=cached_list['total_size'], dynamic_js_footer=dynamic_js_footer, dynamic_css_header=dynamic_css_header, title="Upload", subheading=[""])
         else:
             return syndbb.render_template('error_not_logged_in.html', title="Upload", subheading=[""])
     else:
         return syndbb.render_template('error_not_logged_in.html', title="Upload", subheading=[""])
 
-@syndbb.app.route("/upload/anonymous")
+@syndbb.app.route("/upload/anonymous/")
 def upload_anon():
+    page = syndbb.request.args.get('page', type=int, default=1)
+    per_page = syndbb.request.args.get('amount', type=int, default=25)
     dynamic_css_header = ["js/datatables.min.css"]
     dynamic_js_footer = ["js/bootstrap-filestyle.min.js", "js/bootbox.min.js", "js/delete.js", "js/lazyload.transpiled.min.js"]
     if 'logged_in' in syndbb.session:
         userid = checkSession(str(syndbb.session['logged_in']))
         if userid:
-            user = d2_user.query.filter_by(user_id=userid).first()
-            uname = d2_hash(user.username + user.password)[:10]
-            uploadfolder = syndbb.app.static_folder + "/data/uploads/" + uname + "/"
-            if not syndbb.os.path.exists(uploadfolder):
-                syndbb.os.makedirs(uploadfolder)
-
-            image_types = [".jpg", ".jpeg", ".jpe", ".gif", ".png", ".bmp"]
-            audio_types = [".mp3",".ogg",".wav"]
-            video_types = [".webm",".mp4",".avi",".mpg",".mpeg"]
-            text_types = [".txt",".pdf",".doc"]
-            archive_types = [".zip",".rar",".7z",".tar",".gz"]
-
-            total_size = sum(syndbb.os.path.getsize(uploadfolder+f) for f in syndbb.os.listdir(uploadfolder) if syndbb.os.path.isfile(uploadfolder+f))
-
-            uploadurl = user.upload_url
-            if uploadurl == "local":
-                uploadurl = cdn_path() + "/data/uploads/"
-            else:
-                uploadurl = "https://" + uploadurl + "/"
-              
-            file_list = []
-            for fn in syndbb.os.listdir(uploadfolder):
-                filepath = uploadfolder + "/" + fn
-                if syndbb.os.path.isfile(filepath):
-                    filetime = int(syndbb.os.stat(filepath).st_mtime)
-                    filesize = syndbb.os.path.getsize(filepath)
-                    extension = syndbb.os.path.splitext(fn)[1].lower()
-                    hashname = hashlib.sha256(fn.encode()).hexdigest()
-                    if extension in image_types:
-                        type_icon = '<i class="silk-icon icon_picture" aria-hidden="true"></i>'
-                    elif extension in audio_types:
-                        type_icon = '<i class="fa fa-file-audio-o" aria-hidden="true"></i>'
-                    elif extension in video_types:
-                        type_icon = '<i class="fa fa-file-video-o" aria-hidden="true"></i>'
-                    elif extension in text_types:
-                        type_icon = '<i class="fa fa-file-text-o" aria-hidden="true"></i>'
-                    elif extension in archive_types:
-                        type_icon = '<i class="fa fa-file-archive-o" aria-hidden="true"></i>'
-                    else:
-                        type_icon = '<i class="fa fa-file-o" aria-hidden="true"></i>'
-
-                    file_list.append([filetime, filesize, fn, type_icon])
-            file_list.sort(reverse=True)
+            cached_list = get_user_files(userid, anon=1)
+            file_list = cached_list['file_list']
             
-            return syndbb.render_template('upload_anon.html', uploadurl=uploadurl, uname=uname, filecount=len(file_list), file_list=file_list, total_size=total_size, dynamic_js_footer=dynamic_js_footer, dynamic_css_header=dynamic_css_header, title="Anonymous", subheading=['<a href="/upload/">Upload</a>'])
+            page_count = math.ceil(len(file_list)/per_page)
+            pagination = Pagination(page=page, per_page=per_page, css_framework='bootstrap3', total=len(file_list))
+
+            amount_options = ["25", "50", "100", "500", "1000", "1500", "2000"]
+
+            countselector = ''
+            for amount in amount_options:
+                if str(per_page) == amount:
+                    countselector += '<option value="'+amount+'" selected>'+amount+'</option>'
+                else:
+                    countselector += '<option value="'+amount+'">'+amount+'</option>'
+
+            start_index = (page*per_page) - per_page
+            end_index = start_index + per_page
+            if end_index > len(file_list):
+                end_index = len(file_list)
+            file_list = file_list[start_index:end_index]
+            
+            return syndbb.render_template('upload_anon.html', uploadurl=cached_list['uploadurl'], filecount=cached_list['file_count'], file_list=file_list, pagination=pagination, countselector=countselector, total_size=cached_list['total_size'], uploader_name=cached_list['user_name'], dynamic_js_footer=dynamic_js_footer, dynamic_css_header=dynamic_css_header, title="Anonymous", subheading=['<a href="/upload/">Upload</a>'])
         else:
             return syndbb.render_template('error_not_logged_in.html', title="Anonymous", subheading=['<a href="/upload/">Upload</a>'])
     else:
@@ -387,6 +385,7 @@ def upload_file():
                         return "/upload/simple/?file=" + newname
                     else:
                         syndbb.flash('File uploaded successfully.', 'success')
+                        syndbb.cache.delete_memoized(syndbb.views.upload.get_user_files)
                         
                         if anonymous:
                             fpath = d2_hash(user.username + user.password)[:10] + "/" + newname
@@ -432,6 +431,7 @@ def upload_file_external():
                     uploadurl = cdn_path() + "/data/uploads/" + user.username + "/" + newname
                 else:
                     uploadurl = "https://" + uploadurl + "/" + user.username + "/" + newname
+                syndbb.cache.delete_memoized(syndbb.views.upload.get_user_files)
 
                 return uploadurl
         else:
@@ -455,6 +455,7 @@ def delete_file():
             if syndbb.os.path.isfile(uploaded_file):
                 syndbb.os.system("shred -u "+uploaded_file)
                 syndbb.flash('File deleted successfully.', 'success')
+                syndbb.cache.delete_memoized(syndbb.views.upload.get_user_files)
                 return syndbb.redirect(syndbb.url_for(uploader))
             else:
                 syndbb.flash('No such file exists.', 'danger')

@@ -1275,6 +1275,13 @@ table, .navbar-static-top{
     float: right;
 }
 
+.amountselector {
+    display: inline-block;
+    margin-right: 10px;
+    bottom: 11px;
+    position: relative;
+}
+
 .pagination{
     text-align: center;
     margin: 0 auto;

@@ -10,3 +10,4 @@ Pillow
 piexif
 uwsgi
 stopforumspam_api
+flask-paginate
