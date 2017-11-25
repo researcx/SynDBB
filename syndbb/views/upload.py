@@ -10,7 +10,6 @@ from syndbb.models.users import d2_user, checkSession
 from syndbb.models.time import cdn_path
 from syndbb.models.d2_hash import d2_hash
 from werkzeug.utils import secure_filename
-from flask_paginate import Pagination, get_page_parameter
 
 @syndbb.app.route("/upload/")
 def upload():
