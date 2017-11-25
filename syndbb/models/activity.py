@@ -58,7 +58,7 @@ def get_recent_posts(limit=20):
                     activity_item += '''<tr>
                                             <td class="home-forum home-forum-icon"><a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''#'''+str(post.id)+'''"><img src="'''+cdn_path()+'''/images/posticons/icon'''+str(thread.post_icon)+'''.png" alt=""/></a></td>
                                             <td class="home-forum">
-                                            <span class="small align-right">
+                                            <span class="small align-right home-forum-latest">
                                                 <span class="timedisplay">'''+recent_date(post.time)+'''</span><br/>
                                                 by '''+latestreplier+''' <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''#'''+str(post.id)+'''"><img src="'''+cdn_path()+'''/icons/thread_new.png" style="margin-top: -2px;"/></a>
                                             </span>
@@ -81,7 +81,7 @@ def get_recent_posts(limit=20):
                     activity_item += '''<tr>
                                             <td class="home-forum home-forum-icon"><a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''"><img src="'''+cdn_path()+'''/images/posticons/icon'''+str(thread.post_icon)+'''.png" alt=""/></a></td>
                                             <td class="home-forum">
-                                            <span class="small align-right">
+                                            <span class="small align-right home-forum-latest">
                                                 <span class="timedisplay">'''+recent_date(thread.reply_time)+'''</span><br/>
                                                 by '''+threadcreator+''' <a href="/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''"><img src="'''+cdn_path()+'''/icons/thread_new.png" style="margin-top: -2px;"/></a>
                                             </span>

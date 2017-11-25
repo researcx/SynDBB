@@ -4,17 +4,21 @@
 # The full license is included in LICENSE.md, which is distributed as part of this project.
 #
 
-import syndbb, random, string, hashlib, piexif
+import syndbb, random, string, hashlib, piexif, math
 from PIL import Image
 from syndbb.models.users import d2_user, checkSession
 from syndbb.models.time import cdn_path
 from syndbb.models.d2_hash import d2_hash
 from werkzeug.utils import secure_filename
+from flask_paginate import Pagination, get_page_parameter
 
 @syndbb.app.route("/upload/")
 def upload():
+    page = syndbb.request.args.get(get_page_parameter(), type=int, default=1)
+    per_page = 25
+    
     dynamic_css_header = ["js/datatables.min.css"]
-    dynamic_js_footer = ["js/datatables.min.js", "js/bootstrap-filestyle.min.js", "js/bootbox.min.js", "js/delete.js", "js/lazyload.transpiled.min.js"]
+    dynamic_js_footer = ["js/bootstrap-filestyle.min.js", "js/bootbox.min.js", "js/delete.js", "js/lazyload.transpiled.min.js"]
     if 'logged_in' in syndbb.session:
         userid = checkSession(str(syndbb.session['logged_in']))
         if userid:
@@ -68,9 +72,26 @@ def upload():
                         type_icon = '<i class="fa fa-file-o" aria-hidden="true"></i>'
 
                     file_list.append([filetime, filesize, fn, type_icon])
+            
             file_list.sort(reverse=True)
             
-            return syndbb.render_template('upload.html', uploadurl=uploadurl, filecount=len(file_list), file_list=file_list, total_size=total_size, dynamic_js_footer=dynamic_js_footer, dynamic_css_header=dynamic_css_header, title="Upload", subheading=[""])
+            page_count = math.ceil(len(file_list)/per_page)
+            
+            start_index = (page*per_page) - per_page
+            end_index = start_index + per_page
+            if end_index > len(file_list):
+                end_index = len(file_list)
+            file_list = file_list[start_index:end_index]
+            
+            pagination = '<ul class="pagination">'
+            for cpage in range(page_count):
+                if (cpage + 1) == page:
+                    pagination += '<li class="active"><a href="?page='+str(cpage + 1)+'">'+str(cpage + 1)+'</a></li>'
+                else:
+                    pagination += '<li><a href="?page='+str(cpage + 1)+'">'+str(cpage + 1)+'</a></li>'
+            pagination += '</ul>'
+            
+            return syndbb.render_template('upload.html', uploadurl=uploadurl, filecount=len(file_list), file_list=file_list, pagination=pagination, total_size=total_size, dynamic_js_footer=dynamic_js_footer, dynamic_css_header=dynamic_css_header, title="Upload", subheading=[""])
         else:
             return syndbb.render_template('error_not_logged_in.html', title="Upload", subheading=[""])
     else:
@@ -79,7 +100,7 @@ def upload():
 @syndbb.app.route("/upload/anonymous")
 def upload_anon():
     dynamic_css_header = ["js/datatables.min.css"]
-    dynamic_js_footer = ["js/datatables.min.js", "js/bootstrap-filestyle.min.js", "js/bootbox.min.js", "js/delete.js", "js/lazyload.transpiled.min.js"]
+    dynamic_js_footer = ["js/bootstrap-filestyle.min.js", "js/bootbox.min.js", "js/delete.js", "js/lazyload.transpiled.min.js"]
     if 'logged_in' in syndbb.session:
         userid = checkSession(str(syndbb.session['logged_in']))
         if userid:

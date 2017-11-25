@@ -185,7 +185,7 @@
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-circle-o" aria-hidden="true"></i> {{user.username}} <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                  <li><a href="{{ url_for('info') }}">Donate</a></li>
+                  <li><a href="/user/{{user.username}}">View Profile</a></li>
                   <li class="forum-list">&nbsp;</li>
                   <li><a href="{{ url_for('pastebin') }}">My Pastes</a></li>
                   <li><a href="{{ url_for('upload') }}">My Files</a></li>
@@ -330,13 +330,17 @@
       </div>
         
       <div class="sidebar-donate text-center" style="padding: 18px;">
-          <strong>Donations help us afford our servers and our continued existence.</strong><br/><br/>
-          <span class="small">D2K5 &amp; <a href="https://github.com/D2K5/SynDBB" style="" target="_blank">SynDBB</a> are individually developed and maintained as a hobby, we don't have adverts and our site is entirely open-source.</span><br/>
+          <div style="font-weight: bold; font-size: 11pt; margin-bottom: 8px;">Donations help us afford our servers and our continued existence.</div>
+          <span class="small">D2K5 &amp; <a href="https://github.com/D2K5/SynDBB" style="" target="_blank">SynDBB</a> are individually developed and maintained as a hobby, we don't have adverts and our site is entirely <a href="https://github.com/D2K5/SynDBB" style="" target="_blank">open-source</a>.</span><br/>
           <a href="https://paypal.me/d2k5" target="_blank" style="background-color: steelblue; color: #fff; text-decoration: none;" class="authbutton">PayPal</a>
           <div style="margin-top: -15px;"><a href="https://paypal.me/d2k5" target="_blank" style="font-size: 11px; font-weight: bold; color: dimgrey;">Keira Treial</a></div>
-          <a href="https://blockchain.info/address/1NuBjWhELGBxNsVzwZ9toAzWj74Miihqn7" target="_blank" style="background-color: darkorange; color: #fff; text-decoration: none;" class="authbutton">Bitcoin</a>
-          <div style="margin-top: -15px;"><a href="https://blockchain.info/address/1NuBjWhELGBxNsVzwZ9toAzWj74Miihqn7" target="_blank" style="font-size: 11px; font-weight: bold; color: dimgrey;">1NuBjWhELGBxNsVzwZ9toAzWj74Miihqn7</a><br/>
+          <a href="https://blockchain.info/payment_request?address=1NuBjWhELGBxNsVzwZ9toAzWj74Miihqn7" target="_blank" style="background-color: darkorange; color: #fff; text-decoration: none;" class="authbutton">Bitcoin</a>
+          <div style="margin-top: -15px;"><a href="https://blockchain.info/payment_request?address=1NuBjWhELGBxNsVzwZ9toAzWj74Miihqn7" target="_blank" style="font-size: 11px; font-weight: bold; color: dimgrey;">1NuBjWhELGBxNsVzwZ9toAzWj74Miihqn7</a><br/>
           <a href="https://keybase.io/d2k5" target="_blank" title="Verified on Keybase" style="font-size: 11px; font-weight: bold; color: dimgrey;"><i class="fa fa-lock" aria-hidden="true"></i> Verified on Keybase</a>
+          <br/><br/>
+          <a href="https://github.com/d2k5/SynDBB" target="_blank" title="SynDBB on GitHub" style="font-size: 18pt; font-weight: bold; color: dimgrey;"><i class="fa fa-github-square" aria-hidden="true"></i></a>
+          <a href="https://steamcommunity.com/groups/D2K5" target="_blank" title="D2K5 on Steam" style="font-size: 18pt; font-weight: bold; color: dimgrey;"><i class="fa fa-steam-square" aria-hidden="true"></i></a>
+          <a href="https://www.youtube.com/user/D2K5S1" target="_blank" title="D2K5 on YouTube" style="font-size: 18pt; font-weight: bold; color: dimgrey;"><i class="fa fa-youtube-square" aria-hidden="true"></i></a>
           </div>
       </div>
     </div>
@@ -344,8 +348,7 @@
     <footer class="footer">
       <div class="container-fluid">
         <p class="text-muted footer-notice" style="font-style: italic; float:right; text-align: right;">
-          All trademarks and copyrights on this page are owned by their respective parties.<br/> Images and files uploaded are the responsibility of the user. Comments are owned by the user.<br/> If you continue to use this site, you are consenting to our
-          use of cookies.</p>
+          <a href="/terms/" target="_blank" title="Rules & Term of Service" style="font-size: 12px; font-weight: bold; color: dimgrey;">All trademarks and copyrights on this site are owned by their respective parties.<br/> Images and files uploaded are the responsibility of the user. Comments are owned by the user.<br/> If you continue to use this site, you are consenting to our use of cookies.</a></p>
           <p class="text-muted">
             <a href="{{ url_for('info') }}">D2K5 &copy; 2002 - {{ now.year }}</a> - <a href="https://github.com/D2K5/SynDBB" target="_blank">Powered by SynDBB {{ syndbb_version }} ({{ syndbb_hash }})</a><br/>
             Theme: &nbsp;<a href="#" onclick="set_theme('white');">White</a> &bull; <a href="#" onclick="set_theme('invert');">Dark</a> &bull; <a href="#" onclick="set_theme('oify');">OIFY</a><br/>

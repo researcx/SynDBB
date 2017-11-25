@@ -1,12 +1,22 @@
 {% extends "layout.html" %} {% block body %}
       <div class="inner-header">
-        Channels
+        Official Channels
       </div>
       <table class="home-forum-list table table-striped">
         <tbody>
-          {{get_channel_list()|safe}}
+          {{ get_channel_list(1)|safe }}
         </tbody>
       </table>
+<!--
+      <div class="inner-header">
+        Unofficial Channels
+      </div>
+      <table class="home-forum-list table table-striped">
+        <tbody>
+           get_channel_list(0)|safe 
+        </tbody>
+      </table>
+-->
       <div class="inner-header">
         Recent Posts
       </div>

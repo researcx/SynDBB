@@ -114,10 +114,14 @@ syndbb.app.jinja_env.globals.update(parse_bbcode=parse_bbcode)
 #Get channel info
 @syndbb.app.template_filter('get_channel_list')
 @syndbb.cache.memoize(timeout=360)
-def get_channel_list():
+def get_channel_list(official):
     channels = []
     chlist = ""
-    forum_list = d2_forums.query.filter_by(owned_by=0).all()
+    if official:
+        forum_list = d2_forums.query.filter_by(owned_by=0).all()
+    else:
+        forum_list = d2_forums.query.filter(d2_forums.owned_by != 0).all()
+        
     for forum in forum_list:
         threadcount = 0
         messagecount = 0

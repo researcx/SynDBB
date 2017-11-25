@@ -34,17 +34,10 @@
       <span class="sr-only">Loading...</span>
     </div>
   </div>
-    
+<div class="upload-pagination">
+{{ pagination|safe }}
+</div>
   <table class="file-list table table-striped" id="uploads">
-    <thead>
-        <tr>
-            <th></th>
-            <th>Filename</th>
-            <th>Size</th>
-            <th>Date</th>
-            <th>Options</th>
-        </tr>
-    </thead>
     <tbody>
       {% for file in file_list %}
       <tr>
@@ -57,5 +50,8 @@
       {% endfor %}
     </tbody>
   </table>
+</div>
+<div class="upload-pagination">
+{{ pagination|safe }}
 </div>
 {% endblock %}

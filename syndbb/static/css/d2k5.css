@@ -71,6 +71,29 @@
         width: 100% !important;
         float: none !important;
     }
+    .home-forum-modes, .home-forum-threads, .home-forum-options, .home-forum-latest, .home-forum .small, .thread-left{
+        display: none !important;
+    }
+    .home-forum a{
+        font-size: 12pt !important;
+    }
+    .authbutton{
+        width: 99% !important;
+    }
+    .file-date, .file-size{
+        width: 0px;
+        overflow: hidden;
+        font-size: 0px !important;
+    }
+    .file-list th{
+        display: none;
+    }
+    .file-actions, .file-name{
+        font-size: 13pt;
+    }
+    .sidebar-userinfo img{
+        display: none;
+    }
   li:hover, li:active, li:focus{
     background: #d9d9d9;
   }
@@ -1246,8 +1269,15 @@ table, .navbar-static-top{
     margin-bottom: 2px;
 }
 
-div.dataTables_wrapper div.dataTables_paginate ul.pagination{
-    margin-right: 20px;
+.upload-pagination{
+    text-align: center;
+    margin: 2px 8px;
+    float: right;
+}
+
+.pagination{
+    text-align: center;
+    margin: 0 auto;
 }
 
 .gm_avatar{
