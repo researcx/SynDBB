@@ -13,7 +13,7 @@ from werkzeug.utils import secure_filename
 
 @syndbb.app.route("/upload/")
 def upload():
-    page = syndbb.request.args.get(get_page_parameter(), type=int, default=1)
+    page = syndbb.request.args.get('page', type=int, default=1)
     per_page = 25
     
     dynamic_css_header = ["js/datatables.min.css"]
