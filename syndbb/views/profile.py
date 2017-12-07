@@ -35,7 +35,7 @@ def preferences():
         userid = checkSession(str(syndbb.session['logged_in']))
         if userid:
             user = d2_user.query.filter_by(user_id=userid).first()
-            possibleurls = ["local", "i.d2k5.com", "i.hardcats.net", "i.lulzsec.co.uk"]
+            possibleurls = ["local", "i.d2k5.com", "i.hardcats.net", "i.hard.cat", "i.lulzsec.co.uk", "i.hurr.ca"]
             uploadurls = []
             for uploadurl in possibleurls:
                 if user.upload_url == uploadurl:
@@ -82,7 +82,7 @@ def change_password():
 
 @syndbb.app.route("/functions/save_preferences", methods=['GET', 'POST'])
 def save_preferences():
-    possibleurls = ["local", "i.d2k5.com", "i.hardcats.net", "i.lulzsec.co.uk"]
+    possibleurls = ["local", "i.d2k5.com", "i.hardcats.net", "i.hard.cat", "i.lulzsec.co.uk", "i.hurr.ca"]
 
     status = syndbb.request.form['status']
     location = syndbb.request.form['location']
