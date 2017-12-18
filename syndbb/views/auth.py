@@ -169,12 +169,12 @@ def dologin():
             
             return "Login successful."
         else:
-            login_ip = d2_ip(my_ip, user.user_id, unix_time_current(), 0, syndbb.request.path)
+            login_ip = d2_ip(my_ip, useragent, user.user_id, unix_time_current(), 0, syndbb.request.path, "N/A", d2_hash(my_ip)[:10])
             syndbb.db.session.add(login_ip)
             syndbb.db.session.commit()
-            return "Invalid password."
+            return "Invalid credentials."
     else:
-        return "Invalid username."
+        return "Invalid credentials."
 
 @syndbb.app.route('/functions/logout')
 def logout():
