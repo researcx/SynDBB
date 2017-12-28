@@ -132,6 +132,8 @@
         <div id="navbar" class="navbar-collapse collapse">
           <div class="navbar-container">
             <ul class="nav navbar-nav">
+               <li><a href="{{ url_for('activity') }}"><i class="fa fa-calendar" aria-hidden="true"></i> Activity</a></li>
+               <li><a href="{{ url_for('home') }}"><i class="fa fa-comments" aria-hidden="true"></i> IRC ({{get_stats()['irccount']}})</a></li>
                <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-th-list" aria-hidden="true"></i> Channels <span class="caret"></span></a>
                 <ul class="dropdown-menu channel-list">
@@ -158,8 +160,8 @@
                   {% endif %}
                 </ul>
               </li>
-              <li><a href="{{ url_for('chat') }}"><i class="fa fa-comments" aria-hidden="true"></i> Chat ({{get_stats()['irccount']}})</a></li>
-              <li><a href="{{ url_for('ban_list') }}"><i class="fa fa-ban" aria-hidden="true"></i> Ban List</a></li>
+              <li><a href="{{ url_for('view_qdb') }}"><i class="fa fa-quote-left" aria-hidden="true"></i> Quotes</a></li>
+              <li><a href="{{ url_for('ban_list') }}"><i class="fa fa-ban" aria-hidden="true"></i> Bans</a></li>
 <!--
               <li><a href="{{ url_for('events') }}"><i class="silk-icon icon_date" aria-hidden="true"></i> Events</a></li>
               
@@ -201,9 +203,6 @@
                   <li><a href="{{ url_for('logout') }}?uniqid={{user_session.sessionid}}">Log Out</a></li>
                 </ul>
               </li>
-              {% else %}
-              <li><a href="{{ url_for('login') }}"><i class="fa fa-icon fa-key" aria-hidden="true"></i> Log In</a></li>
-              <li><a href="{{ url_for('register') }}"><i class="fa fa-icon fa-lock" aria-hidden="true"></i> Register</a></li>
               {% endif %}
             </ul>
           </div>
@@ -247,12 +246,14 @@
             </a>
         </div>
       {% else %}
-      <div style="padding-left: 8px; padding-right: 8px; padding-top: 10px;">
+        <div style="padding-left: 8px; padding-right: 8px; padding-top: 10px;">
             <img src="/static/images/default_avatar.png" alt="Avatar" class="home-avatar-size"/>
-          </div>
+        </div>
+        {% if (request.path != "/login/") and (request.path != "/register/") %}
         <a href="{{ url_for('register') }}" style="color: #fff; text-decoration: none;" class="authbutton">Register</a>
         <a href="{{ url_for('login') }}" style="color: #fff; margin-top: -10px; text-decoration: none;" class="authbutton">Log In</a>
-			{% endif %}
+        {% endif %}
+      {% endif %}
       </div>
       <div class="sidebar-status" style="padding: 12px; border-bottom: 1px solid #ddd;">
         {% if user_session.sessionid %}

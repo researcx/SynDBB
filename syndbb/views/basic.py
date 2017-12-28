@@ -11,10 +11,10 @@ import syndbb.models.time
 import syndbb.models.activity
 import syndbb.models.version
 
-@syndbb.app.route("/")
-def home():
+@syndbb.app.route("/activity")
+def activity():
     dynamic_js_footer = ["js/inline.js", "js/bootbox.min.js"]
-    return syndbb.render_template('home.html', dynamic_js_footer=dynamic_js_footer)
+    return syndbb.render_template('home.html', dynamic_js_footer=dynamic_js_footer, title="Activity", subheading=[""])
 
 @syndbb.app.route('/robots.txt')
 def robotstxt():
@@ -24,9 +24,13 @@ def robotstxt():
 def faviconico():
     return send_from_directory(syndbb.app.static_folder, syndbb.request.path[1:])
 
-@syndbb.app.route("/chat/")
+@syndbb.app.route("/")
+def home():
+    return syndbb.render_template('chat.html')
+
+@syndbb.app.route("/chat")
 def chat():
-    return syndbb.render_template('chat.html', title="Chat", subheading=[""])
+    return syndbb.render_template('chat.html')
 
 @syndbb.app.route("/im/")
 def im():

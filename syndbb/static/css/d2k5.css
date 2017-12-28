@@ -94,6 +94,10 @@
     .sidebar-userinfo img{
         display: none;
     }
+    .btn-auth{
+        width: 100%;
+        font-size: 16pt !important;
+    }
   li:hover, li:active, li:focus{
     background: #d9d9d9;
   }
@@ -1319,4 +1323,12 @@ legend{
 iframe#ytplayer{
     width: 768px;
     height: 432px;
+}
+
+pre{
+    white-space: pre-wrap !important;
+    white-space: -moz-pre-wrap !important;
+    white-space: -pre-wrap !important;
+    white-space: -o-pre-wrap !important;
+    word-wrap: break-word !important;
 }
