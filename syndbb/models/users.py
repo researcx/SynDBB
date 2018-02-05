@@ -136,7 +136,7 @@ def is_banned(id):
     if user and user.rank <= 500:
         bans = d2_bans.query.order_by(d2_bans.time.desc()).all()
         for ban in bans:
-            if (ban.length is 0) or (int(ban.expires) >= unix_time_current()):
+            if (int(ban.length) is 0) or (int(ban.expires) >= unix_time_current()):
                 if ban.banned_id == user.user_id:
                     ips = d2_ip.query.filter_by(user_id=ban.banned_id).all()
                     for ipad in ips:
@@ -148,7 +148,7 @@ def is_banned(id):
     else:
         ban = d2_bans.query.filter_by(banned_id=id).order_by(d2_bans.time.desc()).first()
         if ban:
-            if ban.length is not 0:
+            if int(ban.length) is not 0:
                 if int(ban.expires) <= unix_time_current():
                     return 0
                 else:
