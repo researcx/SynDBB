@@ -39,7 +39,7 @@ This is where the avatars, file uploads, thumbnails and submitted emoticons will
 
 #### Operator (Tier-1 Moderator)
 
-* Rank Integer: >=900
+* Rank Integer: >=500
 * Has a purple name.
 * Can view admin panel.
 * Can view the users list.
