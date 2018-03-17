@@ -64,7 +64,7 @@ def feed_posts_xml_all():
                                     		<guid>'''+str(post.id)+'''</guid>
                                     		<title>'''+latestreplier+''' replied to "'''+html_escape(thread.title)+'''" in '''+html_escape(forum.name)+'''</title>
                                     		<link>https://d2k5.com/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''#'''+str(post.id)+'''</link>
-                                    		<pubDate>'''+human_date(post.time)+'''</pubDate>
+                                    		<pubDate>'''+post.time+'''</pubDate>
                                     	</item>'''
             count += 1
 
@@ -106,7 +106,7 @@ def feed_threads_xml_all():
                                     		<guid>'''+str(thread.id)+'''</guid>
                                     		<title>'''+threadcreator+''' created "'''+html_escape(thread.title)+'''" in '''+html_escape(forum.name)+'''</title>
                                     		<link>https://d2k5.com/'''+str(forum.short_name)+'''/'''+str(thread.id)+'''</link>
-                                    		<pubDate>'''+human_date(thread.time)+'''</pubDate>
+                                    		<pubDate>'''+thread.time+'''</pubDate>
                                     	</item>'''
             count += 1
 
