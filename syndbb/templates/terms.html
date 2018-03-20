@@ -1,10 +1,21 @@
 {% extends "layout.html" %} {% block body %}
 <div class="inner-container">
   <h2>Community Rules</h2>
-  <a href="{{ url_for('rules') }}" style="color: #fff; text-decoration: none;" class="btn btn-info">Forum Rules</a>
-  <a href="{{ url_for('chat_rules') }}" style="color: #fff; text-decoration: none;" class="btn btn-info">Chat Rules</a>
-  <br/>
-    
+  <h3>The following are considered unacceptable:</h3>
+  <ul>
+	<li>Threats / Attacks / Terrorism</li>
+	<li>Posting or soliciting illegal pornography.</li>
+	<li>Flooding channels or users.</li>
+	<li>Posting private information.</li>
+	<li>Malicious attacks (hacking, ddos, etc) towards the network or its users.</li>
+	<li>Advertising.</li>
+	<li>Spam.</li>
+  </ul>
+
+  <p>Not safe for work content should be tagged as NSFW.</p>
+
+  <p>Respect other users and take it to private messages if necessary.<p>
+		
   <h2>Content</h2>
   <p>D2K5 and the D2K5 logo are Copyright &copy; 2002 - {{ now.year }} by faggqt (<a href="https://faggqt.pw" target="_blank">https://faggqt.pw/</a>). All rights reserved.<br/>
   You may use, distribute and modify this code under the QPL-1.0 license. The full license is included in LICENSE.md, which is distributed as part of this project.
