@@ -50,10 +50,16 @@ function set_theme(theme) {
   setCookie("theme", theme, 356);
   themepath = "#";
   if (theme == "invert"){
-  themepath = "/static/css/invert.css";
+    themepath = "/static/css/invert.css";
   }
   if (theme == "oify"){
-  themepath = "/static/css/oify.css";
+    themepath = "/static/css/oify.css";
+  }
+  if (theme == "futaba"){
+    themepath = "/static/css/futaba.css";
+  }
+  if (theme == "midnight"){
+    themepath = "/static/css/midnight.css";
   }
   window.location.reload();
 }

@@ -1,11 +1,11 @@
 #
-# Copyright (c) 2017 by faggqt (https://faggqt.pw). All Rights Reserved.
+# Copyright (c) 2017 - 2020 Keira T (https://kei.info.gf). All Rights Reserved.
 # You may use, distribute and modify this code under the QPL-1.0 license.
 # The full license is included in LICENSE.md, which is distributed as part of this project.
 #
 
 import syndbb
-from syndbb.models.users import d2_user, checkSession
+from syndbb.models.users import d2_user, check_session_by_id
 
 def give_currency(userid, amount):
     user = d2_user.query.filter_by(user_id=userid).first()

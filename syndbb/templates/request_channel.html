@@ -1,0 +1,95 @@
+{% extends "layout.html" %} {% block body %}
+<div class="inner-container">
+	  <strong>Guidelines:</strong>
+	  <ul>
+		<li>Must have an appropriate name and short name.</li>
+    <li>No channels promoting illegal activities or content.</li>
+    </ul>
+    <p style="font-style: italic; font-size: 12px;">All community channels will be admin approved.</p>
+	  <br/>
+    <div class="custom-channel">
+        <form id="custom-channel" class="form-horizontal" action="/functions/custom_channel/" method="POST">
+            <div class="form-group">
+                <label class="control-label col-xs-2">Channel Name</label>
+                <div class="col-xs-10">
+                    <input id="channel-name" type="text" name="channel-name" class="form-control">
+                    <span style="font-style: italic; font-size: 12px;">3 to 25 alphanumeric characters.</span>
+                </div>
+            </div>
+						<div class="form-group">
+                <label class="control-label col-xs-2">Short Name</label>
+                <div class="col-xs-10">
+                    <input id="channel-acronym" type="text" name="channel-acronym" class="form-control">
+                    <span style="font-style: italic; font-size: 12px;">1 to 10 alphanumeric characters.</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-2">Channel Description</label>
+                <div class="col-xs-10">
+                    <textarea id="channel-description" class="form-control" name="channel-description" rows="5" data-provide="text-editor"></textarea>
+                </div>
+            </div>
+						<div class="form-group">
+              <label class="control-label col-xs-2">Personal Link</label>
+              <div class="col-xs-10">
+                  <input id="channel-chat-url" type="text" name="channel-chat-url" class="form-control">
+                  <span style="font-style: italic; font-size: 12px;">Optional; your website, chat room, etc.</span>
+              </div>
+            </div>
+						<div class="form-group">
+              <label class="control-label col-xs-2">Access</label>
+              <div class="col-xs-10">
+                <select name="channel-access-rank" class="form-control">
+                  <option value="0">Anonymous</option>
+                  <option value="1">Tourist</option>
+                  <option value="10">Citizen</option>
+                  <option value="20">Citizen (Staff)</option>
+                  <option value="50">{{ get_core_config()['site']['donator_group_name'] }}</option>
+                  {% if user.rank >= 50 %}
+                  <option value="100">Peacekeeper</option>
+                  <option value="500">Federation Council</option>
+                  <option value="900">Special Operations</option>
+                  {% endif %}
+                </select>
+              </div>
+            </div>
+						<div class="form-group">
+              <label class="control-label col-xs-2">Users</label>
+              <div class="col-xs-10">
+                  <input id="channel-access-names" type="text" name="channel-access-user" class="form-control">
+                  <span style="font-style: italic; font-size: 12px;">List of usernames separated by space.</span><br/>
+                  Leave this blank to not restrict users on username basis.
+              </div>
+            </div>
+						<div class="form-group">
+              <label class="control-label col-xs-2">Moderators</label>
+              <div class="col-xs-10">
+                  <input id="channel-moderator-names" type="text" name="channel-access-moderator" class="form-control">
+                  <span style="font-style: italic; font-size: 12px;">List of usernames separated by space.</span><br/>
+                  Moderators have the power to delete posts and threads in this channel. Leave this blank to not specify any moderators.
+              </div>
+            </div>
+						<div class="form-group">
+                <div class="col-xs-offset-2 col-xs-10">
+                  <div class="checkbox">
+                    <label><input type="checkbox" name="nsfw_toggle" value="1"><strong><abbr title="Not Safe For Work">NSFW</abbr></strong></label>
+                  </div>
+                </div>
+            </div>
+						<div class="form-group">
+                <div class="col-xs-offset-2 col-xs-10">
+                  <div class="checkbox">
+                    <label><input type="checkbox" name="anon_toggle" value="1"><strong>Allow Anonymous Posting</strong></label>
+                  </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-offset-2 col-xs-10">
+                    <button type="submit" class="btn btn-primary">Request Channel</button>
+                </div>
+            </div>
+            <input type="hidden" name="uniqid" value="{{user_session.sessionid}}">
+        </form>
+      </div>
+</div>
+{% endblock %}

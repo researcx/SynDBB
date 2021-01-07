@@ -1,38 +1,39 @@
-{% if bancheck %}
+{% if ban_check %}
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta name="description" content="D2K5">
-    <meta name="author" content="https://faggqt.pw/">
+    <meta name="description" content="{{ get_core_config()['site']['branding'] }}">
+    <meta name="author" content="Rendered by{{ get_core_config()['software']['name'] }}">
     <meta name="referrer" content="no-referrer">
 
     <link rel="apple-touch-icon" sizes="180x180" href="{{cdn_path()|safe}}/apple-touch-icon.png">
     <link rel="icon" type="image/png" href="{{cdn_path()|safe}}/favicon-32x32.png" sizes="32x32">
     <link rel="icon" type="image/png" href="{{cdn_path()|safe}}/favicon-16x16.png" sizes="16x16">
-    <link rel="manifest" href="{{cdn_path()|safe}}/manifest.json">
+    <link rel="manifest" href="{{cdn_path()|safe}}/js/manifest.json">
     <link rel="mask-icon" href="{{cdn_path()|safe}}/safari-pinned-tab.svg" color="#000000">
     <link rel="shortcut icon" href="{{cdn_path()|safe}}/favicon.ico">
+
     <meta name="msapplication-config" content="{{cdn_path()|safe}}/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
 
-    <title>YOU ARE BANNED &bull; D2K5</title>
+    <title>YOU ARE BANNED &bull; {{ get_core_config()['site']['branding'] }}</title>
   </head>
 
   <body>
-    <div style='font-family: arial, tahoma; background: yellow; color: red; width: 80%; padding: 20px; margin: 0 auto; margin-top: 2%; text-align: center; border: 20px dashed red; font-size: 11pt;'><span style='font-size: 24pt; font-weight: bold;'>YOU ARE BANNED!</span><br/><br/>
+    <div style='font-family: arial, tahoma; background: yellow; color: red; width: 80%; padding: 20px; margin: 0 auto; margin-top: 2%; text-align: center; border: 20px dashed red; font-size: 11pt;'><span style='font-size: 24pt; font-weight: bold;'>YOU ARE BANNED</span><br/><br/>
 
-    You've been banned. You probably know why - but the reason that the moderator gave is below. If you feel this is unjust or just want to bitch about how we're nazis and get laughed at then feel free to <a href='mailto://tears@d2k5.com'>contact someone about it</a>.
+    You've been banned. You probably know why - but the reason that the member of council gave is below. If you feel this is unjust, feel free to <a href='{{ get_core_config()['site']['contact']|safe }}'>contact</a> us.
     <br/><br/>
 
-    {% if bancheck.ban.reason %}
-    <strong>Reason:</strong> {{bancheck.ban.reason}}<br/>
+    {% if ban_check.ban.reason %}
+    <strong>Reason:</strong> {{ban_check.ban.reason}}<br/>
     {% endif %}
-    {% if bancheck.ban.length != 0 %}
-      <strong>Duration:</strong> {{bancheck.banduration}}<br/>
-      <strong>Expires:</strong> {{get_ban_expiry(bancheck.ban.expires)}}
+    {% if ban_check.ban.length != 0 %}
+      <strong>Duration:</strong> {{ban_check.banduration}}<br/>
+      <strong>Expires:</strong> {{get_ban_expiry(ban_check.ban.expires)}}
     {% else %}
     <strong>Duration:</strong> Forever<br/>
     <strong>Expires:</strong> Never
@@ -50,20 +51,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta name="description" content="D2K5">
-    <meta name="author" content="https://faggqt.pw/">
+    <meta name="description" content="{{ get_core_config()['site']['branding'] }}">
+    <meta name="author" content="Rendered by{{ get_core_config()['software']['name'] }}">
     <meta name="referrer" content="no-referrer">
 
     <link rel="apple-touch-icon" sizes="180x180" href="{{cdn_path()|safe}}/apple-touch-icon.png">
     <link rel="icon" type="image/png" href="{{cdn_path()|safe}}/favicon-32x32.png" sizes="32x32">
     <link rel="icon" type="image/png" href="{{cdn_path()|safe}}/favicon-16x16.png" sizes="16x16">
-    <link rel="manifest" href="{{cdn_path()|safe}}/manifest.json">
+    <link rel="manifest" href="{{cdn_path()|safe}}/js/manifest.json">
     <link rel="mask-icon" href="{{cdn_path()|safe}}/safari-pinned-tab.svg" color="#000000">
     <link rel="shortcut icon" href="{{cdn_path()|safe}}/favicon.ico">
+    
     <meta name="msapplication-config" content="{{cdn_path()|safe}}/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
+    <meta name="twitter:card" content="{{ get_core_config()['site']['branding'] }}" />
+    <meta name="twitter:site" content="{% if title %} {{ title|striptags }} &bull; {% endif %}{{ get_core_config()['site']['branding'] }} {% if debug %}(debug){% endif %}" />
+    <meta property="og:title" content="{% if title %} {{ title|striptags }} &bull; {% endif %}{{ get_core_config()['site']['branding'] }} {% if debug %}(debug){% endif %}" />
+    {% if meta_description %}
+    <meta property="og:description" content="{{meta_description}}" />
+    {% endif %} 
+    {% if meta_image %} 
+    <meta property="og:image" content="{{meta_image}}" />
+    {% else %}
+    <meta property="og:image" content="{{cdn_path()|safe}}/apple-touch-icon.png" />
+    {% endif %}
 
-    <title>{% if title %} {{ title|striptags }} &bull; {% endif %}D2K5 {% if debug %}(debug){% endif %}</title>
+    <title>{% if title %} {{ title|striptags }} &bull; {% endif %}{{ get_core_config()['site']['branding'] }} {% if debug %}(debug){% endif %}</title>
 
     <link href="{{cdn_path()|safe}}{{get_filemtime('/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{cdn_path()|safe}}{{get_filemtime('/css/ie10-viewport-bug-workaround.css')}}" rel="stylesheet">
@@ -90,7 +103,7 @@
       <div class="container-fluid">
         {% if subheading %}
         <span class="navbar-title-sub">
-          <a href="{{ url_for('home') }}">D2K5</a> &gt;
+          <a href="{{ url_for('home') }}">{{ get_core_config()['site']['branding'] }}</a> &gt;
           {% for subhead in subheading %}
             {% if subhead %}
               {{subhead|safe}} &gt;
@@ -99,13 +112,13 @@
         </span>
         {% endif %}
         <span class="navbar-title">
-          {% if forumtitle %}
-            {{ forumtitle|safe }}
+          {% if channeltitle %}
+            {{ channeltitle|safe }}
           {% else %}
             {% if title %}
               {{ title|striptags }}
             {% else %}
-              D2K5
+              {{ get_core_config()['site']['branding'] }}
             {% endif %}
           {% endif %}
           {% if topbuttons %}
@@ -122,87 +135,108 @@
                 <span class="icon-bar"></span>
               </button>
           <a class="navbar-brand" href="{{ url_for('home') }}">
-                {% if forumlogo %}
-                {{forumlogo|safe}}
+                {% if channellogo %}
+                {{channellogo|safe}}
                 {% else %}
-                <img src="{{cdn_path()|safe}}/images/d2k5_logo.svg" alt="D2K5" class="sitelogo">
+                <img src="{{cdn_path()|safe}}/images/logo.svg" alt="{{ get_core_config()['site']['branding'] }}" class="sitelogo">
                 {% endif %}
               </a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <div class="navbar-container">
             <ul class="nav navbar-nav">
-               <li><a href="{{ url_for('activity') }}"><i class="fa fa-calendar" aria-hidden="true"></i> Activity</a></li>
-               <li><a href="{{ url_for('home') }}"><i class="fa fa-comments" aria-hidden="true"></i> IRC ({{get_stats()['irccount']}})</a></li>
+               <li><a href="{{ url_for('home') }}"><i class="silk-icon icon_calendar" aria-hidden="true"></i> Activity</a></li>
                <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-th-list" aria-hidden="true"></i> Channels <span class="caret"></span></a>
-                <ul class="dropdown-menu channel-list">
-                  <li class="forum-list"><a href="#">Official</a></li>
-                  {% for forum in forums %}
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="silk-icon icon_application_view_list" aria-hidden="true"></i> Channels <span class="caret"></span></a>
+                <ul class="dropdown-menu channel-list-dropdown">
+                  <li class="channel-list"><a href="#">{{ get_core_config()['site']['branding'] }}</a></li>
+                  {% for channel in channels %}
                   <li>
-                    <a href="/{{ forum.short_name }}/">
-                      <span style="float:right;">#{{ forum.short_name }}</span>
-                      {{ forum.name }}
+                    <a href="/{{ channel.short_name }}/">
+                      <!-- <span style="float:right;">#{{ channel.short_name }}</span> -->
+                      {{ channel.name }}
                     </a>
                   </li>
                   {% endfor %}
-                  <li class="forum-list"><a href="#">Unofficial</a></li>
-                  {% for forum in custom_forums %}
+                  <li class="channel-list"><a href="#">NSFW</a></li>
+                  {% for channel in nsfw_channels %}
                   <li>
-                    <a href="/{{ forum.short_name }}/">
-                      <span style="float:right;">#{{ forum.short_name }}</span>
-                      {{ forum.name }}
+                    <a href="/{{ channel.short_name }}/">
+                      <!-- <span style="float:right;">#{{ channel.short_name }}</span> -->
+                      {{ channel.name }}
+                    </a>
+                  </li>
+                  {% endfor %}
+                  <li class="channel-list"><a href="#">Community</a></li>
+                  {% for channel in custom_channels %}
+                  <li>
+                    <a href="/{{ channel.short_name }}/">
+                      <!-- <span style="float:right;">#{{ channel.short_name }}</span> -->
+                      {{ channel.name }}
                     </a>
                   </li>
                   {% endfor %}
                   {% if user_session.sessionid %}
-                  <li class="forum-list" style="text-align: center;"><a href="/request-channel/">REQUEST A CHANNEL</a></li>
+                  <li class="channel-list" style="text-align: center;"><a href="/request-channel/">Request Channel</a></li>
                   {% endif %}
                 </ul>
               </li>
-              <li><a href="{{ url_for('view_qdb') }}"><i class="fa fa-quote-left" aria-hidden="true"></i> Quotes</a></li>
-              <li><a href="{{ url_for('ban_list') }}"><i class="fa fa-ban" aria-hidden="true"></i> Bans</a></li>
-<!--
-              <li><a href="{{ url_for('events') }}"><i class="silk-icon icon_date" aria-hidden="true"></i> Events</a></li>
+              <li><a href="{{ url_for('view_qdb') }}"><i class="silk-icon icon_comments" aria-hidden="true"></i> Quotes</a></li>
+              {% if get_core_config()['site']['show_public_bans'] %}
+              <li><a href="{{ url_for('ban_list') }}"><i class="silk-icon icon_date_delete" aria-hidden="true"></i> Bans</a></li>
+              {% endif %}
               
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="silk-icon icon_cup" aria-hidden="true"></i> Services <span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                  <i class="silk-icon icon_server_go" aria-hidden="true"></i> Services <span class="caret"></span>
+                </a>
                 <ul class="dropdown-menu">
-                  {% if user_session.sessionid %}
-                  <li><a href="{{ url_for('pastebin') }}">Pastebin</a></li>
-                  <li><a href="{{ url_for('upload') }}">File Upload</a></li>
-                  {% endif %}
-                  <li><a href="/chat/">Internet Relay Chat</a></li>
-                  <li><a href="/chat/">XMPP Network</a></li>
-                  <li><a href="/quotes/">Quote Database</a></li>
-                  <li><a href="/vidya/">Video Chat</a></li>
-                  <li><a href="/synctube/">SyncTube</a></li>
+                  <li><a href="https://info.d2k5.com/chat/" target="_blank"><i class="silk-icon icon_application_side_tree" aria-hidden="true"></i> Chat Servers</a></li>
+                  <li><a href="https://txt.d2k5.com/" target="_blank"><i class="silk-icon icon_page_white_key" aria-hidden="true"></i> Privatebin</a></li>
+                  <li><a href="https://img.d2k5.com/" target="_blank"><i class="silk-icon icon_report_picture" aria-hidden="true"></i> Image Gallery</a></li>
+                  <li><a href="https://fs.d2k5.com/" target="_blank"><i class="silk-icon icon_drive_network" aria-hidden="true"></i> Cloud Storage</a></li>
+                  <li><a href="https://mirror.d2k5.com/" target="_blank"><i class="silk-icon icon_folder_go" aria-hidden="true"></i> Mirrors/Archive</a></li>
+                  <li><a href="https://vd.d2k5.com/" target="_blank"><i class="silk-icon icon_application_view_tile" aria-hidden="true"></i> Video Meet</a></li>
+                  <li><a href="https://stream.d2k5.com/" target="_blank"><i class="silk-icon icon_application_view_gallery" aria-hidden="true"></i> Stream</a></li>
+                  <li><a href="https://media.d2k5.com/" target="_blank"><i class="silk-icon icon_film_save" aria-hidden="true"></i> Media Share</a></li>
+                  <li><a href="https://synctube.d2k5.com/" target="_blank"><i class="silk-icon icon_control_play" aria-hidden="true"></i> Synctube</a></li>
+                  <li class="channel-list" style="text-align: center;"><a href="https://info.d2k5.com" target="_blank">View All</a></li>
                 </ul>
               </li>
--->
+              
             </ul>
             <ul class="nav navbar-nav navbar-right">
               {% if user_session.sessionid %}
               <!--<li><a href="{{ url_for('ban_list') }}"><i class="silk-icon icon_error" aria-hidden="true"></i> Alerts (0)</a></li>-->
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-circle-o" aria-hidden="true"></i> {{user.username}} <span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="silk-icon icon_user_gray" aria-hidden="true"></i> {{get_displayed_name_by_username(user.username)}} <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                  <li><a href="/user/{{user.username}}">View Profile</a></li>
-                  <li class="forum-list">&nbsp;</li>
-                  <li><a href="{{ url_for('pastebin') }}">My Pastes</a></li>
-                  <li><a href="{{ url_for('upload') }}">My Files</a></li>
-                  <li class="forum-list">&nbsp;</li>
-                  <li><a href="{{ url_for('preferences') }}">Change Profile</a></li>
-                  <li><a href="{{ url_for('change_avatar') }}">Change Avatar</a></li>
-                  <li><a href="{{ url_for('change_password') }}">Change Password</a></li>
-                  <li class="forum-list">&nbsp;</li>
                   {% if user.rank >= 500 %}
-                  <li><a href="{{ url_for('siteadmin') }}">Administrative Tools</a></li>
+                  <li><a href="{{ url_for('siteadmin') }}"><i class="silk-icon icon_report_user" aria-hidden="true"></i> Administrative Tools</a></li>
                   {% endif %}
-                  <li><a href="{{ url_for('login_history') }}">Login History</a></li>
-                  <li><a href="{{ url_for('logout') }}?uniqid={{user_session.sessionid}}">Log Out</a></li>
+                  <li><a href="/user/{{user.username}}"><i class="silk-icon icon_vcard" aria-hidden="true"></i> View Profile</a></li>
+                  <li class="channel-list list-separator">&nbsp;</li>
+                  <li><a href="{{ url_for('upload') }}"><i class="silk-icon icon_folder_user" aria-hidden="true"></i> My Files</a></li>
+                  <li><a href="{{ url_for('pastebin') }}"><i class="silk-icon icon_paste_plain" aria-hidden="true"></i> My Pastes</a></li>
+                  <li><a href="{{ url_for('profiles') }}"><i class="silk-icon icon_group_link" aria-hidden="true"></i> My Profiles</a></li>
+                  {% if get_core_config()['site']['invite_only'] %}
+                  <li><a href="{{ url_for('my_invites') }}"><i class="silk-icon icon_book_addresses" aria-hidden="true"></i> My Invites</a></li>
+                  {% endif %}
+                  <li class="channel-list list-separator">&nbsp;</li>
+                  <li><a href="{{ url_for('configure_avatar') }}"><i class="silk-icon icon_image_edit" aria-hidden="true"></i> Change Avatar</a></li>
+                  <li><a href="{{ url_for('configure_flair') }}"><i class="silk-icon icon_tag_green" aria-hidden="true"></i> Change Flair</a></li>
+                  <li><a href="{{ url_for('preferences') }}"><i class="silk-icon icon_cog" aria-hidden="true"></i> Preferences</a></li>
+                  <li class="channel-list list-separator">&nbsp;</li>
+                  <li><a href="{{ url_for('change_password') }}"><i class="silk-icon icon_lock_edit" aria-hidden="true"></i> Change Password</a></li>
+                  <li><a href="{{ url_for('login_history') }}"><i class="silk-icon icon_lock_break" aria-hidden="true"></i> Login History</a></li>
+                  <li><a href="{{ url_for('logout') }}?uniqid={{user_session.sessionid}}"><i class="silk-icon icon_lock_delete" aria-hidden="true"></i> Log Out</a></li>
                 </ul>
               </li>
+              {% else %}
+                {% if (request.path != "/login/") and (request.path != "/register/") %}
+                  <li class="nav-auth"><a href="{{ url_for('login') }}"><i class="silk-icon icon_key" aria-hidden="true"></i> Log in</a></li>
+                  <li class="nav-auth"><a href="{{ url_for('register') }}"><i class="silk-icon icon_user_add" aria-hidden="true"></i> Register</a></li>
+                {% endif %}
               {% endif %}
             </ul>
           </div>
@@ -220,32 +254,49 @@
           {% endfor %}
         {% endif %}
       {% endwith %}
-
       {% block body %}{% endblock %}
     </div>
     </div>
-    <div class="site-sidebar" style="border-top: 1px solid #ddd; border-left: 1px solid #ddd;">
-      <div class="sidebar-userinfo text-center" style="border-bottom: 1px solid #ddd;">
-      {% if user_session.sessionid %}
-        <div style="padding-left: 8px; padding-right: 8px; padding-top: 10px;">
-            <a href="/user/{{user.username}}">
-                <img src="{{get_avatar(user.user_id)}}" alt="Avatar" class="home-avatar-size"/>
-            </a>
-            
-            <a href="{{ url_for('upload') }}" style="color: #fff; text-decoration: none; padding-left: 16px; padding-right: 16px;" class="authbutton">
-                <span style="float:right;">{{human_size(user_stats(user.user_id)['filesize'])}}</span>
-                <span style="float:left;">My Files</span>
-            </a>
-            <a href="{{ url_for('pastebin') }}" style="color: #fff; text-decoration: none; margin-top: -8px; padding-left: 16px; padding-right: 16px;" class="authbutton">
-                <span style="float:right;">{{user_stats(user.user_id)['pastecount']}}</span>
-                <span style="float:left;">My Pastes</span>
-            </a>
-            <a href="{{ url_for('store') }}" style="color: #fff; text-decoration: none; padding-left: 16px; padding-right: 16px;" class="authbutton">
-                <span style="float:right;">&ETH;{{user.points}}</span>
-                <span style="float:left;">Store</span>
-            </a>
-        </div>
-      {% else %}
+    <div class="site-sidebar">
+      {% if not sidebar_extras or sidebar_extras %}
+        <div class="sidebar-userinfo text-center" style="border-bottom: 1px solid #ddd;">
+        {% if user_session.sessionid %}
+          <div style="padding-left: 8px; padding-right: 8px; padding-top: 10px;">
+              <a href="/user/{{user.username}}">
+                  <img src="{{get_avatar_by_id(user.user_id)}}" alt="Avatar" class="home-avatar-size"/>
+              </a>
+              
+
+              {% if get_linked_by_id(user.user_id) %}
+                <div class="siderbar-user-switch">
+                {% for linked_user in get_linked_by_id(user.user_id) %}
+                  {% if linked_user['user_id'] != user.user_id  %}
+                  <div class="siderbar-user-switcher">
+                      <a href="/functions/change_user/?userid={{linked_user['user_id']}}&uniqid={{user_session.sessionid}}" title="Activate {{get_displayed_name_by_username(linked_user['username'])}}" class="text-muted"><img src="{{get_avatar_by_id(linked_user['user_id'])}}" alt="Avatar" class="sidebar-user-switch-icon" /></a>
+                  </div>
+                  {% endif %}
+                {% endfor %}
+                </div>
+              {% endif %}
+
+              <div class="welcome-back">Welcome back, <span class="username {{get_group_style_by_username(user.username)}}">{{get_displayed_name_by_username(user.username)}}</span>!</div>
+
+              <a href="{{ url_for('upload') }}" style="color: #fff; text-decoration: none; padding-left: 16px; padding-right: 16px;" class="authbutton">
+                  <span style="float:right;">{{human_size(user_stats(user.user_id)['filesize'])}}</span>
+                  <span style="float:left;">My Files</span>
+              </a>
+              <a href="{{ url_for('pastebin') }}" style="color: #fff; text-decoration: none; margin-top: -8px; padding-left: 16px; padding-right: 16px;" class="authbutton">
+                  <span style="float:right;">{{user_stats(user.user_id)['pastecount']}}</span>
+                  <span style="float:left;">My Pastes</span>
+              </a>
+              {% if get_core_config()['site']['is_shop_enabled'] %}
+              <a href="#" style="color: #fff; text-decoration: none; padding-left: 16px; padding-right: 16px;" class="authbutton">
+                  <span style="float:right;">&ETH;{{user.points}}</span>
+                  <span style="float:left;">Currency</span>
+              </a>
+              {% endif %}
+          </div>
+        {% else %}
         <div style="padding-left: 8px; padding-right: 8px; padding-top: 10px;">
             <img src="/static/images/default_avatar.png" alt="Avatar" class="home-avatar-size"/>
         </div>
@@ -253,8 +304,16 @@
         <a href="{{ url_for('register') }}" style="color: #fff; text-decoration: none;" class="authbutton">Register</a>
         <a href="{{ url_for('login') }}" style="color: #fff; margin-top: -10px; text-decoration: none;" class="authbutton">Log In</a>
         {% endif %}
-      {% endif %}
+        {% endif %}
       </div>
+    {% endif %}
+    {% if sidebar_extras %}
+    <div class="sidebar-extras" style="border-bottom: 1px solid #ddd;">
+      {{ sidebar_extras|safe }}
+    </div>
+    {% else %}
+      {% if get_core_config()['site']['show_sidebar_status'] %}
+      {% if (not get_core_config()['site']['show_sidebar_status_reg_only'] and not user_session.sessionid) or user_session.sessionid %}
       <div class="sidebar-status" style="padding: 12px; border-bottom: 1px solid #ddd;">
         {% if user_session.sessionid %}
         <form class="form-horizontal" action="/functions/update_status" method="POST">
@@ -265,94 +324,113 @@
         {% for status in get_all_status_updates() %}
         <div class="media" style="margin-top: 3px;">
           <div class="media-left" style="padding-right: 5px; vertical-align: middle;">
-            <a href="/user/{{status[2]}}">
-              <img src="{{get_avatar(status[3])}}" alt="Avatar" class="status-avatar-size"/>
+            <a href="/user/{{status[2]}}" class="profile-inline">
+              <img src="{{get_avatar_by_id(status[3])}}" alt="Avatar" class="status-avatar-size"/>
             </a>
           </div>
           <div class="media-body" style="vertical-align: middle;">
             <a href="/user/{{status[2]}}">
-              <span class="username {{get_group_style_from_id(status[3])}}">{{status[2]}}</span>
+              <span class="username {{get_group_style_by_id(status[3])}}">{{status[4]}}</span>
             </a>
             <span class="text-muted" style="font-size: 12px;"> {{status[1]}}</span>
           </div>
         </div>
         {% endfor %}
       </div>
+      {% endif %}
+    {% endif %}
+    {% endif %}
     {% if request.path != "/" %}
-    <div class="sidebar-forums" style="border-bottom: 1px solid #ddd;">
-      {% for forum in forums %}
-      <div class="sidebar-forum">
-        <a href="/{{ forum.short_name }}/new_thread">
+    <div class="sidebar-channels" style="border-bottom: 1px solid #ddd;">
+      {% for channel in channels %}
+      <div class="sidebar-channel">
+        <a href="/{{ channel.short_name }}/new_thread">
             <span style="float: right;">
                 <i class="silk-icon icon_note_add" aria-hidden="true"></i>
             </span>
         </a>
-        <a href="/{{ forum.short_name }}/">
+        <a href="/{{ channel.short_name }}/">
           <i class="silk-icon icon_bullet_black" aria-hidden="true"></i>
-          {{ forum.name }}
+          {{ channel.name }}
         </a>
       </div>
       {% endfor %}
-      {% for forum in custom_forums %}
-      <div class="sidebar-forum">
-        <a href="/{{ forum.short_name }}/new_thread">
+      {% for channel in custom_channels %}
+      <div class="sidebar-channel">
+        <a href="/{{ channel.short_name }}/new_thread">
             <span style="float: right;">
                 <i class="silk-icon icon_note_add" aria-hidden="true"></i>
             </span>
         </a>
-        <a href="/{{ forum.short_name }}/">
+        <a href="/{{ channel.short_name }}/">
           <i class="silk-icon icon_bullet_black" aria-hidden="true"></i>
-          {{ forum.name }}
+          {{ channel.name }}
         </a>
       </div>
       {% endfor %}
     </div>
     {% endif %}
+    {% if get_core_config()['site']['show_statistics'] %}
+    {% if (not get_core_config()['site']['show_statistics_reg_only'] and not user_session.sessionid) or user_session.sessionid %}
     <div class="sidebar-statistics text-center" style="border-bottom: 1px solid #ddd;">
-          
         <dl class="dl-horizontal statistics" style="margin-top: 10px; margin-bottom: 10px;">
-  				<dt>Messages:</dt>
-  				<dd>{{get_stats()['threadcount'] + get_stats()['postcount'] + get_stats()['linecount']}}</dd>
-
+          {% if get_core_config()['site']['show_statistics_thread_count'] %}
+          <dt>Threads:</dt>
+          <dd>{{get_stats()['threadcount']}}</dd>
+          {% endif %}
+  
+          {% if get_core_config()['site']['show_statistics_post_count'] %}
+          <dt>Posts:</dt>
+          <dd>{{get_stats()['postcount']}}</dd>
+          {% endif %}
+  
+          {% if get_core_config()['site']['show_statistics_channel_count'] %}
           <dt>Channels:</dt>
-  				<dd>{{get_stats()['officialforumcount'] + get_stats()['unofficialforumcount']}}</dd>
+          <dd><span title="Official Channels">{{get_stats()['officialchannelcount']}}</span> + <span title="Community Channels">{{get_stats()['unofficialchannelcount']}}</span></dd>
+          {% endif %}
 
+          {% if get_core_config()['site']['show_public_bans'] and get_core_config()['site']['show_statistics_ban_count'] %}
           <dt>Bans:</dt>
-  				<dd>{{get_stats()['bancount']}}</dd>
-  			</dl>
+          <dd>{{get_stats()['bancount']}}</dd>
+          {% endif %}
+
+          {% if get_core_config()['site']['show_statistics_user_count'] %}
+          <dt>Registered Members:</dt>
+          <dd>{{get_stats()['usercount']}}</dd>
+          {% endif %}
+        </dl>
+        {% if get_core_config()['site']['show_statistics_file_progress'] %}
         <div style="padding: 0px 20px;">
           <div class="progress">
             <div class="progress-bar {{get_stats()['progress_indicator']}} progress-bar-striped" role="progressbar" aria-valuenow="40"
             aria-valuemin="0" aria-valuemax="100" style="width:{{get_stats()['disk_percentage']}}%">
-              <span>{{get_stats()['filecount']}} files ({{human_size(get_stats()['filesize'])}})</span>
+              <span>Serving {{get_stats()['filecount']}} files ({{human_size(get_stats()['filesize'])}})</span>
             </div>
           </div>
        </div>
+       {% endif %}
       </div>
-        
-      <div class="sidebar-donate text-center" style="padding: 18px;">
-          <div style="font-weight: bold; font-size: 11pt; margin-bottom: 8px;">Donations help us afford our servers and our continued existence.</div>
-          <span class="small">D2K5 &amp; <a href="https://github.com/D2K5/SynDBB" style="" target="_blank">SynDBB</a> are individually developed and maintained as a hobby, we don't have adverts and our site is entirely <a href="https://github.com/D2K5/SynDBB" style="" target="_blank">open-source</a>.</span><br/>
-          <a href="https://paypal.me/d2k5" target="_blank" style="background-color: steelblue; color: #fff; text-decoration: none;" class="authbutton">PayPal</a>
-          <div style="margin-top: -15px;"><a href="https://paypal.me/d2k5" target="_blank" style="font-size: 11px; font-weight: bold; color: dimgrey;">Keira Treial</a></div>
-          <a href="https://blockchain.info/payment_request?address=1NuBjWhELGBxNsVzwZ9toAzWj74Miihqn7" target="_blank" style="background-color: darkorange; color: #fff; text-decoration: none;" class="authbutton">Bitcoin</a>
-          <div style="margin-top: -15px;"><a href="https://blockchain.info/payment_request?address=1NuBjWhELGBxNsVzwZ9toAzWj74Miihqn7" target="_blank" style="font-size: 11px; font-weight: bold; color: dimgrey;">1NuBjWhELGBxNsVzwZ9toAzWj74Miihqn7</a><br/>
-          <a href="https://keybase.io/d2k5" target="_blank" title="Verified on Keybase" style="font-size: 11px; font-weight: bold; color: dimgrey;"><i class="fa fa-lock" aria-hidden="true"></i> Verified on Keybase</a>
-          <br/><br/>
-          <a href="https://github.com/d2k5/SynDBB" target="_blank" title="SynDBB on GitHub" style="font-size: 18pt; font-weight: bold; color: dimgrey;"><i class="fa fa-github-square" aria-hidden="true"></i></a>
-          <a href="https://steamcommunity.com/groups/D2K5" target="_blank" title="D2K5 on Steam" style="font-size: 18pt; font-weight: bold; color: dimgrey;"><i class="fa fa-steam-square" aria-hidden="true"></i></a>
-          <a href="https://www.youtube.com/user/D2K5S1" target="_blank" title="D2K5 on YouTube" style="font-size: 18pt; font-weight: bold; color: dimgrey;"><i class="fa fa-youtube-square" aria-hidden="true"></i></a>
-          </div>
-      </div>
+      {% endif %}
+    {% endif %}
+    {% if get_core_config()['site']['show_donate_info'] %}
+    <div class="sidebar-donate text-center" style="padding: 18px;">
+        <div style="font-weight: bold; font-size: 11pt; margin-bottom: 8px;">Donate to us:</div>
+        <a href="https://info.d2k5.com/donate/xmr.txt" target="_blank" style="background-color: #ff6600; color: #fff; text-decoration: none;" class="authbutton">via Monero</a>
+        <a href="https://info.d2k5.com/donate/btc.txt" target="_blank" style="background-color: #f69627; color: #fff; text-decoration: none;" class="authbutton">via Bitcoin</a>
+        </div>
+    </div>
+    {% endif %}
     </div>
     </div>
     <footer class="footer">
       <div class="container-fluid">
         <p class="text-muted footer-notice" style="font-style: italic; float:right; text-align: right;">
-          <a href="/terms/" target="_blank" title="Rules & Term of Service" style="font-size: 12px; font-weight: bold; color: dimgrey;">All trademarks and copyrights on this site are owned by their respective parties.<br/> Images and files uploaded are the responsibility of the user. Comments are owned by the user.<br/> If you continue to use this site, you are consenting to our use of cookies.</a></p>
+          <a href="{{ get_core_config()['site']['rules_and_terms_url'] }}" target="_blank" title="Rules & Term of Service" style="font-size: 13px; color: dimgrey;">All trademarks and copyrights on this site are owned by their respective parties.<br/> Images and files uploaded are the responsibility of the user. Comments are owned by the user.<br/> If you continue to use this site, you are consenting to our use of cookies.</a></p>
           <p class="text-muted">
-            <a href="{{ url_for('info') }}">D2K5 &copy; 2002 - {{ now.year }}</a> - <a href="https://github.com/D2K5/SynDBB" target="_blank">Powered by SynDBB {{ syndbb_version }} ({{ syndbb_hash }})</a><br/>
-            Theme: &nbsp;<a href="#" onclick="set_theme('white');">White</a> &bull; <a href="#" onclick="set_theme('invert');">Dark</a> &bull; <a href="#" onclick="set_theme('oify');">OIFY</a><br/>
+            <a href="{{ get_core_config()['site']['info_url']  }}">{{ get_core_config()['site']['branding'] }} &#8729; {{ get_core_config()['site']['year_founded'] }} - {{ now.year }}</a>
+            <!-- &#8729; Powered by {{ get_core_config()['software']['url']|safe }} {{ get_core_config()['software']['version'] }} ({{ get_core_config()['software']['codename'] }}) ({{ get_core_config()['software']['hash'] }}) -->
+            <br/>
+            Theme: &nbsp;<a href="#" onclick="set_theme('white');">Day</a> &bull; <a href="#" onclick="set_theme('invert');">Night</a> &bull; <a href="#" onclick="set_theme('futaba');">Futaba</a> &bull; <a href="#" onclick="set_theme('yotsuba');">Yotsuba</a><br/>
             <i>Page generation took {{ g.request_time() }} seconds. &bull; All times are <abbr title="Greenwich Mean Time">GMT</abbr>.</i>
           </p>
       </div>

@@ -21,6 +21,9 @@
       </div>
     </div>
     <input type="hidden" name="password" id="pword">
+    {% if get_core_config()['ldap']['enabled']  %}
+    <input type="hidden" name="password_hash" id="pword_hash">
+    {% endif %}
   </form>
   {% else %}
   <div class="thread-title">You are already logged in!</div>

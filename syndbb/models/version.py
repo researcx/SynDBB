@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2017 by faggqt (https://faggqt.pw). All Rights Reserved.
+# Copyright (c) 2017 - 2020 Keira T (https://kei.info.gf). All Rights Reserved.
 # You may use, distribute and modify this code under the QPL-1.0 license.
 # The full license is included in LICENSE.md, which is distributed as part of this project.
 #
@@ -36,7 +36,15 @@ def inject_version():
         git_shash = "Unknown"
         git_version = "r0"
 
-    return { 'syndbb_version': syndbb.pkg_resources.get_distribution('syndbb').version, 'syndbb_hash': git_shash, 'syndbb_full_hash': git_fhash, 'python_version': syndbb.platform.python_version(), 'flask_version': syndbb.pkg_resources.get_distribution('flask').version }
+    core_config = syndbb.core_config
+
+    return core_config
+
+#Get core config variables
+@syndbb.cache.memoize(timeout=86400) # get_core_config
+def get_core_config():
+    return syndbb.core_config
+syndbb.app.jinja_env.globals.update(get_core_config=get_core_config)
 
 @syndbb.app.context_processor
 def inject_debug():

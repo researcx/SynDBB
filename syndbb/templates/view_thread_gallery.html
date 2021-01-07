@@ -6,7 +6,7 @@
     <div class="panel-body">
       <div class="threadimg-gallery center-block">
         <a href="{{image}}" target="_blank">
-          <img src="{{image}}" title="Post your Desktop" class="activity-threadimg-gallery">
+          <img src="{{image}}" alt="[IMG]" class="activity-threadimg-gallery">
         </a>
       </div>
     </div>
@@ -15,7 +15,7 @@
   <br/><br/>
   <div class="thread-title">Displaying {{imagecount}}.</div>
 {% else %}
-<div class="alert alert-info" role="alert">
+<div class="alert alert-warning" role="alert">
   No images were found in this thread.
 </div>
 {% endif %}

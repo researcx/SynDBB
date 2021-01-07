@@ -1,15 +1,27 @@
 {% extends "layout.html" %} {% block body %}
-<table class="event-list table table-striped table-header">
-  <thead>
-      <th>Date</th>
-      <th>Horrible Jerk</th>
-      <th>Reason</th>
-      <th>Duration</th>
-      <th>Expires</th>
-      <th>Banned By</th>
-  </thead>
-  <tbody>
-    {{ ban_list|safe }}
-  </tbody>
-</table>
+{% if get_core_config()['site']['show_public_bans'] %}
+  {% if ban_list %}
+    <table class="event-list table table-striped table-header">
+      <thead>
+          <th>Date</th>
+          <th>User</th>
+          <th>Reason</th>
+          <th>Duration</th>
+          <th>Expires</th>
+          <th>Banned By</th>
+      </thead>
+      <tbody>
+        {{ ban_list|safe }}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="alert alert-warning" role="alert">
+      No bans yet. Lucky.
+    </div>
+  {% endif %}
+{% else %}
+  <div class="alert alert-danger" role="alert">
+    The public ban list is currently disabled.
+  </div>
+{% endif %}
 {% endblock %}

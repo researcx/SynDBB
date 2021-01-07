@@ -1,11 +1,11 @@
 #
-# Copyright (c) 2017 by faggqt (https://faggqt.pw). All Rights Reserved.
+# Copyright (c) 2017 - 2020 Keira T (https://kei.info.gf). All Rights Reserved.
 # You may use, distribute and modify this code under the QPL-1.0 license.
 # The full license is included in LICENSE.md, which is distributed as part of this project.
 #
 
 import syndbb
-from syndbb.models.users import d2_user, checkSession
+from syndbb.models.users import d2_user, check_session_by_id
 from syndbb.models.paste import d2_paste
 from syndbb.models.time import unix_time_current
 
@@ -27,7 +27,7 @@ def has_no_empty_params(rule):
 def pastebin():
     if 'logged_in' in syndbb.session:
         dynamic_js_footer = ["js/bootbox.min.js", "js/delete.js"]
-        userid = checkSession(str(syndbb.session['logged_in']))
+        userid = check_session_by_id(str(syndbb.session['logged_in']))
         if userid:
             getPastes = d2_paste.query.filter(d2_paste.user_id == userid).order_by(syndbb.db.desc(d2_paste.time)).all()
             return syndbb.render_template('pastebin.html', dynamic_js_footer=dynamic_js_footer, paste_list=getPastes, title="Pastebin", subheading=[""])
@@ -52,7 +52,7 @@ def dopaste():
     uniqid = syndbb.request.form['uniqid']
 
     if paste_title and paste_content and uniqid:
-        userid = checkSession(uniqid)
+        userid = check_session_by_id(uniqid)
         if userid:
             pasteid = str(syndbb.uuid.uuid4().hex)
             new_paste = d2_paste(userid, pasteid, unix_time_current(), html_escape(paste_content), html_escape(paste_title))
@@ -71,7 +71,7 @@ def undopastes():
     uniqid = syndbb.request.args.get('uniqid')
 
     if paste_id and uniqid:
-        userid = checkSession(uniqid)
+        userid = check_session_by_id(uniqid)
         if userid:
             deletePaste = d2_paste.query.filter(d2_paste.user_id == userid).filter(d2_paste.paste_id == paste_id).order_by(syndbb.db.desc(d2_paste.time)).first()
             syndbb.db.session.delete(deletePaste)

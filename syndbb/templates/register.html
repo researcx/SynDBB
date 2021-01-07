@@ -1,17 +1,20 @@
 {% extends "layout.html" %} {% block body %}
 <div class="inner-container">
   <form class="form-horizontal" id="regform" action="/functions/register/" method="get">
-<!--
-      <div class="form-group" id="invite">
-          <label for="inputInvite" class="control-label col-xs-2">Invite Code</label>
-          <div class="col-xs-10">
-              <input type="invite" name="code" class="form-control" id="inputInvite" value="" placeholder="Invite Code" required>
-          </div>
-      </div>
--->
+
+      {% if get_core_config()['site']['invite_only'] %}
+        <div class="form-group" id="invite">
+            <label for="inputInvite" class="control-label col-xs-2">Invite Code</label>
+            <div class="col-xs-10">
+                <input type="invite" name="code" class="form-control" id="inputInvite" value="{{invite_code}}" placeholder="Invite Code" required>
+            </div>
+        </div>
+      {% endif %}
+
       <div class="form-group" id="username">
           <label for="inputUsername" class="control-label col-xs-2">Username</label>
           <div class="col-xs-10">
+            <i class="silk-icon icon_arrow_refresh" style="position: absolute; right: 23px; top: 11px; cursor: pointer;" aria-hidden="true" title="Randomize" onclick="randomUserName()"></i>
               <input type="username" name="username" class="form-control" id="inputUsername" placeholder="Username" required>
           </div>
       </div>
@@ -39,10 +42,10 @@
       <div class="form-group" id="tos">
           <label for="tos" class="control-label col-xs-2">Terms of Service</label>
           <div class="col-xs-10">
-              <input type="checkbox" value="1" name="tos" required> <span style="font-size: 14pt">I have read and agree to <a href="/terms/" target="_blank" style="border-bottom: 1px dotted red; font-weight: bold; color: #ff0000 !important;">the rules and the terms of service</a>.</span>
+              <input type="checkbox" value="1" name="tos" required> <span style="font-size: 14pt">I have read and agree to <a href="{{ get_core_config()['site']['rules_and_terms_url'] }}" target="_blank" style="border-bottom: 1px dotted red; font-weight: bold; color: #ff0000 !important;">the rules and terms of service</a>.</span>
               <br/><br/>
-              <i>You will not be able to sign up for this site with Tor or a proxy.<br/>
-              IP banned users can not re-register without appealing to their ban.<br/></i>
+             <!--<i>You will not be able to sign up for this site with Tor or a proxy.<br/>
+              IP banned users can not re-register without appealing to their ban.<br/></i>-->
           </div>
       </div>
       
@@ -51,25 +54,31 @@
           <div class="col-xs-10">
               <strong>Appeal to:</strong>
             <ul>
-                <li><a href="mailto://tears@d2k5.com" style="border-bottom: 1px dotted red;">IP Ban</a></li>
-                <li><a href="mailto://tears@d2k5.com" style="border-bottom: 1px dotted red;">Forum Ban</a></li>
-                <li><a href="mailto://tears@d2k5.com" style="border-bottom: 1px dotted red;">IRC Ban</a></li>
+                <li><a href="{{ get_core_config()['site']['contact']|safe }}" style="border-bottom: 1px dotted red;">IP Ban</a></li>
+                <li><a href="{{ get_core_config()['site']['contact']|safe }}" style="border-bottom: 1px dotted red;">Forum Ban</a></li>
+                <li><a href="{{ get_core_config()['site']['contact']|safe }}" style="border-bottom: 1px dotted red;">IRC Ban</a></li>
               </ul>
           </div>
       </div>
       
       <div class="form-group">
           <div class="col-xs-offset-2 col-xs-10">
-                <strong>If the captcha doesn't appear below, disable script/ad block plugins during the registration process.<br/>Some anti-viruses with web protection may also attempt to block this.</strong><br/><br/>
-                <script src="https://coinhive.com/lib/captcha.min.js" async></script>
-                <div class="coinhive-captcha" data-whitelabel="true" data-hashes="256" data-key="uDGN6rDyXLj4cAo0eJozg9F3O8jU8LOs">
-                    <em>Loading Captcha...</em>
-                </div>
-              <br/>
-              <button type="submit" id="submission" class="btn disabled btn-primary btn-auth">Sign Up</button>
+            {% if not get_core_config()['hcaptcha']['enabled']  %}
+            <label for="inputCaptcha" class="sr-only">captcha</label>
+            <div class="site-captcha">
+                {{ hcaptcha|safe }}
+                <a href="https://www.hcaptcha.com/privacy" target="_blank"><img src="/static/img/hcaptcha-logo-small.png" alt="hCaptcha" title="powered by hCaptcha"/></a>
+                <span>JavaScript is required for hCaptcha</span>
+            </div>
+            {% endif %}
+            <br/>
+            <button type="submit" id="submission" class="btn disabled btn-primary btn-auth">Sign Up</button>
           </div>
       </div>
       <input type="hidden" name="password" id="pword">
+      {% if get_core_config()['ldap']['enabled']  %}
+      <input type="hidden" name="password_hash" id="pword_hash">
+      {% endif %}
   </form>
 </div>
 {% endblock %}

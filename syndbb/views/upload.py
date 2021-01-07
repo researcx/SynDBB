@@ -1,18 +1,19 @@
 #
-# Copyright (c) 2017 by faggqt (https://faggqt.pw). All Rights Reserved.
+# Copyright (c) 2017 - 2020 Keira T (https://kei.info.gf). All Rights Reserved.
 # You may use, distribute and modify this code under the QPL-1.0 license.
 # The full license is included in LICENSE.md, which is distributed as part of this project.
 #
 
 import syndbb, random, string, hashlib, piexif, math
 from PIL import Image
-from syndbb.models.users import d2_user, checkSession
+from syndbb.models.users import d2_user, check_session_by_id
 from syndbb.models.time import cdn_path
 from syndbb.models.d2_hash import d2_hash
 from werkzeug.utils import secure_filename
 from flask_paginate import Pagination
+from flask import send_from_directory, make_response
 
-@syndbb.cache.memoize(timeout=60)
+@syndbb.cache.memoize(timeout=86400) # get_user_files
 def get_user_files(userid, anon=0, gallery=0, album=0):
     user = d2_user.query.filter_by(user_id=userid).first()
     
@@ -83,10 +84,10 @@ def get_user_files(userid, anon=0, gallery=0, album=0):
 def upload():
     page = syndbb.request.args.get('page', type=int, default=1)
     per_page = syndbb.request.args.get('amount', type=int, default=25)
-    dynamic_css_header = ["js/datatables.min.css"]
+    dynamic_css_header = []
     dynamic_js_footer = ["js/bootstrap-filestyle.min.js", "js/bootbox.min.js", "js/delete.js", "js/lazyload.transpiled.min.js"]
     if 'logged_in' in syndbb.session:
-        userid = checkSession(str(syndbb.session['logged_in']))
+        userid = check_session_by_id(str(syndbb.session['logged_in']))
         if userid:
             cached_list = get_user_files(userid)
             file_list = cached_list['file_list']
@@ -119,10 +120,10 @@ def upload():
 def upload_anon():
     page = syndbb.request.args.get('page', type=int, default=1)
     per_page = syndbb.request.args.get('amount', type=int, default=25)
-    dynamic_css_header = ["js/datatables.min.css"]
+    dynamic_css_header = []
     dynamic_js_footer = ["js/bootstrap-filestyle.min.js", "js/bootbox.min.js", "js/delete.js", "js/lazyload.transpiled.min.js"]
     if 'logged_in' in syndbb.session:
-        userid = checkSession(str(syndbb.session['logged_in']))
+        userid = check_session_by_id(str(syndbb.session['logged_in']))
         if userid:
             cached_list = get_user_files(userid, anon=1)
             file_list = cached_list['file_list']
@@ -145,9 +146,9 @@ def upload_anon():
                 end_index = len(file_list)
             file_list = file_list[start_index:end_index]
             
-            return syndbb.render_template('upload_anon.html', uploadurl=cached_list['uploadurl'], filecount=cached_list['file_count'], file_list=file_list, pagination=pagination, countselector=countselector, total_size=cached_list['total_size'], uploader_name=cached_list['user_name'], dynamic_js_footer=dynamic_js_footer, dynamic_css_header=dynamic_css_header, title="Anonymous", subheading=['<a href="/upload/">Upload</a>'])
+            return syndbb.render_template('upload_anon.html', uploadurl=cached_list['uploadurl'], filecount=cached_list['file_count'], file_list=file_list, pagination=pagination, countselector=countselector, total_size=cached_list['total_size'], uploader_name=cached_list['user_name'], dynamic_js_footer=dynamic_js_footer, dynamic_css_header=dynamic_css_header, title="Anonymous Upload", subheading=['<a href="/upload/">Upload</a>'])
         else:
-            return syndbb.render_template('error_not_logged_in.html', title="Anonymous", subheading=['<a href="/upload/">Upload</a>'])
+            return syndbb.render_template('error_not_logged_in.html', title="Anonymous Upload", subheading=['<a href="/upload/">Upload</a>'])
     else:
         return syndbb.render_template('error_not_logged_in.html', title="Upload", subheading=[""])
       
@@ -183,7 +184,7 @@ def upload_album():
 def upload_gallery():
     dynamic_js_footer = ["js/bootstrap-filestyle.min.js", "js/uploadgallery.js", "js/bootbox.min.js", "js/delete.js", "js/lazyload.transpiled.min.js"]
     if 'logged_in' in syndbb.session:
-        userid = checkSession(str(syndbb.session['logged_in']))
+        userid = check_session_by_id(str(syndbb.session['logged_in']))
         if userid:
             user = d2_user.query.filter_by(user_id=userid).first()
             uploadfolder = syndbb.app.static_folder + "/data/uploads/" + user.username + "/"
@@ -230,7 +231,7 @@ def upload_gallery():
 @syndbb.app.route("/upload/simple/")
 def upload_simple():
     if 'logged_in' in syndbb.session:
-        userid = checkSession(str(syndbb.session['logged_in']))
+        userid = check_session_by_id(str(syndbb.session['logged_in']))
         if userid:
             dynamic_js_footer = ["js/bootstrap-filestyle.min.js", "js/bootbox.min.js", "js/delete.js", "js/lazyload.transpiled.min.js"]
             user = d2_user.query.filter_by(user_id=userid).first()
@@ -301,7 +302,7 @@ def upload_viewer():
         
         if user:
             if 'logged_in' in syndbb.session:
-                userid = checkSession(str(syndbb.session['logged_in']))
+                userid = check_session_by_id(str(syndbb.session['logged_in']))
                 user = d2_user.query.filter_by(user_id=userid).first()
 
                 uploadurl = user.upload_url
@@ -340,13 +341,31 @@ def upload_viewer():
     else:
         return syndbb.render_template('upload_viewer.html', dynamic_js_footer=dynamic_js_footer, title="View File", subheading=["Upload"])
 
+# ShareX Script
+@syndbb.app.route("/upload/sharex")
+@syndbb.cache.memoize(timeout=86400) # provide_sharex_script
+def provide_sharex_script():
+    template = syndbb.render_template('sharex.json')
+    response = make_response(template)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
+# Bash Script
+@syndbb.app.route("/upload/bash")
+@syndbb.cache.memoize(timeout=86400) # provide_bash_script
+def provide_bash_script():
+    template = syndbb.render_template('bash-upload.sh')
+    response = make_response(template)
+    response.headers['Content-Type'] = 'text/plain'
+    return response
+
 
 @syndbb.app.route('/functions/upload', methods=['GET', 'POST'])
 def upload_file():
     if syndbb.request.method == 'POST':
         image_types = [".jpg", ".jpeg", ".jpe"]
         if 'logged_in' in syndbb.session:
-            userid = checkSession(str(syndbb.session['logged_in']))
+            userid = check_session_by_id(str(syndbb.session['logged_in']))
             uploader = syndbb.request.form['uploader']
             
             if 'anonymous' in syndbb.request.form:
@@ -405,10 +424,10 @@ def upload_file_external():
             password = syndbb.request.form['password']
         else:
             return "No password set."
-        user = d2_user.query.filter_by(username=username).filter_by(uploadauth=password).first()
+        user = d2_user.query.filter_by(username=username).filter_by(upload_auth=password).first()
         if user:
-#            bancheck = is_banned(user.user_id)
-#            if bancheck:
+#            ban_check = check_ban_by_id(user.user_id)
+#            if ban_check:
 #                return "This user or IP address is banned."
             uploadfolder = syndbb.app.static_folder + "/data/uploads/" + user.username + "/"
             if not syndbb.os.path.exists(uploadfolder):
@@ -445,7 +464,7 @@ def delete_file():
     uniqid = syndbb.request.args.get('uniqid', '')
     uploader = syndbb.request.args.get('uploader', '')
     if 'logged_in' in syndbb.session:
-        userid = checkSession(str(uniqid))
+        userid = check_session_by_id(str(uniqid))
         if userid:
             user = d2_user.query.filter_by(user_id=userid).first()
             if uploader == "upload_anon":

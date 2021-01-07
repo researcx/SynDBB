@@ -1,0 +1,11 @@
+{
+  "Name": "{{ get_core_config()['site']['branding'] }} Upload",
+  "RequestType": "POST",
+  "RequestURL": "https://{{ get_core_config()['site']['domain'] }}/functions/upload/external",
+  "FileFormName": "file",
+  "Arguments": {
+    "username": "",
+    "auth": ""
+  },
+  "ResponseType": "Text"
+}

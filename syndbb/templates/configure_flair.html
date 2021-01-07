@@ -1,0 +1,44 @@
+{% extends "layout.html" %} {% block body %}
+<div class="inner-container">
+  <div class="media">
+    <span class="media-left text-center">
+      </span>
+    <div class="media-body" style="padding: 8px;">
+      <form class="form-horizontal" action="/functions/upload_flair" method="POST" enctype="multipart/form-data">
+        <div class="image-editor">
+            <input type="file" id="avatar_crop" name="flair_source" class="cropit-image-input">
+            <span id="avatarform" class="hidden">
+                <div class="cropit-preview"></div>
+                <div class="image-size-label">
+                  Resize image
+                </div>
+                <input type="range" class="cropit-image-zoom-input">
+                <input type="hidden" name="flair" class="hidden-image-data" />
+                <input type="hidden" name="uniqid" value="{{user_session.sessionid}}" />
+                <button type="submit">Submit</button>
+              </span>
+          </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="thread-title" style="margin-top: 24px;">Flair</div>
+  {% for flair in get_flair_by_id(user.user_id) %}
+  <div class="text-center img-grid">
+    <div class="panel-body">
+      <div class="threadimg-gallery center-block">
+        <a href="{{cdn_path()|safe}}/data/flair/{{user.user_id}}/{{flair[0]}}.png" target="_blank">
+          <img src="{{cdn_path()|safe}}/data/flair/{{user.user_id}}/{{flair[0]}}.png" class="activity-threadimg-gallery" alt="{{flair[0]}}"/>
+        </a>
+        <div class="avatar_details">
+          <span style="float:right;">
+              <a href="/functions/set_flair/?file={{flair[0]}}&uniqid={{user_session.sessionid}}" title="Set as primary flair" class="text-muted"><i class="fa fa-check" aria-hidden="true"></i></a>
+              <a href="/functions/remove_flair?file={{flair[0]}}&uniqid={{user_session.sessionid}}" title="Delete Flair" class="text-muted deletebutton"><i class="fa fa-times" aria-hidden="true"></i></a>
+            </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,68 +1,77 @@
-# SynDBB
+# SynDBB (Cyndi)
 
-SynDBB is a compilation of all the best parts of bulletin boards, intended for IRC/ZNC integration.  
-Code, layout and templates written from scratch. Images that are part of the design are also all custom-made.  
+SynDBB is a hybridization of different aspects of classic internet forums and imageboards.
+
 
 **Features:**
 
-*   All scripts and styles are hosted locally.
-*   Passwords are hashed client-side before they are submitted to the server, then hashed again server-side.
-*   File uploading system where you can upload files on-site or externally using curl/ShareX.
-*   File listing for all of your uploads with file info and thumbnails, sorted by date.
-*   Forum/channel system with the ability to create your own custom forums/channels with admin approval.
-*   Custom forums/channels can be made to have their own guidelines and description.
-*   List/grid view toggle for file uploads and forums/threads.
-*   Thread gallery/image view mode.
-*   Light/dark theme selector (easy to create/add themes).
-*   QDB style quote database for IRC quotes.
+*   File uploader with external upload support.
+*   Anonymous file uploader.
+*   Automatic Exif data removal on uploaded images.
+*   Deleted files securely wiped using "shred".
+*   File listing with file info and thumbnails.
+*   Temporary personal image galleries.
+*   Custom user-created channels.
+*   List and grid (catalog) view modes for channels.
+*   List and gallery view modes for threads.
+*   Rating system for threads, quotes and IRC.
+*   Site/IRC integration API.
 *   Avatar history with the ability to re-use avatars without uploading them.
-*   Users can submit their own emoticons and have them admin approved.
-*   Uploaded files get shredded (secure erased) when the user chooses to delete them.
-*   Pastebin system with a listing of all of your pastes.
-*   Thread/post karma (upvoting and downvoting).
-*   Karma positive/negative/total system for IRC.
-*   IRC statistics tracking for lines and words spoken.
-*   Lightweight.
-
-
-<a href="screenshots/1.png" target="_blank"><img src="screenshots/1.png" alt="[IMG]" width="200"/></a>  <a href="screenshots/2.png" target="_blank"><img src="screenshots/2.png" alt="[IMG]" width="200"/></a>  <a href="screenshots/3.png" target="_blank"><img src="screenshots/3.png" alt="[IMG]" width="200"/></a>  <a href="screenshots/4.png" target="_blank"><img src="screenshots/4.png" alt="[IMG]" width="200"/></a>  <a href="screenshots/5.png" target="_blank"><img src="screenshots/5.png" alt="[IMG]" width="200"/></a>  <a href="screenshots/6.png" target="_blank"><img src="screenshots/6.png" alt="[IMG]" width="200"/></a>  <a href="screenshots/7.png" target="_blank"><img src="screenshots/7.png" alt="[IMG]" width="200"/></a>  <a href="screenshots/8.png" target="_blank"><img src="screenshots/8.png" alt="[IMG]" width="200"/></a>  <a href="screenshots/9.png" target="_blank"><img src="screenshots/9.png" alt="[IMG]" width="200"/></a>  <a href="screenshots/10.png" target="_blank"><img src="screenshots/10.png" alt="[IMG]" width="200"/></a>  <a href="screenshots/11.png" target="_blank"><img src="screenshots/11.png" alt="[IMG]" width="200"/></a>  <a href="screenshots/12.png" target="_blank"><img src="screenshots/12.png" alt="[IMG]" width="200"/></a>  <a href="screenshots/13.png" target="_blank"><img src="screenshots/13.png" alt="[IMG]" width="200"/></a>
-
-It is an open-source cross-platform forum software written in Python + Flask. It's primarily intended to be used for the D2K5 website, however users are welcome and encouraged to submit improvements, features, feature requests, fixes and bug reports.
-
-*This code is released under the **[Q Public License 1.0 (QPL-1.0)](https://tldrlegal.com/license/q-public-license-1.0-(qpl-1.0)#summary "QPL-1.0")**. The full license is included in [LICENSE.md](LICENSE.md).*
+*   Custom emoticon submission (admin approval required).
+*   QDB style quote database for IRC quotes (quotes are admin approved).
+*   Simple pastebin.
+*   Improved site and IRC API.
+*   LDAP Authentication support (+ automatic migration)
+*   JSON based configuration file.
+*   Most aspects of the site configurable in config.json.
+*   Display names (+ display name generator).
+*   Username generator.
+*   Summary cards for user profiles.
+*   Profile and user tags.
+*   NSFW profile toggle.
+*   Tall avatar support (original avatar source image is used) for profiles (all members) and posts (donators).
+*   Various configuration options for custom channels (access control, moderator list, NSFW toggle, anon posting toggle, imageboard toggle, etc)
+*   Channel and thread info displayed on sidebar.
+*   User flairs.
+*   Multi-user/profile support (accounts can be linked together and switched between with ease).
+*   Mobile layout.
+*   Theme selector.
+*   All scripts and styles hosted locally.
 
 ## Setup
     chmod +x *.sh
-    ./install.sh
-    ./run.sh
+    chmod -R 0700 syndbb/static/data/
+    ./run.sh install
+    ./run.sh [http|uwsgi|windows]
 
-## Set proper permissions for the data folder
-This is where the avatars, file uploads, thumbnails and submitted emoticons will go.
-
-`chmod -R 0700 syndbb/static/data/`
 
 ----------
+
 
 ## Information for Developers
 
 ### Premade test accounts:
 
-    admin:admin
-    banneduser:testing
-    Poster:testing
+    synop:password (root admin)
+    council:password (regular admin)
+    peacekeeper:password
+    supporter:password
+    staff:password
+    citizen:password
+    tourist:password
+    banned:password 
 
 ### Ranks:
 
-#### Administrator
+#### Special Operations
 
 * Rank Integer: >=900
 * Has a red name.
 * Can approve/disapprove emoticons, channels.
 * Can change user ranks. (promote/demote)
-* Inherits permissions from lower ranks.
 
 
-#### Operator (Tier-1 Moderator)
+#### Federation Council
 
 * Rank Integer: >=500
 * Has a purple name.
@@ -70,25 +79,37 @@ This is where the avatars, file uploads, thumbnails and submitted emoticons will
 * Can view the users list.
 * Can ban/unban users.
 * Can edit/delete posts/threads.
-* Inherits permissions from lower ranks.
 
-#### Half-Operator (Tier-2 Moderator)
+#### Peacekeeper
 
 * Rank Integer: >=100
 * Has a green name.
-* Currently has no extra permissions.
+* Can ban/unban users.
+* Can edit/delete posts/threads.
 
-#### Gold Member
+#### Citizen (Supporter)
 
 * Rank Integer: >=50
-* Has a gold name.
+* Has a light blue name.
+* Can have animated and full size (tall) avatars in threads and on profile.
+* (Group name configurable in site config.)
+
+#### Citizen (Staff)
+
+* Rank Integer: >=20
+* Has a light red name.
 * Currently has no extra permissions.
-* *To-do:* Can upload animated avatars.
 
-#### Registered User
+#### Citizen
 
-* Rank Integer: <50
-* Has a blue name.
+* Rank Integer: >=10
+* Has a light blue name.
+* Currently has no extra permissions.
+
+#### Tourist
+
+* Rank Integer: 1
+* Has a grey blue name.
 * Can create threads, posts and pastes. 
 * Can upload files.
 * Can modify their profile.
@@ -103,3 +124,6 @@ Creates a ZNC user with the users' name and the IRC auth key provided in their p
 Requires https://github.com/unendingPattern/znc-httpadmin to be installed on the ZNC server and the IRC and ZNC details set properly inside the config file.
 
 You should have a specific ZNC user with admin privileges which only the server's IP has permission to contact.
+
+
+*This code is released under the **[Q Public License 1.0 (QPL-1.0)](https://tldrlegal.com/license/q-public-license-1.0-(qpl-1.0)#summary "QPL-1.0")**. The full license is included in [LICENSE.md](LICENSE.md).*

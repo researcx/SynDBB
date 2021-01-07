@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2017 by faggqt (https://faggqt.pw). All Rights Reserved.
+# Copyright (c) 2017 - 2020 Keira T (https://kei.info.gf). All Rights Reserved.
 # You may use, distribute and modify this code under the QPL-1.0 license.
 # The full license is included in LICENSE.md, which is distributed as part of this project.
 #
@@ -23,6 +23,31 @@ swallow_trailing_newline=True, replace_links=False)
 parser.add_simple_formatter('img', '<img src="%(value)s" onclick="window.open(this.src)" class="bbcode-image img-responsive inline-block" alt="[IMG]" />', replace_links=False)
 parser.add_simple_formatter('t', '<img src="%(value)s" onclick="window.open(this.src)" class="bbcode-image img-thumb inline-block" alt="[IMG]" />', replace_links=False)
 
+#Custom Thumbnail
+def imageboard_thumbnail(name, value, options, parent, context):
+    image = value
+    thumbnail = syndbb.os.path.splitext(value)[0]+"s.jpg"
+    return '<img src="%(thumb)s" onclick="window.open(\'%(link)s\')"class="bbcode-image img-thumb img-chan-thumb inline-block" alt="[IMG]" />' % {
+        'link': image,
+        'thumb': thumbnail,
+    }
+parser.add_formatter('ct', imageboard_thumbnail, replace_links=False, strip=True, swallow_trailing_newline=False)
+
+# #Custom Thumbnail
+# def custom_thumbnail(name, value, options, parent, context):
+#     if 'ct' in options:
+#         link = options['ct'].strip()
+#     elif options:
+#         link = list(options.keys())[0].strip()
+#     else:
+#         return value
+#     link = link
+#     return '<img src="%(thumb)s" onclick="window.open(\'%(link)s\')"class="bbcode-image img-thumb img-custom-thumb inline-block" alt="[IMG]" />' % {
+#         'link': link,
+#         'thumb': value,
+#     }
+# parser.add_formatter('ct', custom_thumbnail, replace_links=False, strip=True, swallow_trailing_newline=False)
+
 #Lists
 parser.add_simple_formatter('ul', '<ul>%(value)s</ul>', swallow_trailing_newline=True)
 parser.add_simple_formatter('ol', '<ol>%(value)s</ol>', swallow_trailing_newline=True)
@@ -32,8 +57,8 @@ parser.add_simple_formatter('li', '<li>%(value)s</li>', swallow_trailing_newline
 parser.add_simple_formatter('left', '<span style="float: left;">%(value)s</span>')
 parser.add_simple_formatter('right', '<span style="float: right;">%(value)s</span>')
 
-#Replies
-parser.add_simple_formatter('reply', '<a href="#%(value)s" style="border-bottom: 1px dashed #111;">&gt;%(value)s</a>', swallow_trailing_newline=False)
+#Replies    
+parser.add_simple_formatter('reply', '<a href="#%(value)s" style="font-size: 13px; font-weight: bold;">&gt;&gt;%(value)s</a>', swallow_trailing_newline=False)
 
 #Ban Message
 parser.add_simple_formatter('ban', '<span class="textcolor" style="color: #ff0000; font-weight: bold;">%(value)s</span>', swallow_trailing_newline=False)
@@ -52,6 +77,12 @@ def youtubelink(tag_name, value, options, parent, context):
     else:
         return "[Invalid video ID]"
 parser.add_formatter('youtube', youtubelink, replace_links=False, strip=True, swallow_trailing_newline=False)
+
+
+#Feeds
+def feed_id(tag_name, value, options, parent, context):
+    return "<span class='feed-id'>"+value+"</span>"
+parser.add_formatter('feed-id', feed_id, replace_links=False, strip=True, swallow_trailing_newline=False)
 
 #Text Background
 def render_bg(tag_name, value, options, parent, context):

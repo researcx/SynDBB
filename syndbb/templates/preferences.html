@@ -2,45 +2,37 @@
 <div class="preferences inner-container">
   <form class="form-horizontal" action="/functions/save_preferences" method="POST">
     <div class="form-group">
+      <label class="control-label col-xs-2">Display Name</label>
+      <div class="col-xs-10">
+        <i class="silk-icon icon_vcard_delete" style="position: absolute; right: 50px; top: 10px; cursor: pointer;" aria-hidden="true" title="Clear" onclick="clearName()"></i>
+        <i class="silk-icon icon_arrow_refresh" style="position: absolute; right: 23px; top: 11px; cursor: pointer;" aria-hidden="true" title="Randomize" onclick="randomDisplayName()"></i>
+        <input type="text" name="display_name" id="display_name_field" class="form-control" value="{{user.display_name}}">
+      </div>
+    </div>
+    <div class="form-group">
       <label class="control-label col-xs-2">Status</label>
       <div class="col-xs-10">
         <input type="text" name="status" class="form-control" value="{{user.status}}">
       </div>
     </div>
-    <div class="form-group">
-      <label class="control-label col-xs-2">Location</label>
+    <!-- <div class="form-group">
+      <label class="control-label col-xs-2">Chat Auth Code</label>
       <div class="col-xs-10">
-        <input type="text" name="location" class="form-control" value="{{user.location}}">
+        <input type="text" name="irc_auth" class="form-control" value="{{user.irc_auth}}">
+      </div>
+    </div> -->
+    <div class="form-group">
+      <label class="control-label col-xs-2">Profile Code</label>
+      <div class="col-xs-10">
+        <input type="text" name="user_auth" class="form-control" value="{{user.user_auth}}">
+        <span style="font-style: italic; font-size: 12px;">This allows you to link and easily <a href="{{ url_for('profiles') }}" class="link-dotted">switch between multiple profiles</a>.</span>
       </div>
     </div>
     <div class="form-group">
-      <label class="control-label col-xs-2">Gender</label>
+      <label class="control-label col-xs-2">Upload Code</label>
       <div class="col-xs-10">
-        <input type="text" name="gender" class="form-control" value="{{user.gender}}">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="control-label col-xs-2">Occupation</label>
-      <div class="col-xs-10">
-        <input type="text" name="occupation" class="form-control" value="{{user.occupation}}">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="control-label col-xs-2">Website</label>
-      <div class="col-xs-10">
-        <input type="text" name="url" class="form-control" value="{{user.site}}">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="control-label col-xs-2">IRC/XMPP Auth Code</label>
-      <div class="col-xs-10">
-        <input type="text" name="ircauth" class="form-control" value="{{user.ircauth}}">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="control-label col-xs-2">Upload Auth Code</label>
-      <div class="col-xs-10">
-        <input type="text" name="uploadauth" class="form-control" value="{{user.uploadauth}}">
+        <input type="text" name="upload_auth" class="form-control" value="{{user.upload_auth}}">
+        <span style="font-style: italic; font-size: 12px;">For use with external uploaders such as <a href="/upload/sharex" class="link-dotted" target="_blank">ShareX</a> or <a href="/upload/bash" class="link-dotted" target="_blank">cURL</a>.</span>
       </div>
     </div>
     <div class="form-group">
@@ -56,7 +48,24 @@
     <div class="form-group">
       <label class="control-label col-xs-2">Bio</label>
       <div class="col-xs-10">
-        <textarea class="form-control" name="bio" rows="10" data-provide="markdown">{{user.bio}}</textarea>
+        <textarea class="form-control" name="bio" rows="10" data-provide="text-editor">{{user.bio}}</textarea>
+      </div>
+    </div>
+     <div class="form-group">
+      <label class="control-label col-xs-2">Tags</label>
+      <div class="col-xs-10">
+        <textarea class="form-control" name="tags" rows="2" data-provide="text-editor">{{user.tags}}</textarea>
+        <span style="font-style: italic; font-size: 12px;">Space-separated list.</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-xs-offset-2 col-xs-10">
+        <div class="checkbox">
+          <label><input type="checkbox" name="nsfw_toggle" value="1" {% if user.nsfw_toggle %}checked="checked"{% endif %}><strong><abbr title="Not Safe For Work">NSFW</abbr> Profile</strong></label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" name="full_avatar" value="1" {% if user.full_avatar %}checked="checked"{% endif %}><strong>Full Avatar</strong></label>
+        </div>
       </div>
     </div>
     <div class="form-group">

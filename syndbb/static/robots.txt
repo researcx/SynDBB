@@ -1,3 +1,13 @@
+User-agent: *
+Disallow: /functions
+Disallow: /login
+Disallow: /register
+Disallow: /account
+Disallow: /info
+Disallow: /upload
+Disallow: /pastebin
+Disallow: /rules-and-terms
+
 User-agent: ia_archiver
 Disallow: /
 
@@ -21,6 +31,3 @@ Disallow: /*.jpg$
 Disallow: /*.jpeg$
 Disallow: /*.gif$
 Disallow: /*.png$
-
-User-agent: duggmirror
-Disallow: /

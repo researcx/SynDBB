@@ -8,7 +8,7 @@
         <div class="panel-body">
           <div class="media">
             <span class="media-left">
-                <img src="{{get_avatar(user.user_id)}}" alt="Avatar" class=" pull-left activity-avatar-size">
+                <img src="{{get_avatar_by_id(user.user_id)}}" alt="Avatar" class=" pull-left activity-avatar-size">
             </span>
             <div class="media-body">
               <form class="form-horizontal" id="activityform" action="/functions/dopaste" method="POST">
@@ -30,7 +30,7 @@
           <div class="media">
             <span class="media-left">
               <a href="/user/{{user.username}}">
-                <img src="{{get_avatar(user.user_id)}}" title="{{user.username}}" alt="Avatar" class=" pull-left activity-avatar-size">
+                <img src="{{get_avatar_by_id(user.user_id)}}" title="{{user.username}}" alt="Avatar" class=" pull-left activity-avatar-size">
               </a>
             </span>
             <div class="media-body">

@@ -3,13 +3,11 @@
   <head>
     <meta charset="utf-8">
     <meta name="description" content="D2-IRC">
-    <meta name="author" content="https://faggqt.pw/">
-    <meta name="referrer" content="no-referrer">
 
   	<link rel="apple-touch-icon" sizes="180x180" href="https://im.d2k5.com/client-icons/apple-touch-icon.png">
   	<link rel="icon" type="image/png" sizes="32x32" href="https://im.d2k5.com/client-icons/favicon-32x32.png">
   	<link rel="icon" type="image/png" sizes="16x16" href="https://im.d2k5.com/client-icons/favicon-16x16.png">
-  	<link rel="manifest" href="https://im.d2k5.com/client-icons/manifest.json">
+  	<link rel="manifest" href="https://im.d2k5.com/client-icons/js/manifest.json">
   	<link rel="mask-icon" href="https://im.d2k5.com/client-icons/safari-pinned-tab.svg" color="#0e5415">
   	<link rel="shortcut icon" href="https://im.d2k5.com/client-icons/favicon.ico">
     <link href="{{cdn_path()|safe}}{{get_filemtime('/css/font-awesome.min.css')}}" rel="stylesheet">
@@ -90,32 +88,38 @@
   {% if user_session.sessionid %}
 	<body>
     <div class="header stats_dynamic"> </div>
-    {% if user_session.sessionid and not user.ircauth %}
-    <div class="alertnotice">Looks like you haven't set up a chat password yet!<br/>Go <a href="/account/preferences" target="_blank">here</a> to do so now! We are so excited!
-    <br/><br/>
-    <a href="/im">Click here once you've set up your chat password!</a>
+    {% if user_session.sessionid and not user.irc_auth %}
+    <div class="alertnotice">
+      Unfinished
     </div>
     {% else %}
-		<iframe src="https://irc.d2k5.com/?nick={{user.username}}&password={{user.username}}/D2K5:{{user.ircauth}}&autojoin=true{% if hasRoom %}&chan={{hasRoom}}{% else %}&chan=d2k5{% endif %}" style="width: 100%; height: calc(100% - 22px); border: 0px; overflow: none;"></iframe>
+		<iframe src="https://irc.d2k5.com/?nick={{user.username}}&password={{user.username}}/{{ get_core_config()['site']['branding'] }}:{{user.irc_auth}}&autojoin=true{% if hasRoom %}&chan={{hasRoom}}{% else %}&chan=d2k5{% endif %}" style="width: 100%; height: calc(100% - 22px); border: 0px; overflow: none;"></iframe>
     {% endif %}
 	</body>
   {% else %}
   <body class="login">
     <div style="text-align: center;">
       <div id="login">
-        <a href="/" class="logo"><img src="/static/images/d2k5_logo.svg" style="-webkit-filter: invert(100%); filter:invert(100%);" alt="Welcome to D2K5" title="Welcome to D2K5" width="500" height="261"/></a>
+        <a href="/" class="logo"><img src="/static/images/logo.svg" style="-webkit-filter: invert(100%); filter:invert(100%);" alt="Welcome to {{ get_core_config()['site']['branding'] }}" title="Welcome to {{ get_core_config()['site']['branding'] }}" width="500" height="261"/></a>
         <br/><br/><br/>
         <form class="form-horizontal" id="loginform" action="/functions/login" method="POST">
             <input type="text" name="username" id="inputUsername" placeholder="Username" tabindex="1" required>
             <input type="password" id="inputPassword" placeholder="Password" tabindex="2" required> <button type="submit" class="btn btn-link" tabindex="3"><i class="silk-icon icon_bullet_go splashbtn" aria-hidden="true"></i></button>
             <br/>
             <input type="hidden" name="password" id="pword">
+            {% if get_core_config()['ldap']['enabled']  %}
+            <input type="hidden" name="password_hash" id="pword_hash">
+            {% endif %}
         </form>
       </div>
     </div>
   </body>
   <script src="/static/js/jquery-3.1.1.min.js"></script>
-  <script src="/static/js/auth/auth_chat.js"></script>
+  {% if get_core_config()['ldap']['enabled']  %}
+  <script src="/static/js/auth_plain/auth_chat.js"></script>
+  {% else %}
+  <script src="/static/js/auth_hash/auth_chat.js"></script>
+  {% endif %}
   <script src="/static/js/bootstrap.min.js"></script>
   <script src="/static/js/bootbox.min.js"></script>
   {% endif %}

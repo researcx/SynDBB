@@ -1,0 +1,18 @@
+﻿# dn: dc\=my_network\,dc\=com
+dn: dc=my_network,dc=com
+objectClass: dcObject
+objectClass: organization
+o: my_network.com
+dc: my_network
+
+# dn: cn\=Manager\,dc\=my_network\,dc\=com
+dn: cn=Manager,dc=my_network,dc=com
+objectClass: organizationalRole
+cn: Manager
+
+# dn: ou\=my_network\,dc\=my_network\,dc\=com
+dn: ou=my_network,dc=my_network,dc=com
+objectClass: top
+objectClass: organizationalUnit
+ou: my_network
+

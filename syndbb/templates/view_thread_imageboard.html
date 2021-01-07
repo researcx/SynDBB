@@ -1,0 +1,234 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="posthead text-muted" id="{{thread.id}}">
+  <span style="float: left; padding-left: 120px;">
+      <span class="op-info op-title">{{thread.title}}</span>
+      <span class="op-info op-time">{{human_date(thread.time)}}</span>
+      <span class="op-info op-user">
+      {% if thread.anonymous == 0 %}
+        {% if get_user_by_id(thread.user_id)['display_name'] %}
+          {{get_displayed_name_by_id(thread.user_id)}} <a href="/user/{{get_username_by_id(thread.user_id)}}" class="text-muted">({{get_username_by_id(thread.user_id)}})</a>
+        {% endif %}
+        <a href="/user/{{get_username_by_id(thread.user_id)}}" class="text-muted">
+          {{get_username_by_id(thread.user_id)}}
+        </a>
+      {% else %}
+        Anonymous
+      {% endif %}
+      </span>
+      <span class="op-info op-id">
+      <a name="post{{thread.id}}" href="#{{thread.id}}" class="postcounter">No.{{thread.id}}</a>
+      </span>
+      <br/>
+  </span>
+  {% if user_session.sessionid %}
+  <div style="float:right;">
+      {% if thread.anonymous == 1 and user.rank >= 500 %}
+        <a href="/user/{{get_username_by_id(thread.user_id)}}" class="posthead-button text-muted">{{get_username_by_id(thread.user_id)}}{% if get_displayed_name_by_id(thread.user_id) %}{% endif %}</a>
+      {% endif %}
+      {% if (thread.user_id == user.user_id) or (user.rank >= 500) %}
+      <a href="/post/{{thread.id}}/edit" title="Edit Post" class="posthead-button text-muted">Edit</i></a>
+
+      <a href="/functions/delete_post/?post_id={{thread.id}}&uniqid={{user_session.sessionid}}" title="Delete Post" class="posthead-button text-muted deletebutton">Delete</a>
+      {% endif %}
+
+      {% if user.rank >= 500 %}
+      <a href="/account/admin/ban/?user={{thread.user_id}}&post_id={{thread.id}}" target="_blank" title="Ban User" class="posthead-button text-muted">Ban</a>
+      {% endif %}
+  </div>
+  {% endif %}
+</div>
+<div class="chan-container panel panel-default postbg">
+  <div>
+    <div class="media">
+      <div class="thread-left">
+        <div style="max-width: 138px; margin-bottom: 4px;">
+            <a href="{{get_post_thumbnail(thread.id, 'imageboard-source', False)['href']}}" target="_blank"><img src="{{get_post_thumbnail(thread.id, 'imageboard-source', False)['src']}}" class="bbcode-image img-chan-thumb-side inline-block" alt="[IMG]"></a>
+        </div>
+        <!-- avatars used to go here -->
+      </div>
+      <div class="media-body">
+        <div class="post-container">
+          <div class="text-muted" style="float:right; text-align: right;">
+            <div class="RatingContainer Rating">
+              {% if user_session.sessionid %}
+                <a href="/functions/rate_post/?post_id={{thread.id}}&type=up&uniqid={{user_session.sessionid}}" class="RatingUp DoRatingUp"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
+              {% endif %}
+                <span class="PostRating-{{thread.id}} Rating">{{thread.rating}}</span>
+              {% if user_session.sessionid %}
+                <a href="/functions/rate_post/?post_id={{thread.id}}&type=down&uniqid={{user_session.sessionid}}" class="RatingDown DoRatingDown"><i class="fa fa-chevron-down" aria-hidden="true"></i></a>
+              {% endif %}
+            </div>
+          </div>
+          {{parse_bbcode(thread.content)|safe}}
+        </div>
+      </div>
+      <div class="post-extrainfo">
+        <div style="font-size: 12px; padding-top: 4px;">
+          {% if replies_to_post(thread.id) %}
+          <strong>Replies: </strong>
+          {% for replyID in replies_to_post(thread.id) %}
+          <a href="/post/{{replyID.id}}" class="reply-inline">#{{replyID.id}}</a>
+          {% endfor %}
+          {% else %}
+          &nbsp;
+          {% endif %}
+        </div>
+        {% if user_session.sessionid %}
+        <div class="text-muted actions-main replybutton" style="float:right; text-align: right;">
+            <i class="silk-icon icon_comment_add" aria-hidden="true"></i><a href="#reply" onclick="replyToThread('{{thread.id}}')" title="Reply" class="text-muted">Reply</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% for reply in replies %}
+<div class="posthead text-muted" id="{{reply.id}}">
+  <span style="float: left; padding-left: 120px;">
+      <span class="op-info op-title">{{reply.title}}</span>
+      <span class="op-info op-time">{{human_date(reply.time)}}</span>
+      <span class="op-info op-user">
+      {% if reply.anonymous == 0 %}
+        {% if get_user_by_id(reply.user_id)['display_name'] %}
+          {{get_displayed_name_by_id(reply.user_id)}} (<a href="/user/{{get_username_by_id(reply.user_id)}}" class="text-muted">{{get_username_by_id(reply.user_id)}}</a>)
+        {% else %}
+        <a href="/user/{{get_username_by_id(reply.user_id)}}" class="text-muted">
+          {{get_username_by_id(reply.user_id)}}
+        </a>
+        {% endif %}
+      {% else %}
+        Anonymous
+      {% endif %}
+      </span>
+      <span class="op-info op-id">
+      <a name="post{{reply.id}}" href="#{{reply.id}}" class="postcounter">No.{{reply.id}}</a>
+      </span>
+      <br/>
+  </span>
+  {% if user_session.sessionid %}
+  <div style="float:right;">
+      {% if reply.anonymous == 1 and user.rank >= 500 %}
+        <a href="/user/{{get_username_by_id(reply.user_id)}}" class="posthead-button text-muted">{{get_username_by_id(reply.user_id)}}{% if get_displayed_name_by_id(reply.user_id) %}{% endif %}</a>
+      {% endif %}
+      {% if (reply.user_id == user.user_id) or (user.rank >= 500) %}
+      <a href="/post/{{reply.id}}/edit" title="Edit Post" class="posthead-button text-muted">Edit</i></a>
+
+      <a href="/functions/delete_post/?post_id={{reply.id}}&uniqid={{user_session.sessionid}}" title="Delete Post" class="posthead-button text-muted deletebutton">Delete</a>
+      {% endif %}
+
+      {% if user.rank >= 500 %}
+      <a href="/account/admin/ban/?user={{reply.user_id}}&post_id={{reply.id}}" target="_blank" title="Ban User" class="posthead-button text-muted">Ban</a>
+      {% endif %}
+  </div>
+  {% endif %}
+</div>
+<div class="chan-container panel panel-default postbg">
+  <div>
+    <div class="media">
+      <div class="thread-left">
+        <div style="max-width: 138px; margin-bottom: 4px;">
+            <a href="{{get_post_thumbnail(reply.id, 'imageboard-source', False)['href']}}" target="_blank"><img src="{{get_post_thumbnail(reply.id, 'imageboard-source', False)['src']}}"  class="bbcode-image img-chan-thumb-side inline-block" alt="[IMG]"></a>
+        </div>
+        <!-- avatars used to go here -->
+      </div>
+      <div class="media-body">
+        <div class="post-container">
+          <div class="text-muted" style="float:right; text-align: right;">
+            <div class="RatingContainer Rating">
+              {% if user_session.sessionid %}
+                <a href="/functions/rate_post/?post_id={{reply.id}}&type=up&uniqid={{user_session.sessionid}}" class="RatingUp DoRatingUp"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
+              {% endif %}
+                <span class="PostRating-{{reply.id}} Rating">{{reply.rating}}</span>
+              {% if user_session.sessionid %}
+                <a href="/functions/rate_post/?post_id={{reply.id}}&type=down&uniqid={{user_session.sessionid}}" class="RatingDown DoRatingDown"><i class="fa fa-chevron-down" aria-hidden="true"></i></a>
+              {% endif %}
+            </div>
+          </div>
+          {{parse_bbcode(reply.content)|safe}}
+        </div>
+      </div>
+      <div class="post-extrainfo">
+        <div style="font-size: 12px; padding-top: 4px;">
+          {% if replies_to_post(reply.id) %}
+          <strong>Replies: </strong>
+          {% for replyID in replies_to_post(reply.id) %}
+          <a href="/post/{{replyID.id}}" class="reply-inline">#{{replyID.id}}</a>
+          {% endfor %}
+          {% else %}
+          &nbsp;
+          {% endif %}
+        </div>
+        {% if user_session.sessionid %}
+        <div class="text-muted actions-main replybutton" style="float:right; text-align: right;">
+            <i class="silk-icon icon_comment_add" aria-hidden="true"></i><a href="#reply" onclick="replyToThread('{{reply.id}}')" title="Reply" class="text-muted">Reply</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% if user_session.sessionid %}
+<div class="panel panel-default editor-box">
+  <div class="panel-body editor-box">
+    <div class="media">
+      <div class="media-body">
+        <div class="bbcode-editor">
+          <form class="form-horizontal" id="activityform" action="/functions/create_reply/" method="post">
+            <div class="bbcode-buttons">
+              <span class="bbcode-interact">
+                <button id="uploadContent" class="btn btn-primary">Upload File</button>
+                <button id="previewContent" class="btn btn-primary">Preview Post</button>
+                <button id="submitContent" class="btn btn-primary">Submit Post</button>
+              </span>
+              <span class="bbcode-button" title="Bold" onclick="insert_bbcode('b');"><i class="silk-icon icon_text_bold" aria-hidden="true"></i></span>
+              <span class="bbcode-button" title="Italics" onclick="insert_bbcode('i');"><i class="silk-icon icon_text_italic" aria-hidden="true"></i></span>
+              <span class="bbcode-button" title="Underline" onclick="insert_bbcode('u');"><i class="silk-icon icon_text_underline" aria-hidden="true"></i></span>
+              <span class="bbcode-button" title="Strikethrough" onclick="insert_bbcode('s');"><i class="silk-icon icon_text_strikethrough" aria-hidden="true"></i></span>
+              <span class="bbcode-button-spacer"></span>
+              <span class="bbcode-button" title="Link" onclick="insert_bbcode('url');"><i class="silk-icon icon_link" aria-hidden="true"></i></span>
+              <span class="bbcode-button" title="Image" onclick="insert_bbcode('img');"><i class="silk-icon icon_picture" aria-hidden="true"></i></span>
+              <span class="bbcode-button" title="Thumbnail" onclick="insert_bbcode('t');"><i class="silk-icon icon_image" aria-hidden="true"></i></span>
+              <span class="bbcode-button" title="YouTube" onclick="insert_bbcode('youtube');"><i class="silk-icon icon_film" aria-hidden="true"></i></span>
+              <span class="bbcode-button-spacer"></span>
+              <span class="bbcode-button" title="Font Size" onclick="insert_bbcode('size');"><i class="silk-icon icon_text_smallcaps" aria-hidden="true"></i></span>
+              <span class="bbcode-button" title="Font Color" onclick="insert_bbcode('color');"><i class="silk-icon icon_color_swatch" aria-hidden="true"></i></span>
+              <span class="bbcode-button" title="Emoticons" onclick="show_emoticons();"><i class="silk-icon icon_emoticon_smile" aria-hidden="true"></i></span>
+              <span class="bbcode-button-spacer"></span>
+              <span class="bbcode-button" title="Bullet List" onclick="insert_bbcode('bulletlist');"><i class="silk-icon icon_text_list_bullets" aria-hidden="true"></i></span>
+              <span class="bbcode-button" title="Ordered List" onclick="insert_bbcode('orderedlist');"><i class="silk-icon icon_text_list_numbers" aria-hidden="true"></i></span>
+              <span class="bbcode-button-spacer"></span>
+              <span class="bbcode-button" title="Code" onclick="insert_bbcode('code');"><i class="silk-icon icon_script_code" aria-hidden="true"></i></span>
+              <span class="bbcode-button" title="Quote" onclick="insert_bbcode('quote');"><i class="silk-icon icon_comment" aria-hidden="true"></i></span>
+              <span class="bbcode-button-spacer"></span>
+              <span class="bbcode-button" title="Align Left" onclick="insert_bbcode('left');"><i class="silk-icon icon_text_align_left" aria-hidden="true"></i></span>
+              <span class="bbcode-button" title="Align Center" onclick="insert_bbcode('center');"><i class="silk-icon icon_text_align_center" aria-hidden="true"></i></span>
+              <span class="bbcode-button" title="Align Right" onclick="insert_bbcode('right');"><i class="silk-icon icon_text_align_right" aria-hidden="true"></i></span>
+              <span class="bbcode-button-spacer"></span>
+              {% if channel.anon or get_linked_by_id(user.user_id) %}
+              <div class="bbcode-anon">
+                <strong>Posting as </strong>
+                <select name="post_as" id="post_as">
+                  {% if channel.anon %}
+                    <option value="0">anonymous</option>
+                  {% endif %}
+                  {% for linked_user in get_linked_by_id(user.user_id) %}
+                    <option value="{{linked_user['user_id']}}" {% if linked_user['user_id'] == user.user_id %}selected="selected"{% endif %}>{{get_displayed_name_by_username(linked_user['username'])}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              {% endif %}
+            </div>
+            <textarea id="postform" class="form-control bbcode-textarea" name="post_content" rows="5"></textarea>
+            <input type="hidden" id="reply" name="reply_to" value="{{thread.id}}">
+            <input type="hidden" id="replyToPost" name="reply_post" value="0">
+            <input type="hidden" name="uniqid" value="{{user_session.sessionid}}">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

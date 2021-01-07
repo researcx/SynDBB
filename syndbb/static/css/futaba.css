@@ -1,0 +1,256 @@
+body, html {
+    font-family: 'PT Sans Narrow', sans-serif;
+    font-size: 14px;
+    color: #000000;
+    background-color: #ffe;
+  }
+  
+  .modal-content{
+    background-color: #ffe;
+  }
+  
+  a {
+    color: #000000;
+    text-decoration: none;
+  }
+  
+  a:hover, p a:active, p a:focus {
+    color: #444444;
+    text-decoration: none;
+  }
+  
+  .text-muted {
+    color: #897b6a;
+  }
+  
+  @media (max-width: 1000px) {
+    .navbar-container {
+      background: #fff1e1 !important;
+      background-image: none !important;
+      border-top: 1px solid #ddcbb7 !important;
+      border-bottom: 1px solid #ddcbb7 !important;
+      position: absolute !important;
+      display: block;
+    }
+  
+    .navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover {
+      background-color: #f7e8d9;
+    }
+    .navbar-default .navbar-toggle {
+      border-color: #ddcbb7;
+      background: #fff1e1;
+    }
+  
+    ul.nav.navbar-nav .silk-icon{
+      display: none !important;
+    }
+    .navbar-title{
+      top: 70px !important;
+      margin-left: unset;
+    }
+    .navbar-title-sub{
+      top: 55px !important;
+      margin-left: unset;
+    }
+    .home-channel-icon img{
+      display: none !important;
+    }
+    .bbcode-editor{
+      width: 100%;
+    }
+    .navbar {
+      position: relative;
+      min-height: 120px;
+    }
+  }
+  
+  .navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand{
+    display: none;
+  }
+  
+  .welcome-back{
+    display: block !important;
+  }
+  
+  
+  .navbar-default {
+    border-color: #d2b79a;
+    background: #ffe;
+    border-bottom: 0px;
+    text-align: center;
+  }
+  nav.navbar div.container-fluid {
+    padding-left: 0px;
+  }
+  
+  .navbar-container {
+    background: transparent;
+    background-image: none;
+    border-top: 0px solid #e7e7e7;
+    border-left: 0px solid #e7e7e7;
+    position: unset;
+    display: block !important;
+    width: 100% !important;
+  }
+  ul.nav.navbar-nav .silk-icon{
+    display: none;
+  }
+  ul.nav.navbar-nav a{
+    font-weight: bold;
+    font-size: 10pt;
+  }
+  .inner-header {
+    background: transparent !important;
+    border-top: transparent !important;
+    border-bottom: transparent !important;
+    text-shadow: transparent 0px 0px 0px, rgba(0,0,0,1) 0px 0px 0px !important;
+  }
+  
+  div.post-container div.text-muted div.RatingContainer.Rating{
+    display: none;
+  }
+  
+  .table-header{
+    background: #ffe;
+    border-bottom: 0px none #ffe !important;
+  }
+  
+  .upload-box{
+    background: #ffe;
+  }
+  
+  .table > thead > tr > th{
+    border-bottom: 0px none #ffe !important;
+  }
+  
+  .posthead {
+    margin-top: 1px; 
+    background: #fff7e9;
+    border-color: #ecdec9 !important;
+    text-shadow: transparent 0px 0px 0px, rgba(0,0,0,1) 0px 0px 0px !important;
+  }
+  
+  .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:focus, .navbar-default .navbar-nav > .open > a:hover{
+    background: #eed8c1 !important;
+  }
+  
+  
+  li:hover, li:active, li:focus, .dropdown-menu li:hover{
+    background: #ffe;
+  }
+  
+  .channel-list {
+    background: #f7e8d9 !important;
+  }
+  
+  li.dropdown.open ul.dropdown-menu li {
+    overflow: visible;
+    border-top: 0px;
+  }
+  
+  .form-control{
+    -webkit-border-radius: 0px !important;
+    -moz-border-radius: 0px !important;
+    border-radius: 0px !important;
+  }
+  
+  .bbcode-editor {
+    background: transparent !important;
+    border: 0px none #ddcbb7 !important;
+    border-left: 0px solid #ddcbb7 !important;
+    border-right: 0px solid #ddcbb7 !important;
+    border-bottom: 0px solid #ddcbb7 !important;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+  }
+  
+  .editor-box{
+    padding: 0px;
+  }
+  
+  .thread-left{
+    background: transparent;
+    border-right: 1px solid transparent;
+  }
+  
+  .panel{
+    background-color: #ffe;
+  }
+  
+  .reply-container{
+    border-bottom: 0px none transparent !important;
+  }
+  
+  .actions-main.replybutton {
+    border: 1px solid transparent;
+    background: transparent;
+  }
+  
+  .actions-main.replybutton i{
+    display: none;
+  }
+  
+  .posthead.text-muted span i.silk-icon {
+    display: none;
+  }
+  
+  .table-striped > tbody > tr:nth-of-type(2n+1) {
+    background-color: #fff9e5;
+  }
+  .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th{
+    border-top: 0px none transparent !important;
+  }
+  .footer {
+    border-top: 0px none transparent;
+    background-color: transparent;
+    text-shadow: 0 1px 0 #fff;
+  }
+  .footer-notice{
+    margin-right: 220px !important;
+  }
+  .home-channel-threads span{
+    background: #f6f1e1;
+    border: 1px solid #ddcbb7;
+  }
+  .navbar-nav > li > .dropdown-menu{
+    background: #fff6ed !important;
+    border: 1px solid #ddcbb7;
+  }
+  
+  
+  .navbar-title {
+    color: #000 !important;
+    text-decoration: none !important;
+    font-size: 18pt;
+    font-weight: bold;
+    left: unset;
+    position: absolute;
+    top: 42px;
+    margin: 0 auto;
+    margin-left: -90px;
+  }
+  
+  .navbar-title-sub {
+    text-decoration: none !important;
+    font-size: 9pt;
+    font-weight: bold;
+    margin: 0 auto;
+    top: 24px;
+    position: absolute;
+    left: unset;
+    margin-left: -100px;
+  }
+  
+  .group-span-filestyle .buttonText {
+    margin-left: 6px;
+  }
+  
+  pre{
+    background-color: #ffecd1;
+    border: 1px solid #fed8b2;
+  }
+  
+  .op-info{
+    font-size: 10pt;
+  }

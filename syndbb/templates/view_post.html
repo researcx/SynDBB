@@ -14,7 +14,7 @@
             <i title="{{human_date(post.time)}}">{{time_ago(post.time)}}&nbsp;</i><br/>
         </span>
         {% if post.anonymous == 0 %}
-        <a href="/user/{{post.user.username}}" class="activity_poster username {{get_group_style_from_id(post.user_id)}}"><b>{{post.user.username}}</b></a>
+        <a href="/user/{{get_username_by_id(post.user_id)}}" class="activity_poster username {{get_group_style_by_id(post.user_id)}}"><b>{{get_displayed_name_by_id(post.user_id)}}</b></a>
         {% else %}
         <a href="#" class="activity_poster" style="color: #585858; font-weight: bold;"><b>Anonymous</b></a>
         {% endif %}

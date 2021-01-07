@@ -2,7 +2,7 @@ $(document).ready(function() {
     if(!getCookie("nsfwAllow")){
       bootbox.confirm({
           title: "NSFW Warning",
-          message: "This forum may contain content which has been deemed <strong>Not Safe For Work</strong>!",
+          message: "This page may contain content which has been deemed <strong>Not Safe For Work</strong>!",
           backdrop: false,
           closeButton: false,
           onEscape: false,

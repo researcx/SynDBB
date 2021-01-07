@@ -6,18 +6,20 @@
   <div class="panel-body">
     <div class="media">
       <span class="media-left">
-        <a href="/user/{{get_name(channel.owned_by)}}" class="profile-inline">
-          <img src="{{get_avatar(channel.owned_by)}}" title="{{get_name(channel.owned_by)}}" alt="Avatar" class=" pull-left activity-avatar-size">
+        <a href="/user/{{get_username_by_id(channel.owned_by)}}" class="profile-inline">
+          <img src="{{get_avatar_by_id(channel.owned_by)}}" title="{{get_username_by_id(channel.owned_by)}}" alt="Avatar" class=" pull-left activity-avatar-size">
         </a>
       </span>
       <div class="media-body">
         <span class="text-muted" style="float:right; text-align: right;">
-          <i>#{{channel.short_name}}&nbsp;</i><br/>
           <a href="/functions/approve_channel/?channel={{channel.id}}&uniqid={{user_session.sessionid}}" title="Approve" class="text-muted"><i class="silk-icon icon_tick" aria-hidden="true"></i></a>
           <a href="/functions/disapprove_channel/?channel={{channel.id}}&uniqid={{user_session.sessionid}}" title="Disapprove" class="text-muted"><i class="silk-icon icon_cross" aria-hidden="true"></i></a>
         </span>
-        <a href="/user/{{get_name(channel.owned_by)}}" class="activity_poster"><b>{{channel.name}}</b></a><br/>
-        <span class="text-muted">{{channel.description}}</span><br/></div>
+        #{{channel.short_name}} &mdash; <a href="/user/{{get_username_by_id(channel.owned_by)}}" class="activity_poster"><b>{{channel.name}}</b></a><br/>
+        <strong>Access level:</strong> {{channel.auth}}<br/>
+        <strong>Users:</strong> {{channel.user_list}}<br/>
+        <strong>Moderators:</strong> {{channel.mod_list}}<br/>
+        <span class="text-muted"> {{channel.description}}</span><br/></div>
     </div>
   </div>
 </div>

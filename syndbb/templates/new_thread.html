@@ -1,14 +1,14 @@
 {% extends "layout.html" %} {% block body %}
 {% if user_session.sessionid %}
-<div class="panel panel-default">
-  <div class="panel-body">
+<div class="panel panel-default editor-box">
+  <div class="panel-body editor-box">
     <div class="media">
       <div class="media-body">
         <div class="bbcode-editor">
           <form class="form-horizontal" id="activityform" action="/functions/create_thread/" method="post">
             <select id="post_icon" name="post_icon" style="width:100px;">
               <option value="">Thread Icon</option>
-              {% for icon in get_post_icons() %}
+              {% for icon in get_post_icons(whitelist=True) %}
               <option value="{{icon[1]}}" data-image="{{cdn_path()|safe}}/images/posticons/{{icon[0]}}"></option>
               {% endfor %}
             </select>
@@ -44,16 +44,22 @@
               <span class="bbcode-button" title="Align Center" onclick="insert_bbcode('center');"><i class="silk-icon icon_text_align_center" aria-hidden="true"></i></span>
               <span class="bbcode-button" title="Align Right" onclick="insert_bbcode('right');"><i class="silk-icon icon_text_align_right" aria-hidden="true"></i></span>
               <span class="bbcode-button-spacer"></span>
-              {% if forum.anon %}
+              {% if channel.anon or get_linked_by_id(user.user_id) %}
               <div class="bbcode-anon">
-                <label class="checkbox-inline">
-                    <input type="checkbox" id="anonymous" name="anonymous" value="1"><span class="text">Post Anonymously</span>
-                </label>
+                <strong>Posting as </strong>
+                <select name="post_as" id="post_as">
+                  {% if channel.anon %}
+                    <option value="0">anonymous</option>
+                  {% endif %}
+                  {% for linked_user in get_linked_by_id(user.user_id) %}
+                    <option value="{{linked_user['user_id']}}" {% if linked_user['user_id'] == user.user_id %}selected="selected"{% endif %}>{{get_displayed_name_by_username(linked_user['username'])}}</option>
+                  {% endfor %}
+                </select>
               </div>
               {% endif %}
             </div>
             <input type="hidden" name="uniqid" value="{{user_session.sessionid}}">
-            <input type="hidden" name="category" value="{{forum.id}}">
+            <input type="hidden" name="category" value="{{channel.id}}">
           </form>
         </div>
       </div>

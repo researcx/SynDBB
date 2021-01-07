@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2017 by faggqt (https://faggqt.pw). All Rights Reserved.
+# Copyright (c) 2017 - 2020 Keira T (https://kei.info.gf). All Rights Reserved.
 # You may use, distribute and modify this code under the QPL-1.0 license.
 # The full license is included in LICENSE.md, which is distributed as part of this project.
 #
@@ -21,7 +21,7 @@ HOUR = 60 * MINUTE
 DAY = 24 * HOUR
 MONTH = 30 * DAY
 
-@syndbb.cache.memoize(timeout=60)
+@syndbb.cache.memoize(timeout=60) # get_ban_expiry
 def get_ban_expiry(unixtime):
     dt = syndbb.datetime.fromtimestamp(unixtime)
     now = syndbb.datetime.now()
@@ -105,21 +105,21 @@ def unix_time_current():
 
 #Display how long ago something happened in a readable format
 @syndbb.app.template_filter('time_ago')
-@syndbb.cache.memoize(timeout=60)
+@syndbb.cache.memoize(timeout=60) # time_ago
 def time_ago(unixtime):
     return syndbb.humanize.naturaltime(syndbb.datetime.now() - syndbb.timedelta(seconds=unix_time_current() - int(unixtime)))
 syndbb.app.jinja_env.globals.update(time_ago=time_ago)
 
 #Display a somewhat normal date
 @syndbb.app.template_filter('human_date')
-@syndbb.cache.memoize(timeout=60)
+@syndbb.cache.memoize(timeout=60) # human_date
 def human_date(unixtime):
     return syndbb.datetime.fromtimestamp(int(unixtime)).strftime('%Y-%m-%d %H:%M:%S')
 syndbb.app.jinja_env.globals.update(human_date=human_date)
 
-#Display a somewhat normal date for threads/forums
+#Display a somewhat normal date for threads/channels
 @syndbb.app.template_filter('recent_date')
-@syndbb.cache.memoize(timeout=60)
+@syndbb.cache.memoize(timeout=60) # recent_date
 def recent_date(unixtime):
     dt = syndbb.datetime.fromtimestamp(unixtime)
     today = syndbb.datetime.now()
@@ -146,14 +146,14 @@ syndbb.app.jinja_env.globals.update(recent_date=recent_date)
 
 #Display a somewhat normal size
 @syndbb.app.template_filter('human_size')
-@syndbb.cache.memoize(timeout=60)
+@syndbb.cache.memoize(timeout=60) # human_size
 def human_size(filesize):
     return syndbb.humanize.naturalsize(filesize)
 syndbb.app.jinja_env.globals.update(human_size=human_size)
 
 
 @syndbb.app.template_filter('get_filemtime')
-@syndbb.cache.memoize(timeout=60)
+@syndbb.cache.memoize(timeout=60) # get_filemtime
 def get_filemtime(file):
     filepath = syndbb.app.static_folder + file
     if syndbb.os.path.isfile(filepath):
@@ -165,12 +165,9 @@ def get_filemtime(file):
 syndbb.app.jinja_env.globals.update(get_filemtime=get_filemtime)
 
 @syndbb.app.template_filter('cdn_path')
-@syndbb.cache.memoize(timeout=60)
+@syndbb.cache.memoize(timeout=86400) # cdn_path
 def cdn_path():
-    if not syndbb.app.debug:
-        cdn = syndbb.cdn
-    else:
-        cdn = syndbb.request.url_root + "static"
+    cdn = syndbb.core_config['site']['cdn_url'] 
 
     return cdn
 syndbb.app.jinja_env.globals.update(cdn_path=cdn_path)
@@ -184,15 +181,24 @@ def get_theme():
         if theme == "invert":
             themepath = '<link id="themeselector" href="' + cdn_path() + get_filemtime('/css/invert.css') + '" rel="stylesheet">'
 
+        if theme == "yotsuba":
+            themepath = '<link id="themeselector" href="' + cdn_path() + get_filemtime('/css/yotsuba.css') + '" rel="stylesheet">'
+
+        if theme == "futaba":
+            themepath = '<link id="themeselector" href="' + cdn_path() + get_filemtime('/css/futaba.css') + '" rel="stylesheet">'
+
+        if theme == "midnight":
+            themepath = '<link id="themeselector" href="' + cdn_path() + get_filemtime('/css/midnight.css') + '" rel="stylesheet">'
+
         if theme == "oify":
             themepath = '''<link id="themeselector" href="''' + cdn_path() + get_filemtime('/css/oify.css') + '''" rel="stylesheet">
             
-            <audio style="display: none;" id="yiffmusic" controls autoplay loop>
-              <source src="https://i.hardcats.net/faggqt/Tfrsem9DT2.mp3" type="audio/mpeg">
+            <audio style="display: none;" id="oifymusic" controls autoplay loop>
+              <source src="''' + cdn_path() + '''/data/oifymusic.mp3" type="audio/mpeg">
             </audio>
 
             <script>
-                var audio = document.getElementById("yiffmusic");
+                var audio = document.getElementById("oifymusic");
                 audio.volume = 0.5;
             </script>'''
         return themepath

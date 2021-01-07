@@ -1,21 +1,24 @@
 {% extends "layout.html" %}{% block body %}
-<div class="thread-title"><span style="float: right;">{{human_size(total_size)}}</span>{{filecount}} files</div>
-<div class="upload-title">&nbsp;</div>
+<div class="upload-title">
+  <a href="/account/preferences" title="Settings" style="float:right; margin-left: 10px;"><i class="fa fa-cog" aria-hidden="true"></i></a>
+  <a href="/upload" title="Regular Upload" style="float:right; margin-left: 10px;"><i class="fa fa-user-o" aria-hidden="true"></i></a>
+</div>
 <div class="panel panel-default">
   <div class="panel-body">
     <form id="uploadform" action="/functions/upload" method="post" enctype="multipart/form-data">
       <div class="form-group">
         <input id="file" name="file" class="filestyle" onchange="this.form.submit()" tabindex="-1" type="file">
         <input type="hidden" name="uploader" value="upload_anon">
-        <div class="bbcode-anon" style="margin-bottom: -100px;">
-          <label class="checkbox-inline">
-            <input type="hidden" id="anonymous" name="anonymous" checked value="1"><a href="/account/preferences" title="Preferences" style="border-bottom: 1px dotted black; float:right; margin-left: 12px;">Change displayed URL</a><br/>
-          </label>
-            <br/><br/>
-                <b>Upload URL:</b> {{uploadurl}}{{uploader_name}}/&lt;filename&gt; (<a href="/account/preferences" title="User Preferences" style="border-bottom: 1px dotted black;">change</a>)<br/>
-                Thumbnails are not rendered for anonymous files.<br/>
-                Deleted files are <a href="https://en.wikipedia.org/wiki/Shred_(Unix)"target="_blank" class="link-dotted">securely wiped using "shred"</a>. This also applies for anything else deleted on this site.<br/>
-                All exif data is removed from images automatically.<br/><br/><br/>
+        <input type="hidden" id="anonymous" name="anonymous" checked value="1" />
+        <div class="upload-box">
+
+          <span style="font-style: italic; font-size: 12px;"><a href="https://en.wikipedia.org/wiki/Exif"target="_blank" class="link-dotted">Exif</a> data is automatically removed from images and deleted files are securely wiped using <a href="https://en.wikipedia.org/wiki/Shred_(Unix)"target="_blank" class="link-dotted">"shred"</a>.</span>
+
+          <span style="float: right;">{{human_size(total_size)}} - {{filecount}} files</span>
+
+          <br/><br/>
+
+          <b>URL:</b> {{uploadurl}}{{uploader_name}}/&lt;filename&gt; (<a href="/account/preferences" title="User Preferences" style="border-bottom: 1px dotted black;">change</a>)<br/>
 <!--
           <label class="checkbox-inline">
             <input type="checkbox" id="timedelete" name="timedelete" value="1"><span class="text">Delete in 24 hours</span>
@@ -38,15 +41,6 @@
 {{ pagination.links }}
 </div>
   <table class="file-list table table-striped" id="uploads">
-    <thead>
-        <tr>
-            <th></th>
-            <th>Filename</th>
-            <th>Size</th>
-            <th>Date</th>
-            <th>Options</th>
-        </tr>
-    </thead>
     <tbody>
       {% for file in file_list %}
       <tr>
@@ -60,11 +54,6 @@
     </tbody>
   </table>
 <div class="upload-pagination">
-<form action="/upload/anonymous/" class="amountselector" method="get">
-  <select name="amount" onchange="this.form.submit()">
-      {{ countselector | safe }}
-  </select>
-</form>
 {{ pagination.links }}
 </div>
 </div>

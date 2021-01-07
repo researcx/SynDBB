@@ -1,0 +1,92 @@
+{
+    "server":{
+            "host": "127.0.0.1",
+            "port": 5000,
+            "workers": 4,
+            "processes": 4,
+            "threads": 4,
+            "secret":"INVALID",
+            "hash": "INVALID",
+            "database": "mysql://<username>:<password>@<host>/<database>",
+            "debug": true
+    },
+    "site":{
+            "domain": "127.0.0.1",
+            "branding": "SynDBB Site",
+            "contact": "contact@example.org",
+            "year_founded": "2020",
+            "rules_and_terms_url": "/rules-and-terms/",
+            "info_url": "/info/",
+            "cdn_url": "http://127.0.0.1:5000/static",
+            "donator_group_name": "Donator",
+            "api": "INVALID_API",
+            "search": true,
+            "registration": true,
+            "invite_only": false,
+            "show_recent_posts": true,
+            "show_recent_posts_reg_only": false,
+            "show_recent_posts_public": ["general", "tech", "media", "news"],
+            "show_recent_posts_reg": ["random", "lewd"],
+            "show_sidebar_status": true,
+            "show_sidebar_status_reg_only": false,
+            "show_statistics": true,
+            "show_statistics_file_progress": true,
+            "show_statistics_reg_only": false,
+            "show_public_bans": true,
+            "show_donate_info": true,
+            "display_message_counts": true,
+            "is_shop_enabled": false,
+            "post_timeout": 15,
+            "quote_timeout": 10
+    },
+    "software":{
+            "name": "SynDBB",
+            "url": "<a href='https://github.com/D2K5/syndbb'>SynDBB</a>",
+            "codename": "cyndi",
+            "version": "1.4",
+            "hash": "N/A",
+            "python": "",
+            "flask": ""
+    },
+    "irc":{
+            "network": "INVALID",
+            "host": "irc.example.org",
+            "port": 6667
+    },
+    "znc":{
+            "host": "0.0.0.0",
+            "port": 6697,
+            "user": "INVALID",
+            "password": "INVALID"
+    },
+    "ldap":{
+            "enabled": true,
+            "host": "127.0.0.1",
+            "port": 389,
+            "tls": false,
+            "timeout": 10,
+            "attribute_sn": "sn",
+            "attribute_cn": "cn",
+            "attribute_displayname": "displayName",
+            "attribute_password": "userPassword",
+            "entry_rdn": ["cn"],
+            "classes": ["inetOrgPerson"],
+            "base_dn": "ou=Group,dc=example,dc=com",
+            "user": "cn=Manager,dc=example,dc=com",
+            "password": "INVALID"
+    },
+    "hcaptcha":{
+            "enabled": true,
+            "key": "INVALID",
+            "secret": "INVALID"
+    },
+    "cache":{
+            "type": "simple"
+    },
+    "redis":{
+            "host": "localhost",
+            "port": 6379,
+            "url": "redis://localhost:6379",
+            "prefix": "fcache"
+    }
+}

@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2017 by faggqt (https://faggqt.pw). All Rights Reserved.
+# Copyright (c) 2017 - 2020 Keira T (https://kei.info.gf). All Rights Reserved.
 # You may use, distribute and modify this code under the QPL-1.0 license.
 # The full license is included in LICENSE.md, which is distributed as part of this project.
 #
@@ -10,7 +10,7 @@ from PIL import Image
 from werkzeug.utils import secure_filename
 
 from syndbb.models.get_emote import get_emote, get_submitted_emote
-from syndbb.models.users import d2_user, checkSession
+from syndbb.models.users import d2_user, check_session_by_id
 
 @syndbb.app.route("/emoticons/")
 def emoticons():
@@ -19,14 +19,14 @@ def emoticons():
     return syndbb.render_template('emoticons.html', emote_list=emote_list, dynamic_js_footer=dynamic_js_footer, title="Emoticons", subheading=[""])
 
 
-@syndbb.app.route("/submit-emoticon/")
+@syndbb.app.route("/request-emoticon/")
 def submit_emoticon():
     if 'logged_in' in syndbb.session:
         dynamic_js_footer = ["js/lazyload.transpiled.min.js", "js/bootbox.min.js", "js/delete.js"]
         emote_list = get_submitted_emote()
-        return syndbb.render_template('submit-emoticon.html', emote_list=emote_list, dynamic_js_footer=dynamic_js_footer, title="Submit Emoticon", subheading=["Emoticons"])
+        return syndbb.render_template('request_emoticon.html', emote_list=emote_list, dynamic_js_footer=dynamic_js_footer, title="New Emoticon", subheading=["Emoticons"])
     else:
-        return syndbb.render_template('error_not_logged_in.html', title="Submit Emoticon", subheading=["Emoticons"])
+        return syndbb.render_template('error_not_logged_in.html', title="New Emoticon", subheading=["Emoticons"])
 
 
 @syndbb.app.route("/functions/delete_emoticon/")
@@ -35,7 +35,7 @@ def delete_emoticon():
     uniqid = syndbb.request.args.get('uniqid', '')
 
     if uniqid:
-        userid = checkSession(uniqid)
+        userid = check_session_by_id(uniqid)
         if userid:
             user = d2_user.query.filter_by(user_id=userid).first()
             emotepath = syndbb.app.static_folder + "/data/emoticons/" + user.username + "/" + emote
@@ -55,7 +55,7 @@ def delete_emoticon():
 def upload_emoticon():
     if syndbb.request.method == 'POST':
         if 'logged_in' in syndbb.session:
-            userid = checkSession(str(syndbb.session['logged_in']))
+            userid = check_session_by_id(str(syndbb.session['logged_in']))
             if userid:
                 user = d2_user.query.filter_by(user_id=userid).first()
                 uploadfolder = syndbb.app.static_folder + "/data/emoticons/" + user.username + "/"

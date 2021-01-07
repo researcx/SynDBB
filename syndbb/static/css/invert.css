@@ -3,7 +3,7 @@ html{
   -webkit-filter: invert(100%);
   background: #000;
 }
-img, button, .forum_poster, .post-usertitle, .silk-icon, .username, .karma, .btn, .readnotice, iframe, .regnotice, .alertnotice, .authbutton, .textcolor{
+img, button, .channel_poster, .post-usertitle, .silk-icon, .username, .karma, .btn, .readnotice, iframe, .regnotice, .alertnotice, .authbutton, .textcolor{
   filter: invert(100%);
   -webkit-filter: invert(100%);
 }

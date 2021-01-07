@@ -1,0 +1,1 @@
+ALTER TABLE `d2_user` ADD `nsfw_toggle` INT NOT NULL DEFAULT '0' AFTER `upload_url`, ADD `full_avatar` INT NOT NULL DEFAULT '0' AFTER `nsfw_toggle`, ADD `tags` LONGTEXT NULL DEFAULT NULL AFTER `full_avatar`; 

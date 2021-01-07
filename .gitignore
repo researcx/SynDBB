@@ -1,5 +1,7 @@
 # Configuration
-/config
+config
+config.json
+flask_monitoringdashboard.db
 
 # Database
 /syndbb/syndbb.db
@@ -9,6 +11,7 @@
 /syndbb/static/data/uploads/*
 /syndbb/static/data/avatars/*
 /syndbb/static/data/emoticons/*
+syndbb/static/data/flair/*
 
 #Thread grid-view thumbnails
 /syndbb/static/data/threadimg/grid/*

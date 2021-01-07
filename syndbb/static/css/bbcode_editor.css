@@ -1,13 +1,12 @@
 .bbcode-editor{
   background: #eeeeee;
-  border: 1px solid #ccc;
-  -webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	border-radius: 4px;
-  padding: 4px;
+  padding: 8px;
 }
 .bbcode-buttons{
   padding: 8px;
+}
+div.panel-body.editor-box{
+  padding: 0px !important;
 }
 .bbcode-button{
   padding: 4px;
@@ -36,12 +35,9 @@
   padding: 2px 0px 6px 0px;
 }
 .bbcode-anon{
-  float: right;
-  margin-right: 24px;
-  background: #fff;
-  padding: 6px;
-  margin-top: -4px;
-  border-radius: 4px;
+  padding: 2px 6px 2px 6px;
+  margin-top: 4px;
+  margin-left: -6px;
 }
 .bbcode-anon .checkbox-inline{
   padding-top: 0px;

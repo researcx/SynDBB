@@ -1,9 +1,7 @@
 {% extends "layout.html" %} {% block body %}
 <table class="event-list table table-striped table-header">
   <thead>
-      <th>Session ID</th>
-      <th>IP</th>
-      <th>UserAgent</th>
+      <th>ID</th>
       <th>Time</th>
       <th>Date</th>
       <th>Type</th>
@@ -11,9 +9,7 @@
   <tbody>
     {% for login in logins %}
     <tr>
-        <td>#{{login.iphash}}</td>
-        <td>{{login.ip}}</td>
-        <td>{{login.useragent}}</td>
+        <td>{{login.iphash}}</td>
         <td>{{time_ago(login.time)}}</td>
         <td>{{human_date(login.time)}}</td>
         {% if login.login == 0 %}

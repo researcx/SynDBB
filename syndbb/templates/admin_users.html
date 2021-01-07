@@ -5,19 +5,19 @@
   <div class="panel-body">
     <div class="media">
       <span class="media-left">
-        <a href="/user/{{get_name(luser.user_id)}}" class="profile-inline">
-          <img src="{{get_avatar(luser.user_id)}}" title="{{get_name(luser.user_id)}}" alt="Avatar" class=" pull-left activity-avatar-size">
+        <a href="/user/{{get_username_by_id(luser.user_id)}}" class="profile-inline">
+          <img src="{{get_avatar_by_id(luser.user_id)}}" title="{{get_username_by_id(luser.user_id)}}" alt="Avatar" class=" pull-left activity-avatar-size">
         </a>
       </span>
       <div class="media-body">
         <span class="text-muted" style="float:right; text-align: right;">
-          <i>{{get_user_title(luser.user_id)}}&nbsp;</i><br/>
+          <i>{{get_title_by_id(luser.user_id)}}&nbsp;</i><br/>
           <a href="/functions/drop_session/?user={{luser.user_id}}&uniqid={{user_session.sessionid}}" title="Drop Sessions (Force Log Out)" class="text-muted deletebutton"><i class="silk-icon icon_key_delete" aria-hidden="true"></i></a>&nbsp;
           <a href="/account/admin/password/?user={{luser.user_id}}" title="Change User Password" class="text-muted"><i class="silk-icon icon_lock_edit" aria-hidden="true"></i></a>&nbsp;
           <a href="/account/admin/rank/?user={{luser.user_id}}" title="Change User Rank" class="text-muted"><i class="silk-icon icon_star" aria-hidden="true"></i></a>&nbsp;
           <a href="/account/admin/ban/?user={{luser.user_id}}" title="Ban User" class="text-muted"><i class="silk-icon icon_delete" aria-hidden="true"></i></a>&nbsp;
         </span>
-        <a href="/user/{{get_name(luser.user_id)}}" class="activity_poster username {{get_group_style_from_id(luser.user_id)}}"><b>{{get_name(luser.user_id)}}</b></a><br/>
+        <a href="/user/{{get_username_by_id(luser.user_id)}}" class="activity_poster username {{get_group_style_by_id(luser.user_id)}}"><b>{{get_username_by_id(luser.user_id)}}</b></a><br/>
         <span class="text-muted">Registered {{time_ago(luser.join_date)}}.</span><br/></div>
     </div>
   </div>

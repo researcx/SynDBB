@@ -7,7 +7,7 @@
     <div class="panel-body">
       <span style="font-size: 15pt;">
         {% if invite.used_by != 0 %}
-          Invite used by <a href="/user/{{get_name(invite.used_by)}}" class="text-muted">{{get_name(invite.used_by)}}</a>
+          Invite used by <a href="/user/{{get_username_by_id(invite.used_by)}}" class="text-muted">{{get_username_by_id(invite.used_by)}}</a>
         {% else %}
           <a href="/register/{{ invite.code }}" class="text-muted">{{ invite.code }}</a>
         {% endif %}

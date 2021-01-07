@@ -2,27 +2,41 @@
       <div class="inner-header">
         Official Channels
       </div>
-      <table class="home-forum-list table table-striped">
+      {% if get_channel_list(0) %}
+      <table class="home-channel-list table table-striped">
         <tbody>
-          {{ get_channel_list(1)|safe }}
+          {{ get_channel_list(0)|safe }}
         </tbody>
       </table>
-<!--
+      {% endif %}
+
+      {% if get_channel_list(2) %}
       <div class="inner-header">
-        Unofficial Channels
+        Community Channels
       </div>
-      <table class="home-forum-list table table-striped">
+      <table class="home-channel-list table table-striped">
         <tbody>
-           get_channel_list(0)|safe 
+          {{ get_channel_list(2)|safe }}
         </tbody>
       </table>
--->
-      <div class="inner-header">
-        Recent Posts
-      </div>
-      <table class="home-forum-list recent-post-list table table-striped">
-        <tbody>
-          {{ get_recent_posts(20)|safe }}
-        </tbody>
-      </table>
+      {% endif %}
+
+      {% if get_core_config()['site']['show_recent_posts'] %}
+          {% if (not get_core_config()['site']['show_recent_posts_reg_only'] and not user_session.sessionid) or user_session.sessionid %}
+          {% if get_recent_posts(1, get_core_config()['site']['show_recent_posts_public']) or get_recent_posts(1, get_core_config()['site']['show_recent_posts_reg']) %}
+            <div class="inner-header">
+              Recent Activity
+            </div>
+            <table class="home-channel-list recent-post-list table table-striped">
+              <tbody>
+                {{ get_recent_posts(30, get_core_config()['site']['show_recent_posts_public'])|safe }}
+                {% if user_session.sessionid %}
+                  {{ get_recent_posts(10, get_core_config()['site']['show_recent_posts_reg'])|safe }}
+                {% endif %}
+              </tbody>
+            </table>
+          {% endif %}
+        {% endif %}
+      {% endif %}
+
 {% endblock %}

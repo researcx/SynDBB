@@ -1,11 +1,11 @@
 #
-# Copyright (c) 2017 by faggqt (https://faggqt.pw). All Rights Reserved.
+# Copyright (c) 2017 - 2020 Keira T (https://kei.info.gf). All Rights Reserved.
 # You may use, distribute and modify this code under the QPL-1.0 license.
 # The full license is included in LICENSE.md, which is distributed as part of this project.
 #
 
 import syndbb
-from syndbb.models.users import d2_user, checkSession
+from syndbb.models.users import d2_user, check_session_by_id
 
 #Get quote rating
 @syndbb.app.template_filter('get_quote_rating')
@@ -26,7 +26,7 @@ def do_rate_quote():
     uniqid = syndbb.request.args.get('uniqid', '')
     if quote_id and ratingtype and uniqid:
         if 'logged_in' in syndbb.session:
-            userid = checkSession(str(uniqid))
+            userid = check_session_by_id(str(uniqid))
             if userid:
                 quotecheck = d2_quotes.query.filter_by(id=quote_id).first()
                 if quotecheck:
@@ -62,8 +62,7 @@ def do_rate_quote():
 ### MySQL Functions ###
 class d2_quotes(syndbb.db.Model):
     id = syndbb.db.Column(syndbb.db.Integer, primary_key=True)
-    user_id = syndbb.db.Column(syndbb.db.Integer, syndbb.db.ForeignKey('d2_user.user_id'))
-    user = syndbb.db.relationship('d2_user', backref=syndbb.db.backref('d2_quotes', lazy='dynamic'))
+    user_id = syndbb.db.Column(syndbb.db.String, unique=False)
     time = syndbb.db.Column(syndbb.db.Integer, unique=True)
     content = syndbb.db.Column(syndbb.db.String, unique=False)
     approved = syndbb.db.Column(syndbb.db.Integer, unique=False)

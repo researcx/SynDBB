@@ -3,8 +3,8 @@
 {% if user_session.sessionid %}
   <strong>Submission Guidelines:</strong>
   <ul>
-    <li>Submitted quotes shouldn't contain harassment, personal attacks and the like.</li>
-    <li>All submitted quotes must be admin approved.</li>
+    <li>Submitted quotes shouldn't contain harassment, personal and/or directed attacks.</li>
+    <li>All submitted quotes will be admin approved.</li>
   </ul>
   <div class="panel panel-default">
     <div class="panel-body">
@@ -39,7 +39,7 @@
             <span class="text-muted" style="float:right; text-align: right;">
             <a href="#{{quote.id}}">{{human_date(quote.time)}}</a>
             </span>
-            <span class="text-muted">submitted by <a href="/user/{{quote.user.username}}" class="profile-inline username {{get_group_style_from_id(quote.user_id)}}">{{quote.user.username}}</a></span>
+            <span class="text-muted">submitted by <a href="/user/{{get_username_by_id(quote.user_id)}}" class="profile-inline username {{get_group_style_by_id(quote.user_id)}}">{{get_username_by_id(quote.user_id)}}</a></span>
           </div>
     	  </div>
     	</div>

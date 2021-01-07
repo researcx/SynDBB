@@ -1,0 +1,25 @@
+{% extends "layout.html" %} {% block body %}
+{% if not linked_users %}
+<div class="alert alert-warning" role="alert">Nothing here yet! You can start adding profiles by going to your <a href="/account/preferences">preferences</a> and giving more than one account the same profile code.</div>
+{% else %}
+<div class="inner-container">
+  {% for linked_user in linked_users %}
+  <div class="text-center img-grid">
+    <div class="panel-body">
+      <div class="threadimg-gallery center-block">
+        <a href="/user/{{linked_user['username']}}" target="_blank">
+            <img src="{{get_avatar_by_id(linked_user['user_id'])}}" alt="Avatar" class="activity-threadimg-gallery" />
+        </a>
+        <div class="avatar_details">
+          <span class="username {{get_group_style_by_username(linked_user['username'])}}">{{get_displayed_name_by_username(linked_user['username'])}}</span>
+          <span style="float:right;">
+              <a href="/functions/change_user/?userid={{linked_user['user_id']}}&uniqid={{user_session.sessionid}}" title="Make active" class="text-muted"><i class="fa fa-check" aria-hidden="true"></i></a>
+            </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

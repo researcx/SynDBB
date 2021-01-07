@@ -3,19 +3,16 @@
 	<entry>
 		<id>{{user.user_id}}</id>
 		<name>{{user.username}}</name>
+		<display_name>{{user.display_name}}</display_name>
 		<rank>{{user.rank}}</rank>
-		<gender>{{user.gender}}</gender>
-		<location>{{user.location}}</location>
-		<occupation>{{user.occupation}}</occupation>
-		<homepage>{{user.site}}</homepage>
 		<join_date>{{user.join_date}}</join_date>
 		<avatar_date>{{user.avatar_date}}</avatar_date>
 		<post_count>{{user.post_count}}</post_count>
 		<line_count>{{user.line_count}}</line_count>
 		<word_count>{{user.word_count}}</word_count>
 		<profanity_count>{{user.profanity_count}}</profanity_count>
-		<karma_positive>{{user.karma_positive}}</karma_positive>
-		<karma_negative>{{user.karma_negative}}</karma_negative>
+		<rating_positive>{{user.karma_positive}}</rating_positive>
+		<rating_negative>{{user.karma_negative}}</rating_negative>
 		<points>{{user.points}}</points>
 	</entry>
 </api>

@@ -4,18 +4,20 @@
     <div class="form-group">
       <label class="control-label col-xs-2">User ID</label>
       <div class="col-xs-10">
-        <input id="forum-name" type="text" name="user_id" class="form-control" value="{{rankuser}}">
+        <input id="channel-name" type="text" name="user_id" class="form-control" value="{{rankuser}}">
       </div>
     </div>
     <div class="form-group">
       <label class="control-label col-xs-2">Rank</label>
       <div class="col-xs-10">
         <select name="rank" class="form-control">
-          <option value="0">Member</option>
-          <option value="50">Gold Member</option>
-          <option value="100">Half-Op</option>
-          <option value="500">Operator</option>
-          <option value="900">Administrator</option>
+          <option value="1">Tourist</option>
+          <option value="10">Citizen</option>
+          <option value="20">Citizen (Staff)</option>
+          <option value="50">{{ get_core_config()['site']['donator_group_name'] }}</option>
+          <option value="100">Peacekeeper</option>
+          <option value="500">Federation Council</option>
+          <option value="900">Special Operations</option>
         </select>
       </div>
     </div>

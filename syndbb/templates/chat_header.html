@@ -1,7 +1,7 @@
 {% if user_session.sessionid %}
 <div class="top-left">
   <i class="fa fa-id-card" aria-hidden="true"></i> <a href="/user/{{user.username}}" target="_blank"><strong>{{user.username}}</strong></a> &bull;
-  <span title="Karma"><i class="fa fa-star" aria-hidden="true"></i> {{user.karma_positive - user.karma_negative}}</span> &bull;
+  <span title="Rating"><i class="fa fa-star" aria-hidden="true"></i> {{user.karma_positive - user.karma_negative}}</span> &bull;
   <span title="Lines Spoken"><i class="fa fa-comments" aria-hidden="true"></i> {{user.line_count}}</span> &bull;
   <span title="Currency"><i class="fa fa-credit-card-alt" aria-hidden="true" title="Currency"></i> <strong>&ETH;</strong>{{user.points}}</span>
 </div>

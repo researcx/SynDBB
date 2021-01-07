@@ -2,7 +2,7 @@
 <div class="inner-container">
   <div class="media">
     <span class="media-left text-center">
-          <img src="{{get_avatar(user.user_id)}}" alt="Avatar" class="pull-left profile-avatar-size"><br/>
+          <img src="{{get_avatar_by_id(user.user_id)}}" alt="Avatar" class="pull-left profile-avatar-size"><br/>
           {% if user.avatar_date %}
             <a href="/functions/remove_avatar?uniqid={{user_session.sessionid}}" title="Remove Avatar" class="text-muted deletebutton"><i class="fa fa-times" aria-hidden="true"></i></a>
           {% endif %}

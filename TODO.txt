@@ -1,0 +1,3 @@
+# to do 
+
+write access name/rank system for channels

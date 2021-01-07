@@ -5,7 +5,7 @@
     <div class="form-group">
       <label class="control-label col-xs-2">User ID</label>
       <div class="col-xs-10">
-        <input id="forum-name" type="text" name="user_id" class="form-control" value="{{banuser}}">
+        <input id="channel-name" type="text" name="user_id" class="form-control" value="{{banuser}}">
       </div>
     </div>
     <div class="form-group">
@@ -28,7 +28,7 @@
     <div class="form-group">
       <label class="control-label col-xs-2">User ID</label>
       <div class="col-xs-10">
-        <input id="forum-name" type="text" name="user_id" class="form-control" value="{{banuser}}">
+        <input id="channel-name" type="text" name="user_id" class="form-control" value="{{banuser}}">
       </div>
     </div>
     <div class="form-group">
@@ -40,19 +40,24 @@
     <div class="form-group">
       <label class="control-label col-xs-2">Ban Duration</label>
       <div class="col-xs-10">
-        <select name="time" class="form-control">
-          <option value="3600">1 Hour</option>
-          <option value="7200">2 Hours</option>
-          <option value="43200">12 Hours</option>
-          <option value="86400">1 Day</option>
-          <option value="172800">2 Days</option>
-          <option value="604800">1 Week</option>
-          <option value="1209600">2 Weeks</option>
-          <option value="2629800">1 Month</option>
-          <option value="7889400">3 Months</option>
-          <option value="15778800">6 Months</option>
-          <option value="0">Permanent</option>
-        </select>
+        <input id="time" type="text" name="time" class="form-control" value="3600">
+        <p>Ban duration should be written in seconds.</p>
+          0 - Permanent<br/>
+          3600 - 1 Hour<br/>
+          7200 - 2 Hours<br/>
+          43200 - 12 Hours<br/>
+          86400 - 1 Day<br/>
+          172800 - 2 Days<br/>
+          604800 - 1 Week<br/>
+          1209600 - 2 Weeks<br/>
+          2629800 - 1 Month<br/>
+          7889400 - 3 Months<br/>
+          15778800 - 6 Months<br/>
+          31557600 - 1 Year<br/>
+          63115200 - 2 Years<br/>
+          94672800 - 3 Years<br/>
+          126230400 - 4 Years<br/>
+          157788000 - 5 Years<br/>
       </div>
     </div>
     <div class="form-group">

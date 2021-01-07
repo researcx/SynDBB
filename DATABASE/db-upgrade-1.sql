@@ -1,0 +1,1 @@
+ALTER TABLE `d2_user` ADD `display_name` LONGTEXT NOT NULL AFTER `username`; 

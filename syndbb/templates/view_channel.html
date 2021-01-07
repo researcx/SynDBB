@@ -1,0 +1,13 @@
+{% extends "layout.html" %} {% block body %}
+{% if thread_list %}
+<table class="home-channel-list table table-striped">
+  <tbody>
+      {{ thread_list|safe }}
+  </tbody>
+</table>
+{% else %}
+<div class="alert alert-warning" role="alert">
+  No threads were found in this channel.
+</div>
+{% endif %}
+{% endblock %}

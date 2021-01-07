@@ -12,7 +12,7 @@
         <a href="/functions/disapprove_quote/?quote={{quote.id}}&uniqid={{user_session.sessionid}}" title="Disapprove" class="text-muted"><i class="silk-icon icon_cross" aria-hidden="true"></i></a>
         {{human_date(quote.time)}}
   		</span>
-  		<span class="text-muted">submitted by <a href="/user/{{quote.user.username}}" class="text-muted username {{get_group_style_from_id(quote.user_id)}}">{{quote.user.username}}</a></span>
+  		<span class="text-muted">submitted by <a href="/user/{{get_username_by_id(quote.user_id)}}" class="text-muted username {{get_group_style_by_id(quote.user_id)}}">{{get_username_by_id(quote.user_id)}}</a></span>
   	  </div>
   	</div>
     </div>

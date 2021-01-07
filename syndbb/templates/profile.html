@@ -6,29 +6,29 @@
 		<div class="media-left">
 			{% if not isInline %}
 				{% if user.user_id == profile.user_id %}
-					{% if get_avatar_source(profile.user_id) %}
+					{% if get_avatar_source_by_id(profile.user_id) and profile.full_avatar %}
 					<a href="/account/avatar">
-						<img src="{{get_avatar_source(profile.user_id)}}" alt="Avatar" class="profile-avatar-size-large"/>
+						<img src="{{get_avatar_source_by_id(profile.user_id)}}" alt="Avatar" class="profile-avatar-size-large"/>
 					</a>
 					{% else %}
 						<a href="/account/avatar">
-							<img src="{{get_avatar(profile.user_id)}}" alt="Avatar" class="profile-avatar-size"/>
+							<img src="{{get_avatar_by_id(profile.user_id)}}" alt="Avatar" class="profile-avatar-size"/>
 						</a>
 					{% endif %}
 				{% else %}
-					{% if get_avatar_source(profile.user_id) %}
-						<a id="profileAvatar" href="{{get_avatar_source(profile.user_id)}}">
-							<img src="{{get_avatar_source(profile.user_id)}}" alt="Avatar" class="profile-avatar-size-large"/>
+					{% if get_avatar_source_by_id(profile.user_id) and profile.full_avatar %}
+						<a id="profileAvatar" href="{{get_avatar_source_by_id(profile.user_id)}}">
+							<img src="{{get_avatar_source_by_id(profile.user_id)}}" alt="Avatar" class="profile-avatar-size-large"/>
 						</a>
 					{% else %}
-						<a id="profileAvatar" href="{{get_avatar_source(profile.user_id)}}">
-							<img src="{{get_avatar(profile.user_id)}}" alt="Avatar" class="profile-avatar-size"/>
+						<a id="profileAvatar" href="{{get_avatar_source_by_id(profile.user_id)}}">
+							<img src="{{get_avatar_by_id(profile.user_id)}}" alt="Avatar" class="profile-avatar-size"/>
 						</a>
 					{% endif %}
 				{% endif %}
 			{% else %}
 			<a href="/user/{{profile.username}}">
-				<img src="{{get_avatar(profile.user_id)}}" alt="Avatar" class="profile-avatar-inline"/>
+				<img src="{{get_avatar_by_id(profile.user_id)}}" alt="Avatar" class="profile-avatar-inline"/>
 			</a>
 			{% endif %}
 			{% if not isInline %}
@@ -37,7 +37,7 @@
 			    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bars" aria-hidden="true"></i></a>
 			    <ul class="dropdown-menu user-options">
 						{% if user.rank >= 500 %}
-							{% if is_banned(profile.user_id) %}
+							{% if check_ban_by_id(profile.user_id) %}
 							<li><a href="/account/admin/ban/?user={{profile.user_id}}">Unban {{profile.username}}</a></li>
 							{% else %}
 							<li><a href="/account/admin/ban/?user={{profile.user_id}}">Ban {{profile.username}}</a></li>
@@ -53,65 +53,55 @@
 		<div class="media-body">
 			{% if not isInline %}
 			<div class="text-muted" style="float:right; text-align: right;">
-				<span style="font-size: 18pt;">{{get_user_title(profile.user_id)}}</span>&nbsp;
-				{% if profile.title %}
-				<br/><div class="textcolor">{{profile.title|safe}}</div>
+				<span style="font-size: 18pt;">{{get_title_by_id(profile.user_id)}}</span>
+
+				{% if get_flair_by_id(profile.user_id) %}
+				<div class="profile-user-flair text-muted">
+				{% for flair in get_flair_by_id(profile.user_id) %}
+					<img src="{{cdn_path()|safe}}/data/flair/{{profile.user_id}}/{{flair[0]}}.png" title="{{flair[0]}}" alt="{{flair[0]}}"/>
+				{% endfor %}
+				</div>
 				{% endif %}
-        {% if user.rank >= 500 %}
-				<br/>
-        {% if profile.last_activity %}
-        <i>Last active {{time_ago(profile.last_activity)}}.</i>
-				<br/>
-        {% endif %}
-        {% if profile.last_login %}
-        <i>Last logged in {{time_ago(profile.last_login)}}.</i>
-				<br/>
-        {% endif %}
-        <i>Registered {{time_ago(profile.join_date)}}.</i>
-				<br/>
-        {% endif %}
+
+				{% if profile.title %}
+					<br/><div class="textcolor">{{profile.title|safe}}</div>
+				{% endif %}
+
+				{% if user.rank >= 100 %}
+					<br/>
+					{% if profile.last_activity %}
+					<i>Last active {{time_ago(profile.last_activity)}}.</i>
+					<br/>
+					{% endif %}
+					{% if profile.last_login %}
+					<i>Last logged in {{time_ago(profile.last_login)}}.</i>
+					<br/>
+					{% endif %}
+					<i>Registered {{time_ago(profile.join_date)}}.</i>
+					<br/>
+				{% endif %}
 			</div>
 			{% endif %}
 			<a href="/user/{{profile.username}}">
-				<span class="profile-username username {{get_group_style_from_id(profile.user_id)}}">{{profile.username}}</span>
+				<span class="profile-username username {{get_group_style_by_id(profile.user_id)}}">{{get_displayed_name_by_username(profile.username)}}</span>
 			</a>
-			{% if not isInline %}
-				{% if profile.status %}
-				<br/>{{profile.status}}
-				{% endif %}
+
+			{% if profile.status %}
+				<p class="profile-status">{{profile.status}}</p>
 			{% endif %}
-			<dl class="dl-horizontal" style="margin-top: 10px;">
-        {% if profile.gender %}
-				<dt>Gender:</dt>
-				<dd>{{profile.gender}}</dd>
-        {% endif %}
-        {% if profile.location %}
-				<dt>Location:</dt>
-				<dd>{{profile.location}}</dd>
-        {% endif %}
-        {% if profile.occupation %}
-				<dt>Occupation:</dt>
-				<dd>{{profile.occupation}}</dd>
-        {% endif %}
-        {% if profile.site %}
-				<dt>Website:</dt>
-				<dd>
-					<a href="{{profile.site}}" target="_blank">{{profile.site}}</a>
-				</dd>
-        {% endif %}
-			</dl>
+
 			{% if not isInline %}
-			<dl class="dl-horizontal">
+			<!-- <dl class="dl-horizontal">
 				<dt>Lines Spoken:</dt>
 				<dd>{{profile.line_count}} ({{profile.word_count}} words)</dd>
 				<dt>Profanity Count:</dt>
 				<dd>{{profile.profanity_count}}</dd>
-			</dl>
+			</dl> -->
 			{% endif %}
 			<dl {% if isInline %}style="margin-bottom: 0px !important;"{% endif %} class="dl-horizontal">
-				<dt>Currency:</dt>
-				<dd>&ETH;{{profile.points}}</dd>
-				<dt>Karma:</dt>
+				<!-- <dt>Currency:</dt>
+				<dd>&ETH;{{profile.points}}</dd> -->
+				<!-- <dt>Rating:</dt>
 				<dd>
 					{% if (profile.karma_positive - profile.karma_negative) < 0 %}
 					<span class="karma negative">
@@ -122,16 +112,28 @@
 					{% endif %}
 					{{profile.karma_positive - profile.karma_negative}}
 					</span>
-          (<span class="karma positive">+{{profile.karma_positive}}</span>/
+          			(<span class="karma positive">+{{profile.karma_positive}}</span>/
 					<span class="karma negative">-{{profile.karma_negative}}</span>)
-				</dd>
+				</dd> -->
 			</dl>
-			{% if not isInline %}
-	      {% if profile.bio %}
-	      <div style="margin-left: 20px;">
-	        {{parse_bbcode(profile.bio)|safe}}
-	      </div>
-	      {% endif %}
+			{% if not isInline or isInline %}
+				<div style="margin-left: 20px;">
+				{% if profile.bio %}
+						{{parse_bbcode(profile.bio)|safe}}
+						<br/><br/>
+				{% endif %}
+				{% if tag_list_bio %}
+					<dl style="margin-left: 0px; margin-bottom: 0px !important;" class="dl-horizontal profile-bio-list">
+						{{ tag_list_bio|safe }}
+					</dl>
+				{% endif %}
+				{% if tag_list %}
+				<dl class="dl-horizontal profile-tag-list" style="margin-left: 0px; margin-bottom: 0px !important;">
+						<dt>Tags:</dt>
+						<dd>{{ tag_list|safe }}</dd>
+				</dl>
+				{% endif %}
+				</div>
 			{% endif %}
 			<br/>
 		</div>

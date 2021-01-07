@@ -4,13 +4,25 @@
   <span style="float: right;">
       <a name="post{{thread.id}}" href="#{{thread.id}}" class="postcounter"><i class="silk-icon icon_link" aria-hidden="true"></i> #{{thread.id}}</a>
   </span>
-  <span style="float: left; max-width: 200px;">
-      <i class="silk-icon icon_time" aria-hidden="true"></i> <span title="{{human_date(thread.time)}}">{{recent_date(thread.time)}}&nbsp;</span><br/>
+  <span style="float: left;">
+      <i class="silk-icon icon_time" aria-hidden="true"></i>
+      <span title="{{human_date(thread.time)}}">{{recent_date(thread.time)}} by 
+      {% if thread.anonymous == 0 %}
+        {% if get_user_by_id(thread.user_id)['display_name'] %}
+          {{get_displayed_name_by_id(thread.user_id)}} (<a href="/user/{{get_username_by_id(thread.user_id)}}" class="text-muted">{{get_username_by_id(thread.user_id)}}</a>)
+        {% else %}
+        <a href="/user/{{get_username_by_id(thread.user_id)}}" class="text-muted">
+          {{get_username_by_id(thread.user_id)}}
+        </a>
+        {% endif %}
+      {% endif %}
+      </span>
+      <br/>
   </span>
   {% if user_session.sessionid %}
   <div>
-      {% if user.rank >= 500 %}
-      <a href="/user/{{thread.user.username}}" class="posthead-button text-muted">{{thread.user.username}}</a>
+      {% if thread.anonymous == 1 and user.rank >= 500 %}
+      <a href="/user/{{get_username_by_id(thread.user_id)}}" class="posthead-button text-muted">{{get_username_by_id(thread.user_id)}}</a>
       {% endif %}
       {% if (thread.user_id == user.user_id) or (user.rank >= 500) %}
       <a href="/post/{{thread.id}}/edit" title="Edit Post" class="posthead-button text-muted">Edit</i></a>
@@ -31,33 +43,41 @@
         <div style="max-width: 138px; margin-bottom: 4px;">
           {% if thread.anonymous == 0 %}
             <span style="float: right;">
-              {% if (thread.user.karma_positive - thread.user.karma_negative) < 0 %}
-              <i class="silk-icon icon_cross" title="Karma: {{thread.user.karma_positive - thread.user.karma_negative}} (+{{thread.user.karma_positive}}/-{{thread.user.karma_negative}})" aria-hidden="true"></i>
-              {% elif (thread.user.karma_positive - thread.user.karma_negative) > 0 %}
-              <i class="silk-icon icon_tick" title="Karma: {{thread.user.karma_positive - thread.user.karma_negative}} (+{{thread.user.karma_positive}}/-{{thread.user.karma_negative}})" aria-hidden="true"></i>
+              {% if (get_user_by_id(thread.user_id)['karma_positive'] - get_user_by_id(thread.user_id)['karma_negative']) < 0 %}
+              <i class="silk-icon icon_cross" title="Rating: {{get_user_by_id(thread.user_id)['karma_positive'] - get_user_by_id(thread.user_id)['karma_negative']}} (+{{get_user_by_id(thread.user_id)['karma_positive']}}/-{{get_user_by_id(thread.user_id)['karma_negative']}})" aria-hidden="true"></i>
+              {% elif (get_user_by_id(thread.user_id)['karma_positive'] - get_user_by_id(thread.user_id)['karma_negative']) > 0 %}
+              <i class="silk-icon icon_tick" title="Rating: {{get_user_by_id(thread.user_id)['karma_positive'] - get_user_by_id(thread.user_id)['karma_negative']}} (+{{get_user_by_id(thread.user_id)['karma_positive']}}/-{{get_user_by_id(thread.user_id)['karma_negative']}})" aria-hidden="true"></i>
               {% endif %}
             </span>
-            <a href="/user/{{thread.user.username}}" class="forum_poster username {{get_group_style_from_id(thread.user_id)}}"><b>{{thread.user.username}}</b></a>
-            {% if thread.user.title %}
-              <div class="post-usertitle">{{thread.user.title|safe}}</div>
+
+            <a href="/user/{{get_username_by_id(thread.user_id)}}" class="channel_poster username {{get_group_style_by_id(thread.user_id)}}"><b>{{get_displayed_name_by_id(thread.user_id)}}</b></a>
+            {% if get_user_by_id(thread.user_id)['title'] %}
+              <div class="post-usertitle">{{get_user_by_id(thread.user_id)['title']|safe}}</div>
             {% endif %}
           {% else %}
-            <a href="#" class="forum_poster" style="color: #585858; font-weight: bold;"><b>Anonymous</b></a>
+            <a href="#" class="channel_poster" style="color: #585858; font-weight: bold;"><b>Anonymous</b></a>
           {% endif %}
         </div>
         {% if thread.anonymous == 0 %}
-        <a href="/user/{{thread.user.username}}" class="profile-inline">
-          {% if thread.user.rank >= 50 %}
-            {% if get_avatar_source(thread.user.user_id) %}
-                <img src="{{get_avatar_source(thread.user_id)}}" title="{{thread.user.username}}" alt="Avatar" class="thread-avatar-size gm_avatar">
+        <a href="/user/{{get_username_by_id(thread.user_id)}}" class="profile-inline">
+          {% if get_user_by_id(thread.user_id)['rank'] >= 50 and get_user_by_id(thread.user_id)['full_avatar'] %}
+            {% if get_avatar_source_by_id(thread.user_id) %}
+                <img src="{{get_avatar_source_by_id(thread.user_id)}}" title="{{get_username_by_id(thread.user_id)}}" alt="Avatar" class="thread-avatar-size gm_avatar">
             {% else %}
-                <img src="{{get_avatar(thread.user_id)}}" title="{{thread.user.username}}" alt="Avatar" class="thread-avatar-size">
+                <img src="{{get_avatar_by_id(thread.user_id)}}" title="{{get_username_by_id(thread.user_id)}}" alt="Avatar" class="thread-avatar-size">
             {% endif %}
           {% else %}
-          <img src="{{get_avatar(thread.user_id)}}" title="{{thread.user.username}}" alt="Avatar" class="thread-avatar-size">
+          <img src="{{get_avatar_by_id(thread.user_id)}}" title="{{get_username_by_id(thread.user_id)}}" alt="Avatar" class="thread-avatar-size">
           {% endif %}
         </a>
-        <div class="user-regdate text-muted">{{recent_date(thread.user.join_date)}}</div>
+        {% if get_flair_by_id(thread.user_id) %}
+          <div class="user-flair text-muted">
+          {% for flair in get_flair_by_id(thread.user_id) %}
+            <img src="{{cdn_path()|safe}}/data/flair/{{thread.user_id}}/{{flair[0]}}.png" title="{{flair[0]}}" alt="{{flair[0]}}"/>
+          {% endfor %}
+          </div>
+        {% endif %}
+        <div class="user-regdate text-muted">{{recent_date(get_user_by_id(thread.user_id)['join_date'])}}</div>
         {% else %}
         <a href="#">
           <img src="{{cdn_path()|safe}}/images/anon_avatar.png" title="Anonymous User" alt="Avatar" class="thread-avatar-size">
@@ -105,13 +125,24 @@
   <span style="float: right;">
       <a name="post{{reply.id}}" href="#{{reply.id}}" class="postcounter"><i class="silk-icon icon_link" aria-hidden="true"></i> #{{reply.id}}</a>
   </span>
-  <span style="float: left; max-width: 200px;">
-      <i class="silk-icon icon_time" aria-hidden="true"></i> <span title="{{human_date(reply.time)}}">{{recent_date(reply.time)}}&nbsp;</span><br/>
+  <span style="float: left;">
+      <i class="silk-icon icon_time" aria-hidden="true"></i> <span title="{{human_date(reply.time)}}">{{recent_date(reply.time)}} by 
+        {% if reply.anonymous == 0 %}
+          {% if get_user_by_id(reply.user_id)['display_name'] %}
+            {{get_displayed_name_by_id(reply.user_id)}} (<a href="/user/{{get_username_by_id(reply.user_id)}}" class="text-muted">{{get_username_by_id(reply.user_id)}}</a>)
+          {% else %}
+          <a href="/user/{{get_username_by_id(reply.user_id)}}" class="text-muted">
+            {{get_username_by_id(reply.user_id)}}
+          </a>
+          {% endif %}
+        {% endif %}
+      </span>
+      <br/>
   </span>
   {% if user_session.sessionid %}
   <div>
-      {% if user.rank >= 500 %}
-      <a href="/user/{{reply.user.username}}" class="posthead-button text-muted">{{reply.user.username}}</a>
+      {% if reply.anonymous == 1 and user.rank >= 500 %}
+      <a href="/user/{{get_username_by_id(reply.user_id)}}" class="posthead-button text-muted">{{get_username_by_id(reply.user_id)}}</a>
       {% endif %}
       {% if (reply.user_id == user.user_id) or (user.rank >= 500) %}
       <a href="/post/{{reply.id}}/edit" title="Edit Post" class="posthead-button text-muted">Edit</i></a>
@@ -132,33 +163,40 @@
         <div style="max-width: 138px; margin-bottom: 4px;">
           {% if reply.anonymous == 0 %}
             <span style="float: right;">
-              {% if (reply.user.karma_positive - reply.user.karma_negative) < 0 %}
-              <i class="silk-icon icon_cross" title="Karma: {{reply.user.karma_positive - reply.user.karma_negative}} (+{{reply.user.karma_positive}}/-{{reply.user.karma_negative}})" aria-hidden="true"></i>
-              {% elif (reply.user.karma_positive - reply.user.karma_negative) > 0 %}
-              <i class="silk-icon icon_tick" title="Karma: {{reply.user.karma_positive - reply.user.karma_negative}} (+{{reply.user.karma_positive}}/-{{reply.user.karma_negative}})" aria-hidden="true"></i>
+              {% if (get_user_by_id(reply.user_id)['karma_positive'] - get_user_by_id(reply.user_id)['karma_negative']) < 0 %}
+              <i class="silk-icon icon_cross" title="Rating: {{get_user_by_id(reply.user_id)['karma_positive'] - get_user_by_id(reply.user_id)['karma_negative']}} (+{{get_user_by_id(reply.user_id)['karma_positive']}}/-{{get_user_by_id(reply.user_id)['karma_negative']}})" aria-hidden="true"></i>
+              {% elif (get_user_by_id(reply.user_id)['karma_positive'] - get_user_by_id(reply.user_id)['karma_negative']) > 0 %}
+              <i class="silk-icon icon_tick" title="Rating: {{get_user_by_id(reply.user_id)['karma_positive'] - get_user_by_id(reply.user_id)['karma_negative']}} (+{{get_user_by_id(reply.user_id)['karma_positive']}}/-{{get_user_by_id(reply.user_id)['karma_negative']}})" aria-hidden="true"></i>
               {% endif %}
             </span>
-            <a href="/user/{{reply.user.username}}" class="forum_poster username {{get_group_style_from_id(reply.user_id)}}"><b>{{reply.user.username}}</b></a>
-            {% if reply.user.title %}
-              <div class="post-usertitle">{{reply.user.title|safe}}</div>
+            <a href="/user/{{get_username_by_id(reply.user_id)}}" class="channel_poster username {{get_group_style_by_id(reply.user_id)}}"><b>{{get_displayed_name_by_id(reply.user_id)}}</b></a>
+            {% if get_user_by_id(reply.user_id)['title'] %}
+              <div class="post-usertitle">{{get_user_by_id(reply.user_id)['title']|safe}}</div>
             {% endif %}
           {% else %}
-            <a href="#" class="forum_poster" style="color: #585858; font-weight: bold;"><b>Anonymous</b></a>
+            <a href="#" class="channel_poster" style="color: #585858; font-weight: bold;"><b>Anonymous</b></a>
           {% endif %}
         </div>
         {% if reply.anonymous == 0 %}
-        <a href="/user/{{reply.user.username}}" class="profile-inline">
-          {% if reply.user.rank >= 50 %}
-             {% if get_avatar_source(reply.user.user_id) %}
-                <img src="{{get_avatar_source(reply.user_id)}}" title="{{reply.user.username}}" alt="Avatar" class="thread-avatar-size gm_avatar">
+        <a href="/user/{{get_username_by_id(reply.user_id)}}" class="profile-inline">
+          {% if get_user_by_id(reply.user_id)['rank'] >= 50 and get_user_by_id(reply.user_id)['full_avatar'] %}
+             {% if get_avatar_source_by_id(reply.user_id) %}
+                <img src="{{get_avatar_source_by_id(reply.user_id)}}" title="{{get_username_by_id(reply.user_id)}}" alt="Avatar" class="thread-avatar-size gm_avatar">
             {% else %}
-                <img src="{{get_avatar(reply.user_id)}}" title="{{reply.user.username}}" alt="Avatar" class="thread-avatar-size">
+                <img src="{{get_avatar_by_id(reply.user_id)}}" title="{{get_username_by_id(reply.user_id)}}" alt="Avatar" class="thread-avatar-size">
             {% endif %}
           {% else %}
-          <img src="{{get_avatar(reply.user_id)}}" title="{{reply.user.username}}" alt="Avatar" class="thread-avatar-size">
+          <img src="{{get_avatar_by_id(reply.user_id)}}" title="{{get_username_by_id(reply.user_id)}}" alt="Avatar" class="thread-avatar-size">
           {% endif %}
         </a>
-        <div class="user-regdate text-muted">{{recent_date(reply.user.join_date)}}</div>
+        {% if get_flair_by_id(reply.user_id) %}
+          <div class="user-flair text-muted">
+          {% for flair in get_flair_by_id(reply.user_id) %}
+            <img src="{{cdn_path()|safe}}/data/flair/{{reply.user_id}}/{{flair[0]}}.png" title="{{flair[0]}}" alt="{{flair[0]}}"/>
+          {% endfor %}
+          </div>
+        {% endif %}
+        <div class="user-regdate text-muted">{{recent_date(get_user_by_id(reply.user_id)['join_date'])}}</div>
         {% else %}
         <a href="#">
           <img src="{{cdn_path()|safe}}/images/anon_avatar.png" title="Anonymous User" alt="Avatar" class="thread-avatar-size">
@@ -203,8 +241,8 @@
 </div>
 {% endfor %}
 {% if user_session.sessionid %}
-<div class="panel panel-default">
-  <div class="panel-body">
+<div class="panel panel-default editor-box">
+  <div class="panel-body editor-box">
     <div class="media">
       <div class="media-body">
         <div class="bbcode-editor">
@@ -239,11 +277,17 @@
               <span class="bbcode-button" title="Align Center" onclick="insert_bbcode('center');"><i class="silk-icon icon_text_align_center" aria-hidden="true"></i></span>
               <span class="bbcode-button" title="Align Right" onclick="insert_bbcode('right');"><i class="silk-icon icon_text_align_right" aria-hidden="true"></i></span>
               <span class="bbcode-button-spacer"></span>
-              {% if forum.anon %}
+              {% if channel.anon or get_linked_by_id(user.user_id) %}
               <div class="bbcode-anon">
-                <label class="checkbox-inline">
-                    <input type="checkbox" id="anonymous" name="anonymous" value="1"><span class="text">Post Anonymously</span>
-                </label>
+                <strong>Posting as </strong>
+                <select name="post_as" id="post_as">
+                  {% if channel.anon %}
+                    <option value="0">anonymous</option>
+                  {% endif %}
+                  {% for linked_user in get_linked_by_id(user.user_id) %}
+                    <option value="{{linked_user['user_id']}}" {% if linked_user['user_id'] == user.user_id %}selected="selected"{% endif %}>{{get_displayed_name_by_username(linked_user['username'])}}</option>
+                  {% endfor %}
+                </select>
               </div>
               {% endif %}
             </div>

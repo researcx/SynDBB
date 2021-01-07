@@ -1,6 +1,6 @@
 {% extends "layout.html" %}{% block body %}
 <div class="upload-title" style="margin-top: 4px; font-size: 16px;">
-<a href="/store/" title="Store" style="float:right;"><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
+<!--<a href="/store/" title="Store" style="float:right;"><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>-->
 </div>
 <div class="progress" style="margin: 16px 16px 4px 16px;">
     <div class="progress-bar {{user_stats(user.user_id)['progress_indicator']}} progress-bar-striped" role="progressbar" aria-valuenow="40"
@@ -9,6 +9,8 @@
     </div>
 </div>
 <div class="upload-title">
+  <a href="/account/preferences" title="Settings" style="float:right; margin-left: 10px;"><i class="fa fa-cog" aria-hidden="true"></i></a>
+  <a href="/upload/anonymous" title="Anonymous Upload" style="float:right; margin-left: 10px;"><i class="fa fa-user-secret" aria-hidden="true"></i></a>
   <a href="/upload/gallery" title="Gallery View" style="float:right;"><i class="fa fa-picture-o" aria-hidden="true"></i></a>
 </div>
 <div class="panel panel-default">
@@ -17,10 +19,7 @@
       <div class="form-group">
         <input id="file" name="file" class="filestyle" onchange="this.form.submit()" tabindex="-1" type="file">
         <input type="hidden" name="uploader" value="upload">
-        <div class="bbcode-anon" style="margin-bottom: -100px;">
-          <label class="checkbox-inline">
-            <a href="/account/preferences" title="Preferences" style="border-bottom: 1px dotted black; float:right; margin-left: 32px;">Change displayed URL</a><a href="/upload/anonymous" title="Anonymous Uploads" style="border-bottom: 1px dotted black; float:right; margin-right: 12px;">Upload Anonymously</a><br/>
-          </label>
+        <div class="upload-box" style="margin-bottom: -100px;">
 <!--
           <label class="checkbox-inline">
             <input type="checkbox" id="timedelete" name="timedelete" value="1"><span class="text">Delete in 24 hours</span>

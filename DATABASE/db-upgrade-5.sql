@@ -1,0 +1,1 @@
+ALTER TABLE `d2_channels` ADD `type` INT NOT NULL DEFAULT '0' AFTER `mod_list`; 
