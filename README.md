@@ -66,7 +66,6 @@ SynDBB is a hybridization of different aspects of classic internet forums and im
 #### Special Operations
 
 * Rank Integer: >=900
-* Has a red name.
 * Can approve/disapprove emoticons, channels.
 * Can change user ranks. (promote/demote)
 
@@ -74,7 +73,6 @@ SynDBB is a hybridization of different aspects of classic internet forums and im
 #### Federation Council
 
 * Rank Integer: >=500
-* Has a purple name.
 * Can view admin panel.
 * Can view the users list.
 * Can ban/unban users.
@@ -115,7 +113,7 @@ SynDBB is a hybridization of different aspects of classic internet forums and im
 * Can modify their profile.
 * Can delete their own threads/posts.
 * Can request emoticons and channels.
-* Can invite other users.
+* Can invite users.
 
 ### ZNC/IRC Integration:
 
