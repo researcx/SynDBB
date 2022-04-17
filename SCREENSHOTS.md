@@ -95,3 +95,5 @@
 <a href="screenshots/48.png" target="_blank"><img src="screenshots/48.png" alt="[IMG]" width="100%"/></a>  
 
 <a href="screenshots/49.png" target="_blank"><img src="screenshots/49.png" alt="[IMG]" width="100%"/></a>  
+
+<a href="screenshots/49.png" target="_blank"><img src="screenshots/50.png" alt="[IMG]" width="100%"/></a>  
