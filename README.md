@@ -2,6 +2,7 @@
 
 SynDBB is a hybridization of different aspects of classic internet forums and imageboards.
 
+View [screenshots](SCREENSHOTS.md).
 
 **Features:**
 
